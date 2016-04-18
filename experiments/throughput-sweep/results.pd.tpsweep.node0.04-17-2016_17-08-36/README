@@ -1,0 +1,11 @@
+---
+system: cloudlab-wisc-c220m4
+nodes: 1
+os: ubuntu 14.04
+experiment: throughput sweep
+ceph: jewel
+data: sdc / ssd
+---
+
+this experiment runs across several configuration parameters for a single
+interface looking for a configuration that provides good throughput.
