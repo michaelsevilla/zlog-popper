@@ -1,0 +1,32 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage{times}
+
+% do not change these values
+\baselineskip 12pt
+\textheight 9in
+\textwidth 6.5in
+\oddsidemargin 0in
+\topmargin 0in
+\headheight 0in
+\headsep 0in
+
+\begin{document}
+
+\title{$title$}
+
+\author{John Doe and Jane Monroe \\
+\small {\em  Dept. Cloud, Cloud University \quad
+          Cloud National Labs} \\ [2mm]
+\small Submission Type: Research
+}
+
+\date{}
+\maketitle
+
+\begin{abstract}
+$abstract$
+\end{abstract}
+
+$body$
+
+\end{document}
