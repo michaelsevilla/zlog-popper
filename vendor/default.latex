@@ -1,5 +1,6 @@
 \documentclass[10pt,twocolumn]{article}
 \usepackage{times}
+\usepackage{graphicx}
 
 % do not change these values
 \baselineskip 12pt

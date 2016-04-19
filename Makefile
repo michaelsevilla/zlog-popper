@@ -1,7 +1,13 @@
-out/paper.pdf: paper.md
+.PHONY: figures
+
+figures:
+	make -C experiments/throughput-sweep/
+
+out/paper.pdf: paper.md figures
 	docker run \
 	  --rm \
 	  --workdir="/root" \
+	  -v `pwd`/experiments/:/root/experiments \
 	  -v `pwd`/vendor/:/root/.pandoc/templates \
 	  -v `pwd`/vendor/:/root/texmf/tex/latex \
 	  -v `pwd`/paper.md:/root/paper.md \
