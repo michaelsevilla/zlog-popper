@@ -21,3 +21,9 @@ out/paper.pdf: paper.md figures $(shell find vendor -type f)
 		# 2> build.log
 	    #--filter pandoc-citeproc
 	#chown $(USER): $@
+
+nb:
+	docker run -p 8888:8888 -v `pwd`:/home/jovyan/work jupyter/scipy-notebook
+
+nbb:
+	docker run -d -p 8888:8888 -v `pwd`:/home/jovyan/work jupyter/scipy-notebook
