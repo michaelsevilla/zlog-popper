@@ -1,9 +1,11 @@
+all: out/paper.pdf
+
 .PHONY: figures
 
 figures:
 	make -C experiments/throughput-sweep/
 
-out/paper.pdf: paper.md figures
+out/paper.pdf: paper.md figures $(shell find vendor -type f)
 	docker run \
 	  --rm \
 	  --workdir="/root" \
