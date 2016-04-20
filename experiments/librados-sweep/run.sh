@@ -1,5 +1,8 @@
 #!/bin/bash
 
+reset=soft
+data_dev=sdc
+
 name=librados_sweep
 runtime=3600
 pg_nums="128"
