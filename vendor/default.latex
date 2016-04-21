@@ -44,9 +44,10 @@
 
 \title{$title$}
 
-\author{Noah Watkins, Neha Ojha\textsuperscript{*}, Carlos Maltzahn \\
-\small {\em University of California, Santa Cruz} \\
-\small {\{jayhawk,carlosm\}@cs.ucsc.edu} \textsuperscript{*}nojha@ucsc.edu \\ [2mm]
+\author{
+%Noah Watkins, Neha Ojha\textsuperscript{*}, Carlos Maltzahn \\
+%\small {\em University of California, Santa Cruz} \\
+%\small {\{jayhawk,carlosm\}@cs.ucsc.edu} \textsuperscript{*}nojha@ucsc.edu \\ [2mm]
 \small Submission Type: Research
 }
 
