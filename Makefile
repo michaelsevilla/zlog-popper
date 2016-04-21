@@ -4,6 +4,7 @@ all: out/paper.pdf
 
 figures:
 	make -C experiments/throughput-sweep/
+	make -C experiments/librados-sweep/
 
 out/paper.pdf: paper.md figures $(shell find vendor -type f)
 	docker run \
