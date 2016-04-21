@@ -1,1 +1,3 @@
 out
+*.png
+.ipynb_checkpoints

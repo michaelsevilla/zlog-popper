@@ -44,7 +44,9 @@ to form a clean baseline. Log entries may vary in size depending on the
 application, but per-entry metadata is constant.
 
 [src-librados-sweep]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/librados-sweep/visualize.ipynb)
-![\[[source][src-librados-sweep]\] librados-sweep](experiments/librados-sweep/output.png)
+![\[[source][src-librados-sweep]\] Throughput (IOPS) of 1K writes to a single
+OSD using the standard I/O interfaces in various configurations. The best performance is achieved using
+the byte stream interface and a N:1 mapping strategy.](experiments/librados-sweep/output.soft.reset.png)
 
 The first thing to notice is that the configurations using a 1:1 mapping
 perform poorly relative to the other configurations. This is unfortunate

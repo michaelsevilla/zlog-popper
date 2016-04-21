@@ -38,6 +38,8 @@
             pdfborder={0 0 0}}
 \urlstyle{same}  % don't use monospace font for urls
 
+\usepackage[font=footnotesize,labelfont=bf]{caption}
+
 \begin{document}
 
 \title{$title$}
