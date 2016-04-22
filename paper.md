@@ -77,6 +77,9 @@ sized entries without sacrificing performance.
 
 ## Metadata Management
 
+[src-basic-cls-overhead]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-overhead/visualize.ipynb)
+![\[[source][src-basic-cls-overhead]\] No Description.](experiments/basic-cls-overhead/output.1024.soft.reset.png)
+
 Many variations of design here. What is the easiest way to 
 winnow down the design space.
 
