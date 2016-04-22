@@ -24,7 +24,7 @@ out/paper.pdf: paper.md figures $(shell find vendor -type f)
 	#chown $(USER): $@
 
 nb:
-	docker run -p 8888:8888 -v `pwd`:/home/jovyan/work jupyter/scipy-notebook
-
-nbb:
 	docker run -d -p 8888:8888 -v `pwd`:/home/jovyan/work jupyter/scipy-notebook
+
+nbf:
+	docker run -p 8888:8888 -v `pwd`:/home/jovyan/work jupyter/scipy-notebook
