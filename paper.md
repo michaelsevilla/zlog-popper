@@ -26,18 +26,21 @@ Differences between built-in interfaces and custom cls interfaces.
 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.2cm,semithick]
 %\tikzstyle{every state}=[fill=red,draw=none,text=white]
 
-  \node[initial above,state] (A)                    {$EG$};
-  \node[state]         (B) [below left  of=A] {$CP$};
-  \node[state]         (D) [below of=B]       {$IO$};
-  \node[state]         (C) [below right of=A] {$GC$};
-  \node[state]         (E) [below of=C]       {$US$};
+  \node[initial left,state] (A)              {$EG$};
+  \node[state]         (B) [below right of=A] {$CP$};
+  \node[state]         (D) [right of=B]       {$IO$};
+  \node[state]         (C) [above right of=A] {$GC$};
+  \node[state]         (E) [right of=C]       {$US$};
+  \node[state]         (F) [below right of=E] {$Fi$};
 
   \path (A) edge        node [left] {R,W,F} (B)
             edge        node {T}     (C)
         (B) edge        node {F}     (C)
             edge        node {R,W}   (D)
         (C) edge        node {F,T}   (E)
-        (D) edge        node {W}     (E);
+        (D) edge        node {W}     (E)
+            edge        node {R}     (F)
+        (E) edge        node {F,T,W} (F);
 \end{tikzpicture}
 \caption{State transition diagram for read ($R$), write ($W$), fill ($F$), and
 trim ($T$) CORFU operaitons. The states epoch guard ($EG$), check position ($CP$),
