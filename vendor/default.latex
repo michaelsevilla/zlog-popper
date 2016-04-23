@@ -1,6 +1,10 @@
 \documentclass[10pt,twocolumn]{article}
 \usepackage{times}
 \usepackage{graphicx,grffile}
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+\usepackage[latin1]{inputenc}
 
 % do not change these values
 \baselineskip 12pt

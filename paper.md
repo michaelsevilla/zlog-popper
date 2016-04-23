@@ -19,10 +19,35 @@ Template for the CORFU object class interface. Maybe a simple state machine.
 Describe indexing and protocol enforcement.
 Differences between built-in interfaces and custom cls interfaces.
 
+\begin{figure}
+\centering
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.2cm,semithick]
+%\tikzstyle{every state}=[fill=red,draw=none,text=white]
+
+  \node[initial above,state] (A)                    {$EG$};
+  \node[state]         (B) [below left  of=A] {$CP$};
+  \node[state]         (D) [below of=B]       {$IO$};
+  \node[state]         (C) [below right of=A] {$GC$};
+  \node[state]         (E) [below of=C]       {$US$};
+
+  \path (A) edge        node [left] {R,W,F} (B)
+            edge        node {T}     (C)
+        (B) edge        node {F}     (C)
+            edge        node {R,W}   (D)
+        (C) edge        node {F,T}   (E)
+        (D) edge        node {W}     (E);
+\end{tikzpicture}
+\caption{State transition diagram for read ($R$), write ($W$), fill ($F$), and
+trim ($T$) CORFU operaitons. The states epoch guard ($EG$), check position ($CP$),
+and update state ($US$) access metadata. The I/O performs a log entry read or
+write, and garbage collection ($GC$) marks entries for reclamation.}
+\end{figure}
+
 # ZLog Physical Design
 
 ## Storage Interface Selection
 
+\begin{table}
 \begin{tabular}{ | l | l | l | l | l |}
 \hline
 Storage & Mapping & ESize & IP & PE \\ \hline
@@ -34,6 +59,8 @@ BS/Wr   & N:1     & D     & \multicolumn{2}{|c|}{N/A} \\ \hline
 BS/Ap   & N:1     & F/D   & KV/BS & KV/BS \\
 \hline
 \end{tabular}
+\caption{asdf}
+\end{table}
 
 Constructing a complete implementation for each configuration would take
 a lot of time, and may be time wasted if some configurations can be shown
