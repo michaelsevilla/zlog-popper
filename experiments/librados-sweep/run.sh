@@ -4,7 +4,7 @@ reset=soft
 data_dev=sdc
 
 name=librados_sweep
-runtime=3600
+runtime=7200
 pg_nums="128"
 stripe_widths="32"
 queue_depths="32"
