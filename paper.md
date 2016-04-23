@@ -6,7 +6,9 @@ abstract: abstract
 # Introduction
 
 [src-objclass-dev]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/objclass-dev/visualize.ipynb)
-![\[[source][src-objclass-dev]\] No Description.](experiments/objclass-dev/output.png)
+![\[[source][src-objclass-dev]\] Growth of officially supported, custom
+object interfaces in RADOS over 6 years. A *method* is a specific object
+interface and a *class* is a logical grouping of methods.](experiments/objclass-dev/output.png)
 
 # Consolidated Section
 
