@@ -5,7 +5,7 @@ abstract: abstract
 
 # Introduction
 
-[src-objclass-dev]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/objclass-dev/visualize.ipynb)
+[src-objclass-dev]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/objclass-dev/visualize.ipynb
 ![\[[source][src-objclass-dev]\] Growth of officially supported, custom
 object interfaces in RADOS over 6 years. A *method* is a specific object
 interface and a *class* is a logical grouping of methods.](experiments/objclass-dev/output.png)
@@ -78,7 +78,7 @@ simulating the costs associated with indexing or protocol enforcement in order
 to form a clean baseline. Log entries may vary in size depending on the
 application, but per-entry metadata is constant.
 
-[src-librados-sweep]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/librados-sweep/visualize.ipynb)
+[src-librados-sweep]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/librados-sweep/visualize.ipynb
 ![\[[source][src-librados-sweep]\] Throughput (IOPS) of 1K writes to a single
 OSD using the standard I/O interfaces in various configurations. The best performance is achieved using
 the byte stream interface and a N:1 mapping strategy.](experiments/librados-sweep/output.soft.reset.png)
@@ -112,7 +112,7 @@ sized entries without sacrificing performance.
 
 ## Metadata Management
 
-[src-basic-cls-overhead]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-overhead/visualize.ipynb)
+[src-basic-cls-overhead]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-overhead/visualize.ipynb
 ![\[[source][src-basic-cls-overhead]\] No Description.](experiments/basic-cls-overhead/output.1024.soft.reset.png)
 
 Many variations of design here. What is the easiest way to 
