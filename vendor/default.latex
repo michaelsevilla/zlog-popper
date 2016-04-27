@@ -1,5 +1,6 @@
 \documentclass[10pt,twocolumn]{article}
 \usepackage{times}
+\usepackage{multirow}
 \usepackage{graphicx,grffile}
 \usepackage{pgf}
 \usepackage{tikz}

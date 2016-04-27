@@ -7,6 +7,7 @@ figures:
 	make -C experiments/librados-sweep/
 	make -C experiments/basic-cls-overhead/
 	make -C experiments/objclass-dev/
+	make -C experiments/basic-cls-rand-read/
 
 out/paper.pdf: paper.md figures $(shell find vendor -type f)
 	docker run \
