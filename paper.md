@@ -77,8 +77,10 @@ write, and garbage collection ($GC$) marks entries for reclamation.}
 
 # ZLog Physical Design
 
-
-
+In this section we examine the design space for mapping the CORFU protocol onto
+the RADOS storage system. Recall from Section X the options for rados,
+and from section Y for corfu options. The cross product forms the design space.
+Want to winnow this down.
 
 ## Storage Interface Selection
 
@@ -97,8 +99,6 @@ Map & I/O & Entry Size & Addressing & Metadata \\ \hline
 the RADOS object storage system.}
 \label{t:init-ds}
 \end{table}
-
-
 
 Constructing a complete implementation for each configuration would take
 a lot of time, and may be time wasted if some configurations can be shown
@@ -175,8 +175,14 @@ sized entries without sacrificing performance.
 Many variations of design here. What is the easiest way to 
 winnow down the design space.
 
+### NEXT GRAPH A
+
 This is an easy interface to simulate.
 - Check Epoch (omap, stream header)
+- this graph also has the APPEND raw through for comparison
+- adds NEW OSD OP TO AVOID CLS OVERHEAD DISCUSSION FOR PAPER
+- 3 runs in this graph, no need to write interface
+- short runs to verify and then do all long runs togther with next graph
 
 Both protocol enforcement and logical address translation
 represent a larger design space involving index design. However
@@ -189,13 +195,36 @@ provides a strict upper bound on performance.
 
 ## Memory Cache
 
-We solve the slow down of the epoch by storing the value in memory. Here is the new performance.
+### NEXT GRAPH B (or combined with A)
+- Use in-memory cache to implement the epoch check and show that we can match
+the raw performance even with this added functionality.
+- This will show the content from graph A for comparison. Look
+we match the raw performance.
 
-We generalize this as a new interface and use this interface to implement the full
-zlog stack and show the performance.
+### NEXT GRAPH B or C (probably just two).. bar chart?
+- Final consolidation of average throughputs of all the different
+methods
+- THIS INCLUDES THE FULL IMPL OF ZLOG APPEND using the in-memory cache
+
+We solve the slow down of the epoch by storing the value in memory. Here is
+the new performance.  We are able to with the epoch check match the raw
+performance.
+
+We know that we cannot use kv/bs for logicla address translation or protocol
+enforcement without a performance hit so there is no point in trying. instead,
+we generalize this memory cache hting used for epoch checks as a
+new interface and use this interface to implement the full zlog
+stack and show the performance.
 
 Overall corfu is relatively simple abtraction, yet requires significant
 work in making performant. Further, the decision may change over time.
+
+We will probably have room in the paper to discuss the design of the
+index structure, like collapsing a bit map and taking advantage of
+the implicit strides in the offsets, etc... but we can probably move
+that to a later section to keep this presentation concise. We should
+probably mention this aspect here, but overall that becomes a ortholognal
+optimization.
 
 # Abstract Model
 
