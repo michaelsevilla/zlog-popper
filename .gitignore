@@ -2,3 +2,7 @@ out
 *.png
 .ipynb_checkpoints
 timestamp
+paper.aux
+paper.log
+paper.out
+paper.pdf

@@ -1,4 +1,4 @@
-all: out/paper.pdf
+all: paper.pdf
 
 .PHONY: figures
 
@@ -8,6 +8,10 @@ figures:
 	make -C experiments/basic-cls-overhead/
 	make -C experiments/objclass-dev/
 	make -C experiments/basic-cls-rand-read/
+
+paper.pdf: paper.tex figures
+	pdflatex paper
+	pdflatex paper
 
 out/paper.pdf: paper.md figures $(shell find vendor -type f)
 	docker run \

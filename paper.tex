@@ -1,16 +1,77 @@
----
-title: title
-abstract: abstract
----
+\documentclass[10pt,twocolumn]{article}
+\usepackage{times}
+\usepackage{multirow}
+\usepackage{graphicx,grffile}
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+\usepackage[latin1]{inputenc}
 
-# Introduction
+% do not change these values
+\baselineskip 12pt
+\textheight 9in
+\textwidth 6.5in
+\oddsidemargin 0in
+\topmargin 0in
+\headheight 0in
+\headsep 0in
 
-[src-objclass-dev]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/objclass-dev/visualize.ipynb
-![\[[source][src-objclass-dev]\] Growth of officially supported, custom
-object interfaces in RADOS over 6 years. A *method* is a specific object
-interface and a *class* is a logical grouping of methods.](experiments/objclass-dev/output.png)
+%\makeatletter
+%\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+%\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+%\makeatother
+%% Scale images if necessary, so that they will not overflow the page
+%% margins by default, and it is still possible to overwrite the defaults
+%% using explicit options in \includegraphics[width, height, ...]{}
+%\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+%
 
-# Storage System Programmability
+\usepackage[unicode=true]{hyperref}
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+            pdftitle={},
+            colorlinks=true,
+            citecolor=blue
+            urlcolor=blue,
+            linkcolor=blue,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+
+\usepackage[font=footnotesize,labelfont=bf]{caption}
+
+\begin{document}
+
+\title{title}
+
+\author{
+%Noah Watkins, Neha Ojha\textsuperscript{*}, Carlos Maltzahn \\
+%\small {\em University of California, Santa Cruz} \\
+%\small {\{jayhawk,carlosm\}@cs.ucsc.edu} \textsuperscript{*}nojha@ucsc.edu \\ [2mm]
+\small Submission Type: Research
+}
+
+\date{}
+\maketitle
+
+\begin{abstract}
+abstract
+\end{abstract}
+
+\section{Introduction}
+
+\begin{figure}[h]
+  \centering
+    \includegraphics[width=0.45\textwidth]{experiments/objclass-dev/output.png}
+    \caption{
+[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/objclass-dev/visualize.ipynb}{source}]
+Growth of officially supported, custom object interfaces in RADOS over 6
+years. A \emph{method} is a specific object interface and a \emph{class} is a
+logical grouping of methods.
+}
+\end{figure}
+
+\section{Storage System Programmability}
 
 When application goals are not met by a storage system the most common reaction
 is to design a workaround. Workarounds roughly fall into one of two categories:
@@ -37,7 +98,7 @@ Garbage Collection & Reference Counting & 4 \\ \hline
 \label{tab:objclasses}
 \end{table}
 
-# Consolidated Section
+\section{Consolidated Section}
 
 Up until this point we have introduced Ceph, CORFU, the general problems
 associated with programmability, described ZLog as being an instantiation of
@@ -75,14 +136,14 @@ and update state ($US$) access metadata. The I/O performs a log entry read or
 write, and garbage collection ($GC$) marks entries for reclamation.}
 \end{figure}
 
-# ZLog Physical Design
+\section{ZLog Physical Design}
 
 In this section we examine the design space for mapping the CORFU protocol onto
 the RADOS storage system. Recall from Section X the options for rados,
 and from section Y for corfu options. The cross product forms the design space.
 Want to winnow this down.
 
-## Storage Interface Selection
+\subsection{Storage Interface Selection}
 
 \begin{table}
 \begin{tabular}{ | l | l | l | l | l |}
@@ -111,10 +172,17 @@ simulating the costs associated with indexing or protocol enforcement in order
 to form a clean baseline. Log entries may vary in size depending on the
 application, but per-entry metadata is constant.
 
-[src-librados-sweep]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/librados-sweep/visualize.ipynb
-![\[[source\label{f:librados-sweep}][src-librados-sweep]\] Throughput (IOPS) of 1K writes to a single
-OSD using the standard I/O interfaces in various configurations. The best performance is achieved using
-the byte stream interface and a N:1 mapping strategy.](experiments/librados-sweep/output.soft.reset.png)
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.45\textwidth]{experiments/librados-sweep/output.soft.reset.png}
+  \caption{
+[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/librados-sweep/visualize.ipynb}{source}]
+Throughput (IOPS) of 1K writes to a single OSD using the standard I/O
+interfaces in various configurations. The best performance is achieved using
+the byte stream interface and a N:1 mapping strategy.
+}
+\end{figure}
+
 
 The first thing to notice is that the configurations using a 1:1 mapping
 perform poorly relative to the other configurations. This is unfortunate
@@ -132,10 +200,17 @@ As we will see next, even though the KV/N:1 configuration simplifies data
 management, small entry performance falls behind that of N:1 configurations
 that store data in the stream interface.
 
-[src-librados-rand-read]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-rand-read/visualize.ipynb
-![\[[source\label{f:librados-rand-read}][src-librados-rand-read]\] Throughput of 1K random reads to a single
-OSD using the standard I/O interfaces in various configurations. The best performance is achieved using
-the byte stream interface and a N:1 mapping strategy.](experiments/basic-cls-rand-read/output.read.60min.png)
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.45\textwidth]{experiments/basic-cls-rand-read/output.read.60min.png}
+  \caption{
+[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-rand-read/visualize.ipynb}{source}]
+Throughput of 1K random reads to a single OSD using the standard I/O
+interfaces in various configurations. The best performance is achieved using
+the byte stream interface and a N:1 mapping strategy.
+}
+\end{figure}
+
 
 Figure \ref{f:librados-sweep} shows the single-node write-only I/O throughput
 for each of the points in the design space defined in Table \ref{t:init-ds}.
@@ -167,15 +242,20 @@ In conclusion, both *write* and *append* variation of bytestream configurations
 are the best choice, with an edge given to *append* if it can support dynamic
 sized entries without sacrificing performance.
 
-## Metadata Management
+\subsection{Metadata Management}
 
-[src-basic-cls-overhead]: https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-overhead/visualize.ipynb
-![\[[source][src-basic-cls-overhead]\] No Description.](experiments/basic-cls-overhead/output.1024.soft.reset.png)
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.45\textwidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
+  \caption{
+[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-overhead/visualize.ipynb}{source}]
+}
+\end{figure}
 
 Many variations of design here. What is the easiest way to 
 winnow down the design space.
 
-### NEXT GRAPH A
+NEXT GRAPH A
 
 This is an easy interface to simulate.
 - Check Epoch (omap, stream header)
@@ -193,18 +273,18 @@ provides a strict upper bound on performance.
 - Protocol Enforcement
 - Logical Translation (only append case)
 
-## Memory Cache
+Memory Cache
 
-### NEXT GRAPH B (or combined with A)
-- Use in-memory cache to implement the epoch check and show that we can match
+NEXT GRAPH B (or combined with A)
+Use in-memory cache to implement the epoch check and show that we can match
 the raw performance even with this added functionality.
-- This will show the content from graph A for comparison. Look
+This will show the content from graph A for comparison. Look
 we match the raw performance.
 
-### NEXT GRAPH B or C (probably just two).. bar chart?
-- Final consolidation of average throughputs of all the different
+NEXT GRAPH B or C (probably just two).. bar chart?
+ Final consolidation of average throughputs of all the different
 methods
-- THIS INCLUDES THE FULL IMPL OF ZLOG APPEND using the in-memory cache
+ THIS INCLUDES THE FULL IMPL OF ZLOG APPEND using the in-memory cache
 
 We solve the slow down of the epoch by storing the value in memory. Here is
 the new performance.  We are able to with the epoch check match the raw
@@ -226,8 +306,8 @@ that to a later section to keep this presentation concise. We should
 probably mention this aspect here, but overall that becomes a ortholognal
 optimization.
 
-# Abstract Model
+%# Abstract Model
 
-![](experiments/throughput-sweep/output.png)
+%# Sequencer Creation
 
-# Sequencer Creation
+\end{document}
