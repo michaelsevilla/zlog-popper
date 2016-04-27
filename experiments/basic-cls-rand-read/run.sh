@@ -11,7 +11,7 @@ queue_depths="32"
 entry_sizes="1024"
 pool=zlog
 rest=120
-read_runtime=1800
+read_runtime=3600
 reads=yes
 
 # workloads
