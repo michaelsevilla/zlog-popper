@@ -138,12 +138,43 @@ write, and garbage collection ($GC$) marks entries for reclamation.}
 
 \section{ZLog Physical Design}
 
-In this section we examine the design space for mapping the CORFU protocol onto
-the RADOS storage system. Recall from Section X the options for rados,
-and from section Y for corfu options. The cross product forms the design space.
-Want to winnow this down.
+In this section we examine the design space for implementing the CORFU
+protocol in the RADOS storage system. Table \ref{t:init-ds} shows the entire
+design space. A description of each design parameter follows:
+
+{\bf Mapping strategy.} The method by which a log entry---identified by its
+logical position---is addressed within RADOS is referred to as the mapping
+strategy. A 1:1 strategy stores each log entry in a RADOS object with a
+distinct name (e.g. ``mylog.pos443''), and an N:1 strategy stripes the log
+positions across a set of objects (e.g.  round-robin). While we do consider
+both strategies in this paper, a 1:1 strategy is attractive because it allows
+a design in which clients can directly address log positions by constructing
+the correct object name.
+
+{\bf Storage interface.} entry data may be small or large. its primary
+storage location is important. kv, bs. we further sub-divide bs into
+write and append. each strategy is compatible with fixed size entries
+except for the write interface.
+
+{\bf Logical addressing.}
 
 \subsection{Storage Interface Selection}
+
+Figure \ref{f:librados-sweep} shows the single-node write-only I/O throughput
+for each of the points in the design space defined in Table \ref{t:init-ds}.
+The results reveal poor relative performance using both the key-value storage
+interface, as well as either of the 1:1 strategies---which incur overhead by
+creating a new object for each log entry. Both of the N:1 strategies using the
+bytestream I/O interface outperform all of the other approaches by over 2x
+throughput, but otherwise have nearly identical performance.
+
+To examine the read performance of the points in the design space we generated
+a dataset using each of the write workloads, and then issued random reads
+across the entire dataset. Figure \ref{f:librados-rand-read} shows the read
+throughput for each of the design strategies. The results show that an N:1
+mapping using bytestream interface performs best. Interestingly, the 1:1
+mapping strategy using the bytestream interface exhibits good read performance
+in comparison to writes using the same strategy.
 
 \begin{table}
 \begin{tabular}{ | l | l | l | l | l |}
@@ -161,20 +192,9 @@ the RADOS object storage system.}
 \label{t:init-ds}
 \end{table}
 
-Constructing a complete implementation for each configuration would take
-a lot of time, and may be time wasted if some configurations can be shown
-to never be a viable option.
-
-To winnow down the design space we ran a set of benchmarks---one for each
-configuration--- that stressed the raw write performance using the built-in,
-optimized interfaces on an unmodified version of Ceph. We explicitly avoided
-simulating the costs associated with indexing or protocol enforcement in order
-to form a clean baseline. Log entries may vary in size depending on the
-application, but per-entry metadata is constant.
-
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.45\textwidth]{experiments/librados-sweep/output.soft.reset.png}
+  \includegraphics[width=0.45\textwidth]{experiments/librados-sweep/output.soft.reset.2hr.png}
   \caption{
 [\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/librados-sweep/visualize.ipynb}{source}]
 Throughput (IOPS) of 1K writes to a single OSD using the standard I/O
@@ -182,23 +202,6 @@ interfaces in various configurations. The best performance is achieved using
 the byte stream interface and a N:1 mapping strategy.
 }
 \end{figure}
-
-
-The first thing to notice is that the configurations using a 1:1 mapping
-perform poorly relative to the other configurations. This is unfortunate
-because a 1:1 mapping simplifies data management by avoiding the need to
-multiplex entries onto a smaller set of objects. However, even if performance
-was acceptable, notice that throughput dramatically drops in the tail when the
-number of objects reaches a threshold forcing the object cache to spill to
-disk. Note that in a large cluster this mode may take a long time reach,
-but we avoid it due to the inherent risk.
-
-The KV/N:1 is a convenient configuration because the key-value interface
-can be used to easily address log entries and manage index data. However, the
-performance of KV/N:1 can vary widely depending on the size of the data entry.
-As we will see next, even though the KV/N:1 configuration simplifies data
-management, small entry performance falls behind that of N:1 configurations
-that store data in the stream interface.
 
 \begin{figure}[h]
   \centering
@@ -211,36 +214,13 @@ the byte stream interface and a N:1 mapping strategy.
 }
 \end{figure}
 
-
-Figure \ref{f:librados-sweep} shows the single-node write-only I/O throughput
-for each of the points in the design space defined in Table \ref{t:init-ds}.
-The results reveal poor relative performance using both the key-value storage
-interface, as well as either of the 1:1 strategies---which incur overhead by
-creating a new object for each log entry. Both of the N:1 strategies using the
-bytestream I/O interface outperform all of the other approaches by over 2x
-throughput, but otherwise have nearly identical performance. As a first
-approximation these results show that when optimizing for log append throughput
-the design space should be refined by limiting solutions to architectures based
-on a N:1 mapping strategy using the bytestream I/O interface.
-
-To examine the read performance of the points in the design space we generated
-a dataset using each of the write workloads, and then issued random reads
-across the entire dataset. Figure \ref{f:librados-rand-read} shows the read
-throughput for each of the design strategies. The results show that an N:1
-mapping using bytestream interface performs best. Interestingly, the 1:1
-mapping strategy using the bytestream interface exhibits good read performance
-in comparison to writes using the same strategy.
-
-The configurations based on bytestream storage exhibit the best performance.
-The *write* variation depends on client-side mapping to object offset and
-indirectly on the VFS index layer within the OSD, but this method is
-incompatible with non-fixed size entries. Alternatively, the *append* variation
-supports both fixed and dynamic size entries, but leaves the indexing and
-protocl enforcment challenges unsolved.
-
-In conclusion, both *write* and *append* variation of bytestream configurations
-are the best choice, with an edge given to *append* if it can support dynamic
-sized entries without sacrificing performance.
+As a first approximation these results show that when optimizing for log
+append and random read throughput the design space should be refined by
+limiting solutions to architectures based on a N:1 mapping strategy using the
+bytestream I/O interface. But what these microbenchmarks explicitly omit are
+the overheads associated with metadata management such as enforcing write-once
+semantics or using an index to map a log position to a physical offset within
+an object. In the next section we
 
 \subsection{Metadata Management}
 
