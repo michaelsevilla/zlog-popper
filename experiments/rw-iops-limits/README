@@ -1,0 +1,7 @@
+ran bytestream 11 write
+saw around 22K iops
+adjusted throttle_write_iops until about 11K app iops
+set read iops limit to the same value
+
+echo "8:32 15000" | sudo tee
+/sys/fs/cgroup/blkio/blkio.throttle.write_iops_device
