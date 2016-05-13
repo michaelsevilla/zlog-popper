@@ -62,10 +62,26 @@ abstract
 
 Cloud providers are increasingly reliant upon extensions to distributed
 storage system such as Ceph as is shown in Figure~\ref{fig:objclass-dev}
-by a marked increase in production Ceph extensions. The construction of
-extensions is not limited to core developers; the community has been receptive
-to contributions with the recent inclusion by CERN developers of an extension
-for performing limited numeric operations on object data~\cite{cls_numops}.
+by a marked increase in production Ceph extensions.
+
+Figure~\ref{fig:objclass-dev} also shows the number of lines of C++
+code written to create these extensions.
+
+The construction of extensions is not limited to core developers; the
+community has been receptive to contributions with the recent inclusion by
+CERN developers of an extension for performing limited numeric operations on
+object data~\cite{cls_numops}, and a mechanism for dynamically defining
+extensions using Lua~\cite{cls_lua}.
+
+Operating systems and containers are similar. AUFS, dockerfile
+
+\section{Recurring Problem}
+
+Describe CORFU briefly, and then show the physical design challenge. The
+performance decision changes depending on the mix of hardware and software
+versions and configurations.
+
+
 
 \begin{figure}[h]
   \centering
