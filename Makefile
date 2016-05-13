@@ -11,6 +11,8 @@ figures:
 
 paper.pdf: paper.tex figures
 	pdflatex paper
+	bibtex paper
+	pdflatex paper
 	pdflatex paper
 
 out/paper.pdf: paper.md figures $(shell find vendor -type f)
@@ -35,3 +37,6 @@ nb:
 
 nbf:
 	docker run -p 8888:8888 -v `pwd`:/home/jovyan/work jupyter/scipy-notebook
+
+clean:
+	rm -f paper.blg paper.aux paper.bbl paper.log paper.out paper.pdf
