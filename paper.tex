@@ -60,22 +60,39 @@ abstract
 
 \section{Introduction}
 
-Cloud providers are increasingly reliant upon extensions to distributed
-storage system such as Ceph as is shown in Figure~\ref{fig:objclass-dev}
-by a marked increase in production Ceph extensions.
-
-Figure~\ref{fig:objclass-dev} also shows the number of lines of C++
-code written to create these extensions.
+Cloud providers are increasingly reliant upon application-specific extensions
+to distributed storage system such as Ceph as is shown in
+Figure~\ref{fig:objclass-dev} by a marked increase in Ceph extensions used in
+production.
 
 The construction of extensions is not limited to core developers; the
-community has been receptive to contributions with the recent inclusion by
-CERN developers of an extension for performing limited numeric operations on
-object data~\cite{cls_numops}, and a mechanism for dynamically defining
-extensions using Lua~\cite{cls_lua}.
+development community has been receptive to contributions with the recent
+inclusion by CERN developers of an extension for performing limited numeric
+operations on object data~\cite{cls_numops}.
 
-Operating systems and containers are similar. AUFS, dockerfile
+This trend is not limited to Ceph. AWS Lambda, Redis Lua, Redis Modules,
+KV-Drives, and Rhea, are all recent examples of storage systems embracing the
+power of including application-specific semantics. While Ceph has not yet
+reached the point of directly exposing these features to users, the recent
+inclusion of a mechanism for dynamically defining extensions using
+Lua~\cite{cls_lua} suggests that aspects of this may soon appear.
+
+If the growth illustrated in Figure~\ref{fig:objclass-dev} continues, the
+amount of low-level C++ is likely to grow very larage. Unfortunately, much of
+this code is written assuming a performance profile defined by a combination
+of the hardware and software versions available at the time of development. As
+Ceph development continues at a fast pace, the cost of adapting to changing
+assumptions regarding performance will become significant.
+
+% footnote: we could probably look through the cls_* changelog and find
+% examples of changes based on changes to semantics.
+
+% Virtualization. Operating systems and containers are similar. AUFS, dockerfile
+
+In order to avoid this we need declarative magic hats.
 
 \section{Recurring Problem}
+
 
 Describe CORFU briefly, and then show the physical design challenge. The
 performance decision changes depending on the mix of hardware and software
@@ -83,7 +100,11 @@ versions and configurations.
 
 
 
-\begin{figure}[h]
+
+
+\section{Storage System Programmability}
+
+\begin{figure}[ht]
   \centering
     \includegraphics[width=0.45\textwidth]{experiments/objclass-dev/output.png}
     \caption{
@@ -95,32 +116,11 @@ logical grouping of methods.
 \label{fig:objclass-dev}
 \end{figure}
 
-\section{Storage System Programmability}
-
 When application goals are not met by a storage system the most common reaction
 is to design a workaround. Workarounds roughly fall into one of two categories:
 so called ``bolt-on'' services that introduce a 3rd party system (e.g. a
 metadata service), or expanded application responsibility in the form of data
 management (e.g. a new data layout).
-
-\begin{table}
-\begin{tabular}{|l|l|l|}
-\hline
-Category & Specialization & Methods \\ \hline
-\multirow{2}{*}{Locking} & Shared & \multirow{2}{*}{6} \\
-                         & Exclusive & \\ \hline
-\multirow{3}{*}{Logging} & Replica & 3 \\
-                         & State & 4 \\
-                         & Timestamped & 4 \\ \hline
-Garbage Collection & Reference Counting & 4 \\ \hline
-\multirow{4}{*}{Metadata Management} & RBD & 37 \\
- & RGW & 27 \\
- & User & 5 \\
- & Version & 5 \\ \hline
-\end{tabular}
-\caption{A variety of RADOS object storage classes exist that expose reusable interfaces to applications.}
-\label{tab:objclasses}
-\end{table}
 
 \section{Consolidated Section}
 
@@ -133,32 +133,6 @@ Template for the CORFU object class interface. Maybe a simple state machine.
 Describe indexing and protocol enforcement.
 Differences between built-in interfaces and custom cls interfaces.
 
-\begin{figure}
-\centering
-\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.2cm,semithick]
-%\tikzstyle{every state}=[fill=red,draw=none,text=white]
-
-  \node[initial left,state] (A)              {$EG$};
-  \node[state]         (B) [below right of=A] {$CP$};
-  \node[state]         (D) [right of=B]       {$IO$};
-  \node[state]         (C) [above right of=A] {$GC$};
-  \node[state]         (E) [right of=C]       {$US$};
-  \node[state]         (F) [below right of=E] {$Fi$};
-
-  \path (A) edge        node [left] {R,W,F} (B)
-            edge        node {T}     (C)
-        (B) edge        node {F}     (C)
-            edge        node {R,W}   (D)
-        (C) edge        node {F,T}   (E)
-        (D) edge        node {W}     (E)
-            edge        node {R}     (F)
-        (E) edge        node {F,T,W} (F);
-\end{tikzpicture}
-\caption{State transition diagram for read ($R$), write ($W$), fill ($F$), and
-trim ($T$) CORFU operaitons. The states epoch guard ($EG$), check position ($CP$),
-and update state ($US$) access metadata. The I/O performs a log entry read or
-write, and garbage collection ($GC$) marks entries for reclamation.}
-\end{figure}
 
 \section{ZLog Physical Design}
 
@@ -199,6 +173,54 @@ throughput for each of the design strategies. The results show that an N:1
 mapping using bytestream interface performs best. Interestingly, the 1:1
 mapping strategy using the bytestream interface exhibits good read performance
 in comparison to writes using the same strategy.
+
+\begin{table}
+\begin{tabular}{|l|l|l|}
+\hline
+Category & Specialization & Methods \\ \hline
+\multirow{2}{*}{Locking} & Shared & \multirow{2}{*}{6} \\
+                         & Exclusive & \\ \hline
+\multirow{3}{*}{Logging} & Replica & 3 \\
+                         & State & 4 \\
+                         & Timestamped & 4 \\ \hline
+Garbage Collection & Reference Counting & 4 \\ \hline
+\multirow{4}{*}{Metadata Management} & RBD & 37 \\
+ & RGW & 27 \\
+ & User & 5 \\
+ & Version & 5 \\ \hline
+\end{tabular}
+\caption{A variety of RADOS object storage classes exist that expose reusable interfaces to applications.}
+\label{tab:objclasses}
+\end{table}
+
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.2cm,semithick]
+%\tikzstyle{every state}=[fill=red,draw=none,text=white]
+
+  \node[initial left,state] (A)              {$EG$};
+  \node[state]         (B) [below right of=A] {$CP$};
+  \node[state]         (D) [right of=B]       {$IO$};
+  \node[state]         (C) [above right of=A] {$GC$};
+  \node[state]         (E) [right of=C]       {$US$};
+  \node[state]         (F) [below right of=E] {$Fi$};
+
+  \path (A) edge        node [left] {R,W,F} (B)
+            edge        node {T}     (C)
+        (B) edge        node {F}     (C)
+            edge        node {R,W}   (D)
+        (C) edge        node {F,T}   (E)
+        (D) edge        node {W}     (E)
+            edge        node {R}     (F)
+        (E) edge        node {F,T,W} (F);
+\end{tikzpicture}
+\caption{State transition diagram for read ($R$), write ($W$), fill ($F$), and
+trim ($T$) CORFU operaitons. The states epoch guard ($EG$), check position ($CP$),
+and update state ($US$) access metadata. The I/O performs a log entry read or
+write, and garbage collection ($GC$) marks entries for reclamation.}
+\end{figure}
+
 
 \begin{table}
 \begin{tabular}{ | l | l | l | l | l |}
