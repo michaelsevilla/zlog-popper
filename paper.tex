@@ -1,6 +1,7 @@
 \documentclass[10pt,twocolumn]{article}
 \usepackage{times}
 \usepackage{multirow}
+\usepackage{subcaption}
 \usepackage{graphicx,grffile}
 \usepackage{pgf}
 \usepackage{tikz}
@@ -42,7 +43,7 @@
 
 \begin{document}
 
-\title{title}
+\title{outline!}
 
 \author{
 %Noah Watkins, Neha Ojha\textsuperscript{*}, Carlos Maltzahn \\
@@ -55,7 +56,6 @@
 \maketitle
 
 \begin{abstract}
-abstract
 \end{abstract}
 
 \section{Introduction}
@@ -95,42 +95,9 @@ advantage of cpu and i/o parallelism, and gave little to no attention to
 security or performance isolation concerns. In contrast, the interfaces being
 deployed today focus on data management, indexing, and physical format.
 
-We propose the introduction of a declarative language for building object
-based interfaces that allows a storage system to meet the needs of an
-application throughout the development process without requiring rewrites.
-
-\section{Recurring Problem}
-
-Lets motivate here. Showing the need for programmability and some 
-declarative interface.
-
-Describe corfu and object class interfaces.
-
-Describe CORFU briefly, and then show the physical design challenge. The
-performance decision changes depending on the mix of hardware and software
-versions and configurations.
-
-Use state diagram to show how this works for corfu.
-
-then show physical design crazy ness as we go to different
-versions and/or different hardware.
-
-\section{Programming Model}
-
-Here we create a programming model for the objects
-
-Show how the corfu interface is defined in this model.
-
-\section{Other Interfaces}
-
-\section{Evaluation}
-
-
-\section{Storage System Programmability}
-
 \begin{figure}[ht]
   \centering
-    \includegraphics[width=0.45\textwidth]{experiments/objclass-dev/output.png}
+    \includegraphics[width=0.48\textwidth]{experiments/objclass-dev/output.png}
     \caption{
 [\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/objclass-dev/visualize.ipynb}{source}]
 Growth of officially supported, custom object interfaces in RADOS over 6
@@ -140,63 +107,23 @@ logical grouping of methods.
 \label{fig:objclass-dev}
 \end{figure}
 
-When application goals are not met by a storage system the most common reaction
-is to design a workaround. Workarounds roughly fall into one of two categories:
-so called ``bolt-on'' services that introduce a 3rd party system (e.g. a
-metadata service), or expanded application responsibility in the form of data
-management (e.g. a new data layout).
+We propose the introduction of a declarative language for building object
+based interfaces that allows a storage system to meet the needs of an
+application throughout the development process without requiring rewrites.
 
-\section{Consolidated Section}
+\section{Background}
 
-Up until this point we have introduced Ceph, CORFU, the general problems
-associated with programmability, described ZLog as being an instantiation of
-the CORFU interface on top of Ceph.
+In this section we briefly describe Ceph and object-based interface
+development. We will use CORFU as a motivating example of an interface, and
+then show the challenges with the current low-level mechanisms for defining
+interfaces.
 
-Template for the CORFU object class interface. Maybe a simple state machine.
+\subsection{Domain-specific Object Interfaces}
 
-Describe indexing and protocol enforcement.
-Differences between built-in interfaces and custom cls interfaces.
-
-
-\section{ZLog Physical Design}
-
-In this section we examine the design space for implementing the CORFU
-protocol in the RADOS storage system. Table \ref{t:init-ds} shows the entire
-design space. A description of each design parameter follows:
-
-{\bf Mapping strategy.} The method by which a log entry---identified by its
-logical position---is addressed within RADOS is referred to as the mapping
-strategy. A 1:1 strategy stores each log entry in a RADOS object with a
-distinct name (e.g. ``mylog.pos443''), and an N:1 strategy stripes the log
-positions across a set of objects (e.g.  round-robin). While we do consider
-both strategies in this paper, a 1:1 strategy is attractive because it allows
-a design in which clients can directly address log positions by constructing
-the correct object name.
-
-{\bf Storage interface.} entry data may be small or large. its primary
-storage location is important. kv, bs. we further sub-divide bs into
-write and append. each strategy is compatible with fixed size entries
-except for the write interface.
-
-{\bf Logical addressing.}
-
-\subsection{Storage Interface Selection}
-
-Figure \ref{f:librados-sweep} shows the single-node write-only I/O throughput
-for each of the points in the design space defined in Table \ref{t:init-ds}.
-The results reveal poor relative performance using both the key-value storage
-interface, as well as either of the 1:1 strategies---which incur overhead by
-creating a new object for each log entry. Both of the N:1 strategies using the
-bytestream I/O interface outperform all of the other approaches by over 2x
-throughput, but otherwise have nearly identical performance.
-
-To examine the read performance of the points in the design space we generated
-a dataset using each of the write workloads, and then issued random reads
-across the entire dataset. Figure \ref{f:librados-rand-read} shows the read
-throughput for each of the design strategies. The results show that an N:1
-mapping using bytestream interface performs best. Interestingly, the 1:1
-mapping strategy using the bytestream interface exhibits good read performance
-in comparison to writes using the same strategy.
+Ceph allows the construction of domain specific interfaces. There are many
+different object interfaces in production today. An example of the spectrum of
+interface types is shown in Table~\ref{tab:objclass-cats}. Object classes are
+developed as a transactional composition of native storage interfaces.
 
 \begin{table}
 \begin{tabular}{|l|l|l|}
@@ -207,15 +134,30 @@ Category & Specialization & Methods \\ \hline
 \multirow{3}{*}{Logging} & Replica & 3 \\
                          & State & 4 \\
                          & Timestamped & 4 \\ \hline
-Garbage Collection & Reference Counting & 4 \\ \hline
-\multirow{4}{*}{Metadata Management} & RBD & 37 \\
+GC & Reference Counting & 4 \\ \hline
+\multirow{4}{*}{Metadata} & RBD & 37 \\
  & RGW & 27 \\
  & User & 5 \\
  & Version & 5 \\ \hline
 \end{tabular}
-\caption{A variety of RADOS object storage classes exist that expose reusable interfaces to applications.}
-\label{tab:objclasses}
+\caption{A variety of RADOS object storage classes exist that expose reusable
+interfaces to applications.}
+\label{tab:objclass-cats}
 \end{table}
+
+\subsection{Motivating Example: CORFU Log}
+
+Short description of CORFU system~\cite{balakrishnan:nsdi12}. It's a log!
+While CORFU relies on custom interfaces built into flash devices, an
+implementation in Ceph relies upon custom device interfaces to enforce its
+protocol.
+
+The state-machine shown in Figure~\ref{fig:corfu-sm} shows the composition of
+actions for each component of the CORFU interface. For example, each
+operations begins with an \emph{epoch guard}, and a \emph{write} operation
+will consult an index and perform a bulk I/O operation.  The primary concern
+when mapping an interface onto Ceph is deciding how each native interface is
+used in the interface composition.
 
 \begin{figure}
 \centering
@@ -242,8 +184,43 @@ Garbage Collection & Reference Counting & 4 \\ \hline
 trim ($T$) CORFU operaitons. The states epoch guard ($EG$), check position ($CP$),
 and update state ($US$) access metadata. The I/O performs a log entry read or
 write, and garbage collection ($GC$) marks entries for reclamation.}
+\label{fig:corfu-sm}
 \end{figure}
 
+\subsection{Physical Design}
+
+There is a finite set of strategies for mapping the CORFU interfaces onto the
+current set of native I/O interfaces used to construct object interfaces.
+Table~\ref{tab:pd-map} shows the design space for mapping the CORFU interfaces
+onto Ceph. In order to select the best mapping we performed a parameter sweet
+over the design space.
+
+\begin{figure*}[!ht]
+    \centering
+    \begin{subfigure}{.6\columnwidth}
+        \includegraphics[width=\columnwidth]{experiments/librados-sweep/output.soft.reset.2hr.png}
+        \caption{a}
+        \label{fig:vanilla-io-diff}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.6\columnwidth}
+        \includegraphics[width=\columnwidth]{experiments/basic-cls-rand-read/output.read.60min.png}
+        \caption{b}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.6\columnwidth}
+        \includegraphics[width=\columnwidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
+        \caption{c}
+    \end{subfigure}\hfill
+    \caption{Shown here are the graphs and such that demonstrate that the same
+        physical design choices are not the same between differing version of
+    Ceph even on the same hardware.}
+\end{figure*}
+
+Figure~\ref{fig:vanilla-io-diff} shows the result of a parameter sweep which
+clearly shows that an N-1 mapping based on the bytestream interface provides
+superiour performance. However, the other two graphs show the same interfaces
+running on an old version of Ceph that show the same decision would not have
+been the optimal choice {\bf \emph{note: for the outline these are not the
+real graphs we'll be using}}.
 
 \begin{table}
 \begin{tabular}{ | l | l | l | l | l |}
@@ -258,106 +235,100 @@ Map & I/O & Entry Size & Addressing & Metadata \\ \hline
 \end{tabular}
 \caption{The high-level design space of mapping CORFU log entry storage onto
 the RADOS object storage system.}
-\label{t:init-ds}
+\label{tab:pd-map}
 \end{table}
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.45\textwidth]{experiments/librados-sweep/output.soft.reset.2hr.png}
-  \caption{
-[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/librados-sweep/visualize.ipynb}{source}]
-Throughput (IOPS) of 1K writes to a single OSD using the standard I/O
-interfaces in various configurations. The best performance is achieved using
-the byte stream interface and a N:1 mapping strategy.
-}
-\end{figure}
+\section{Programming Model}
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.45\textwidth]{experiments/basic-cls-rand-read/output.read.60min.png}
-  \caption{
-[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-rand-read/visualize.ipynb}{source}]
-Throughput of 1K random reads to a single OSD using the standard I/O
-interfaces in various configurations. The best performance is achieved using
-the byte stream interface and a N:1 mapping strategy.
-}
-\end{figure}
+In this section we are going to be describing our way of creating interfaces.
 
-As a first approximation these results show that when optimizing for log
-append and random read throughput the design space should be refined by
-limiting solutions to architectures based on a N:1 mapping strategy using the
-bytestream I/O interface. But what these microbenchmarks explicitly omit are
-the overheads associated with metadata management such as enforcing write-once
-semantics or using an index to map a log position to a physical offset within
-an object. In the next section we
+\section{Other Interfaces}
 
-\subsection{Metadata Management}
+Here we show the derivation of two other interfaces that are in production in
+Ceph today to demonstrate the generality of our interface.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.45\textwidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
-  \caption{
-[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-overhead/visualize.ipynb}{source}]
-}
-\end{figure}
+\section{Evaluation}
 
-Many variations of design here. What is the easiest way to 
-winnow down the design space.
+\section{Related Work}
 
-NEXT GRAPH A
+\section{Conclusion}
 
-This is an easy interface to simulate.
-- Check Epoch (omap, stream header)
-- this graph also has the APPEND raw through for comparison
-- adds NEW OSD OP TO AVOID CLS OVERHEAD DISCUSSION FOR PAPER
-- 3 runs in this graph, no need to write interface
-- short runs to verify and then do all long runs togther with next graph
+%In this section we examine the design space for implementing the CORFU
+%protocol in the RADOS storage system. Table \ref{t:init-ds} shows the entire
+%design space. A description of each design parameter follows:
+%
+%{\bf Mapping strategy.} The method by which a log entry---identified by its
+%logical position---is addressed within RADOS is referred to as the mapping
+%strategy. A 1:1 strategy stores each log entry in a RADOS object with a
+%distinct name (e.g. ``mylog.pos443''), and an N:1 strategy stripes the log
+%positions across a set of objects (e.g.  round-robin). While we do consider
+%both strategies in this paper, a 1:1 strategy is attractive because it allows
+%a design in which clients can directly address log positions by constructing
+%the correct object name.
+%
+%{\bf Storage interface.} entry data may be small or large. its primary
+%storage location is important. kv, bs. we further sub-divide bs into
+%write and append. each strategy is compatible with fixed size entries
+%except for the write interface.
+%
+%{\bf Logical addressing.}
 
-Both protocol enforcement and logical address translation
-represent a larger design space involving index design. However
-since in either case all state must be stored in the omap and
-in the stream header, testing the overhead of epoch enforcement
-provides a strict upper bound on performance.
+%\subsection{Storage Interface Selection}
+%
+%Figure \ref{f:librados-sweep} shows the single-node write-only I/O throughput
+%for each of the points in the design space defined in Table \ref{t:init-ds}.
+%The results reveal poor relative performance using both the key-value storage
+%interface, as well as either of the 1:1 strategies---which incur overhead by
+%creating a new object for each log entry. Both of the N:1 strategies using the
+%bytestream I/O interface outperform all of the other approaches by over 2x
+%throughput, but otherwise have nearly identical performance.
+%
+%To examine the read performance of the points in the design space we generated
+%a dataset using each of the write workloads, and then issued random reads
+%across the entire dataset. Figure \ref{f:librados-rand-read} shows the read
+%throughput for each of the design strategies. The results show that an N:1
+%mapping using bytestream interface performs best. Interestingly, the 1:1
+%mapping strategy using the bytestream interface exhibits good read performance
+%in comparison to writes using the same strategy.
 
-- Protocol Enforcement
-- Logical Translation (only append case)
+%\begin{figure}[h]
+%  \centering
+%  \includegraphics[width=0.45\textwidth]{experiments/librados-sweep/output.soft.reset.2hr.png}
+%  \caption{
+%[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/librados-sweep/visualize.ipynb}{source}]
+%Throughput (IOPS) of 1K writes to a single OSD using the standard I/O
+%interfaces in various configurations. The best performance is achieved using
+%the byte stream interface and a N:1 mapping strategy.
+%}
+%\end{figure}
+%
+%\begin{figure}[h]
+%  \centering
+%  \includegraphics[width=0.45\textwidth]{experiments/basic-cls-rand-read/output.read.60min.png}
+%  \caption{
+%[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-rand-read/visualize.ipynb}{source}]
+%Throughput of 1K random reads to a single OSD using the standard I/O
+%interfaces in various configurations. The best performance is achieved using
+%the byte stream interface and a N:1 mapping strategy.
+%}
+%\end{figure}
+%
+%\begin{figure}[h]
+%  \centering
+%  \includegraphics[width=0.45\textwidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
+%  \caption{
+%[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-overhead/visualize.ipynb}{source}]
+%}
+%\end{figure}
 
-Memory Cache
 
-NEXT GRAPH B (or combined with A)
-Use in-memory cache to implement the epoch check and show that we can match
-the raw performance even with this added functionality.
-This will show the content from graph A for comparison. Look
-we match the raw performance.
-
-NEXT GRAPH B or C (probably just two).. bar chart?
- Final consolidation of average throughputs of all the different
-methods
- THIS INCLUDES THE FULL IMPL OF ZLOG APPEND using the in-memory cache
-
-We solve the slow down of the epoch by storing the value in memory. Here is
-the new performance.  We are able to with the epoch check match the raw
-performance.
-
-We know that we cannot use kv/bs for logicla address translation or protocol
-enforcement without a performance hit so there is no point in trying. instead,
-we generalize this memory cache hting used for epoch checks as a
-new interface and use this interface to implement the full zlog
-stack and show the performance.
-
-Overall corfu is relatively simple abtraction, yet requires significant
-work in making performant. Further, the decision may change over time.
-
-We will probably have room in the paper to discuss the design of the
-index structure, like collapsing a bit map and taking advantage of
-the implicit strides in the offsets, etc... but we can probably move
-that to a later section to keep this presentation concise. We should
-probably mention this aspect here, but overall that becomes a ortholognal
-optimization.
-
-%# Abstract Model
-
-%# Sequencer Creation
+%As a first approximation these results show that when optimizing for log
+%append and random read throughput the design space should be refined by
+%limiting solutions to architectures based on a N:1 mapping strategy using the
+%bytestream I/O interface. But what these microbenchmarks explicitly omit are
+%the overheads associated with metadata management such as enforcing write-once
+%semantics or using an index to map a log position to a physical offset within
+%an object. In the next section we
 
 \bibliography{paper}
 \bibliographystyle{plain}
