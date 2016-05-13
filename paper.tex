@@ -70,7 +70,7 @@ development community has been receptive to contributions with the recent
 inclusion by CERN developers of an extension for performing limited numeric
 operations on object data~\cite{cls_numops}.
 
-This trend is not limited to Ceph. AWS Lambda, Redis Lua, Redis Modules,
+This trend is also not limited to Ceph. AWS Lambda, Redis Lua, Redis Modules,
 KV-Drives, and Rhea, are all recent examples of storage systems embracing the
 power of including application-specific semantics. While Ceph has not yet
 reached the point of directly exposing these features to users, the recent
@@ -78,7 +78,7 @@ inclusion of a mechanism for dynamically defining extensions using
 Lua~\cite{cls_lua} suggests that aspects of this may soon appear.
 
 If the growth illustrated in Figure~\ref{fig:objclass-dev} continues, the
-amount of low-level C++ is likely to grow very larage. Unfortunately, much of
+amount of low-level C++ will grow large. Unfortunately, much of
 this code is written assuming a performance profile defined by a combination
 of the hardware and software versions available at the time of development. As
 Ceph development continues at a fast pace, the cost of adapting to changing
@@ -89,17 +89,41 @@ assumptions regarding performance will become significant.
 
 % Virtualization. Operating systems and containers are similar. AUFS, dockerfile
 
-In order to avoid this we need declarative magic hats.
+Previous work in active storage has focused on the utility of moving
+computation closer to data in an effort to reduce data movement and take
+advantage of cpu and i/o parallelism, and gave little to no attention to
+security or performance isolation concerns. In contrast, the interfaces being
+deployed today focus on data management, indexing, and physical format.
+
+We propose the introduction of a declarative language for building object
+based interfaces that allows a storage system to meet the needs of an
+application throughout the development process without requiring rewrites.
 
 \section{Recurring Problem}
 
+Lets motivate here. Showing the need for programmability and some 
+declarative interface.
+
+Describe corfu and object class interfaces.
 
 Describe CORFU briefly, and then show the physical design challenge. The
 performance decision changes depending on the mix of hardware and software
 versions and configurations.
 
+Use state diagram to show how this works for corfu.
 
+then show physical design crazy ness as we go to different
+versions and/or different hardware.
 
+\section{Programming Model}
+
+Here we create a programming model for the objects
+
+Show how the corfu interface is defined in this model.
+
+\section{Other Interfaces}
+
+\section{Evaluation}
 
 
 \section{Storage System Programmability}
@@ -193,7 +217,6 @@ Garbage Collection & Reference Counting & 4 \\ \hline
 \label{tab:objclasses}
 \end{table}
 
-
 \begin{figure}
 \centering
 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.2cm,semithick]
@@ -226,7 +249,7 @@ write, and garbage collection ($GC$) marks entries for reclamation.}
 \begin{tabular}{ | l | l | l | l | l |}
 \hline
 Map & I/O & Entry Size & Addressing & Metadata \\ \hline
-\multirow{2}{*}{1:1} & KV  & Flex     & Ceph      & KV/BS \\ \cline{2-5}
+\multirow{3}{*}{1:1} & KV  & Flex     & Ceph      & KV/BS \\ \cline{2-5}
                      & BS  & Flex     & Ceph/VFS  & KV/BS \\ \hline
 \multirow{4}{*}{N:1} & KV  & Flex     & \multicolumn{2}{|c|}{KV/BS} \\ \cline{2-5}
                      & WR  & Fixed    & VFS       & KV/BS \\ \cline{2-5}
