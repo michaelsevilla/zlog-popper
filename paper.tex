@@ -176,14 +176,30 @@ seal interface is used following the failure of a sequencer to calculate the
 tail of the log that the sequencer should use to repopulate its in-memory
 state.
 
-why ceph and corfu?
+\paragraph*{Programmable Storage and CORFU}
+Two aspects of CORFU make its design attractive in the context of
+the Ceph storage system. First, CORFU assumes a cluster of flash devices
+because log-centric systems tend to have a larger percentage of random reads
+making it difficult to achieve high-performance with spinning disks. However,
+the speed of the underlying storage does not affect correctness. Thus, in a
+software-defined storage system such as Ceph a single implementation can
+transparently take advantage of any software or hardware upgrades, and make
+use of data management features such as tiering in RADOS, allowing users to
+freely choose between media types such as SSD, spinning disks, or emerging
+NVRAM technologies.
 
+The second property of CORFU relevant in the context of Ceph is the dependency
+CORFU places on the storage device interface.  As was previously discussed, in
+order to enforce constraints defined within the CORFU protocol, storage
+devices are expected to expose a domain-specific interface specially designed
+for the protocol. While the authors of the CORFU paper describe both a
+host-based and FPGA-based solution, RADOS directly supports the concept of
+custom storage interfaces to its objects that can be used to achieve the
+transactional semantics necessary to implement the CORFU storage interfaces.
+This feature is called RADOS object classes, and is one of the most powerful
+features offered by RADOS for designing storage applications.
 
-Short description of CORFU system~\cite{balakrishnan:nsdi12}. It's a log!
-While CORFU relies on custom interfaces built into flash devices, an
-implementation in Ceph relies upon custom device interfaces to enforce its
-protocol.
-
+\paragraph*{A CORFU Object Interface}
 The state-machine shown in Figure~\ref{fig:corfu-sm} shows the composition of
 actions for each component of the CORFU interface. For example, each
 operations begins with an \emph{epoch guard}, and a \emph{write} operation
