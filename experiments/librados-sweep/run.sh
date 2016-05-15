@@ -3,14 +3,15 @@
 reset=soft
 data_dev=sdc
 
-name=librados_sweep
-runtime=7200
+name=vanilla_firefly
+runtime=1800
 pg_nums="128"
 stripe_widths="32"
 queue_depths="32"
 entry_sizes="1024"
 pool=zlog
 rest=120
+ceph_version=firefly
 
 # workloads
 wl_11="map_11 bytestream_11"
