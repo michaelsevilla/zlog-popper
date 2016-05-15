@@ -145,7 +145,39 @@ interfaces to applications.}
 \label{tab:objclass-cats}
 \end{table}
 
-\subsection{Motivating Example: CORFU Log}
+\subsection{Motivating Example: CORFU}
+
+The primary motivating example we will use in this paper is the CORFU
+distributed shared-log designed to provide high-performance serialization
+across a set of flash storage devices~\cite{balakrishnan:nsdi12}. The
+shared-log is a powerful abstraction useful when building distributed systems
+and applications, but common implementations such as Paxos or Raft funnel I/O
+through a single node limiting the throughput of log
+operations~\cite{lamport:tocs89}. The CORFU protocol addresses this limitation
+by de-coupling log entry storage from log metadata, making use of a
+centeralized, volatile, in-memory \emph{sequencer service} that assigns log
+positions to clients that are appending to the log. Since the sequencer is
+centeralized serialization is trivial, and the use of non-durable state allows
+the sequencer service to operate at very high rates.
+
+While a full description of the CORFU protocol is beyond the scope of this
+paper, it is important to highlight the usage of application-specific flash
+I/O interfaces in CORFU that are used to guarantee correctness during failure.
+Each flash device in CORFU exposes a 64-bit write-once address space
+consisting of the primary interfaces \emph{write(pos, data)} and
+\emph{read(pos)}, as well as \emph{fill(pos)} and \emph{trim(pos)} that
+invalidate and reclaim log entries, respectively. All I/O operations initiated
+by clients are tagged with an \emph{epoch} value, and flash devices are
+expected to reject client requests requests tagged with an old epoch value. To
+facilitate recovery or handle system reconfiguration in CORFU, the storage
+devices are also required to support a \emph{seal(epoch)} command that marks
+the latest epoch and returns the maximum position written to that device. The
+seal interface is used following the failure of a sequencer to calculate the
+tail of the log that the sequencer should use to repopulate its in-memory
+state.
+
+why ceph and corfu?
+
 
 Short description of CORFU system~\cite{balakrishnan:nsdi12}. It's a log!
 While CORFU relies on custom interfaces built into flash devices, an
