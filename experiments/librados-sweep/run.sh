@@ -4,7 +4,7 @@ reset=soft
 data_dev=sdc
 
 name=vanilla_firefly
-runtime=1800
+runtime=3600
 pg_nums="128"
 stripe_widths="32"
 queue_depths="32"
