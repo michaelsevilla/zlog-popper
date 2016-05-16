@@ -1,0 +1,11 @@
+---
+- hosts: zlog-client
+  tasks:
+  - name: run el unit tests
+    shell: >
+           docker run \
+             --name=zlog-client \
+             --net=host \
+             -v /etc/ceph:/etc/ceph \
+             piha.soe.ucsc.edu:5000/zlog/client:jewel \
+             zlog-test

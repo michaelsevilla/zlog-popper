@@ -1,0 +1,3 @@
+---
+ceph_sequencer_docker_username: piha.soe.ucsc.edu:5000/zlog
+ceph_sequencer_docker_imagename: sequencer:jewel
