@@ -1,0 +1,11 @@
+"seconds","total_iops","avg_iops","avg_lat"
+{% for r in results.stdout_lines %}
+{% if 'period' in r %}
+{% set x = r.split(' ') %}
+{% set sec = x[1] %}
+{% set total_iops = x[3] %}
+{% set avg_iops = x[5] %}
+{% set avg_lat = x[7] %}
+"{{ sec }}","{{ total_iops }}","{{ avg_iops }}","{{ avg_lat }}"
+{% endif %}
+{% endfor %}

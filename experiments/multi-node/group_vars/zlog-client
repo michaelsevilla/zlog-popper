@@ -1,0 +1,3 @@
+---
+ceph_zlog_client_docker_username: piha.soe.ucsc.edu:5000/zlog
+ceph_zlog_client_docker_imagename: client:jewel

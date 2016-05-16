@@ -1,0 +1,38 @@
+---
+- hosts: zlog-client
+  tasks:
+  - name: run el benchmark
+    shell: >
+           docker run --rm \
+             --name=zlog-client \
+             --net=host \
+             -v /etc/ceph:/etc/ceph \
+             piha.soe.ucsc.edu:5000/zlog/client:jewel \
+             "/src/zlog/src/zlog-bench-ng --pool cephfs_data --server issdm-45 --port 5678 --append true --width 4096 --runtime 120"
+    register: results
+  - debug: var=results.stdout_lines
+
+  - name: parse results
+    connection: local
+    template: src=parse.j2 dest=results/bench-append-ng.csv
+    with_items:
+      - "{{ results.stdout_lines }}"
+
+- hosts: zlog-sequencer
+  tasks:
+  - name: run el benchmark
+    shell: >
+           docker run --rm \
+             --name=zlog-client \
+             --net=host \
+             -v /etc/ceph:/etc/ceph \
+             piha.soe.ucsc.edu:5000/zlog/client:jewel \
+             "/src/zlog/src/zlog-bench-ng --pool cephfs_data --server issdm-45 --port 5678 --append true --width 4096 --runtime 120"
+    register: results
+  - debug: var=results.stdout_lines
+
+  - name: parse results
+    connection: local
+    template: src=parse.j2 dest=results/bench-ng-append-local.csv
+    with_items:
+      - "{{ results.stdout_lines }}"
