@@ -1,9 +1,11 @@
 #!/bin/bash
 
 reset=soft
-data_dev=sdc
+data_dev=sdb
+journal_dev=sdc
+noop_dev=sdc
 
-name=vanilla_firefly
+name=vanilla_firefly_disk_ssd
 runtime=3600
 pg_nums="128"
 stripe_widths="32"
