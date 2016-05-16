@@ -2,10 +2,9 @@
 
 reset=soft
 data_dev=sdb
-journal_dev=sdc
-noop_dev=sdc
+#noop_dev=yes
 
-name=vanilla_firefly_disk_ssd
+name=vanilla_firefly_disk
 runtime=3600
 pg_nums="128"
 stripe_widths="32"
