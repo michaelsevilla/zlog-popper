@@ -1,6 +1,7 @@
 \documentclass[10pt,twocolumn]{article}
 \usepackage{times}
 \usepackage{multirow}
+\usepackage{tabularx}
 \usepackage{subcaption}
 \usepackage{graphicx,grffile}
 \usepackage{pgf}
@@ -60,29 +61,30 @@
 
 \section{Introduction}
 
-Cloud providers are increasingly reliant upon application-specific extensions
-to distributed storage system such as Ceph as is shown in
-Figure~\ref{fig:objclass-dev} by a marked increase in Ceph extensions used in
-production.
+Storage systems are increasingly providing features that take advantage of
+application-specific knowledge to achieve optimizations and provide unique
+services. However, this trend is leading to the creation of a large amount of
+low-level software extensions that will be difficult to maintain as system
+software and hardware evolve.
 
-The construction of extensions is not limited to core developers; the
-development community has been receptive to contributions with the recent
-inclusion by CERN developers of an extension for performing limited numeric
-operations on object data~\cite{cls_numops}.
+The widely deployed Ceph distributed storage system is an example of a storage
+system that supports application-specific extensions in the form of custom I/O
+interfaces to objects within the underlying RADOS object storage
+system~\cite{weil:osdi06,weil:pdsw07}. Organizations are increasingly reliant
+upon these extensions as is shown in Figure~\ref{fig:objclass-dev} by a marked
+increase in the number of object operations that are packaged are part of the
+Ceph distribution.  In addition to the growth of the quantity of operations,
+Figure~\ref{fig:objclass-dev} also depicts the amount of low-level C++ written
+to implement the set object operations. Unfortunately, this code is written
+assuming a performance profile defined by the combination of the hardware and
+software versions available at the time of development. As Ceph continues to
+evolve at a fast pace, the cost of adapting application-specific codes to
+changing assumptions regarding performance may become significant.
+
 
 This trend is also not limited to Ceph. AWS Lambda, Redis Lua, Redis Modules,
 KV-Drives, and Rhea, are all recent examples of storage systems embracing the
-power of including application-specific semantics. While Ceph has not yet
-reached the point of directly exposing these features to users, the recent
-inclusion of a mechanism for dynamically defining extensions using
-Lua~\cite{cls_lua} suggests that aspects of this may soon appear.
-
-If the growth illustrated in Figure~\ref{fig:objclass-dev} continues, the
-amount of low-level C++ will grow large. Unfortunately, much of
-this code is written assuming a performance profile defined by a combination
-of the hardware and software versions available at the time of development. As
-Ceph development continues at a fast pace, the cost of adapting to changing
-assumptions regarding performance will become significant.
+power of including application-specific semantics.
 
 % footnote: we could probably look through the cls_* changelog and find
 % examples of changes based on changes to semantics.
@@ -120,13 +122,23 @@ interfaces.
 
 \subsection{Domain-specific Object Interfaces}
 
+And the construction of object operations is not limited to core Ceph
+developers; the development community has been receptive to contributions with
+the recent inclusion by CERN developers of an extension for performing limited
+numeric operations on object data~\cite{cls_numops}, and all 
+While Ceph has not yet
+reached the point of directly exposing these features to users, the recent
+inclusion of a mechanism for dynamically defining extensions using
+Lua~\cite{cls_lua} suggests that aspects of this may soon appear.
+
 Ceph allows the construction of domain specific interfaces. There are many
 different object interfaces in production today. An example of the spectrum of
 interface types is shown in Table~\ref{tab:objclass-cats}. Object classes are
 developed as a transactional composition of native storage interfaces.
 
 \begin{table}
-\begin{tabular}{|l|l|l|}
+\centering
+\begin{tabularx}{\columnwidth}{|X|l|l|l|}
 \hline
 Category & Specialization & Methods \\ \hline
 \multirow{2}{*}{Locking} & Shared & \multirow{2}{*}{6} \\
@@ -134,12 +146,12 @@ Category & Specialization & Methods \\ \hline
 \multirow{3}{*}{Logging} & Replica & 3 \\
                          & State & 4 \\
                          & Timestamped & 4 \\ \hline
-GC & Reference Counting & 4 \\ \hline
+Garbage Collection & Ref. Counting & 4 \\ \hline
 \multirow{4}{*}{Metadata} & RBD & 37 \\
  & RGW & 27 \\
  & User & 5 \\
  & Version & 5 \\ \hline
-\end{tabular}
+\end{tabularx}
 \caption{A variety of RADOS object storage classes exist that expose reusable
 interfaces to applications.}
 \label{tab:objclass-cats}
@@ -246,12 +258,12 @@ over the design space.
 \begin{figure*}[!ht]
     \centering
     \begin{subfigure}{.6\columnwidth}
-        \includegraphics[width=\columnwidth]{experiments/librados-sweep/output.soft.reset.2hr.png}
+        \includegraphics[width=\columnwidth]{experiments/librados-sweep/jewel_ssd.png}
         \caption{a}
         \label{fig:vanilla-io-diff}
     \end{subfigure}\hfill
     \begin{subfigure}{.6\columnwidth}
-        \includegraphics[width=\columnwidth]{experiments/basic-cls-rand-read/output.read.60min.png}
+        \includegraphics[width=\columnwidth]{experiments/librados-sweep/firefly_ssd.png}
         \caption{b}
     \end{subfigure}\hfill
     \begin{subfigure}{.6\columnwidth}
