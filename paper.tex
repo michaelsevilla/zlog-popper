@@ -377,86 +377,121 @@ can result in poor performance compared to other designs.
 
 \subsection{Physical Design}
 
-We categorize the challenges of physical design into log entry management, or
-metadata management.
+As we have seen, Ceph provides a rich storage API and places few restrictions
+on the structure of applications. So how should we go about implementing CORFU
+on Ceph? Our strategy is straightforward: first we will define the entire
+design space, and we will then winnow down this space using a set of targetted
+benchmarks. The design space can be divided into three challenges:
+selecting a strategy for log entry addressing, choosing a native I/O interface
+for storing log entry content, and implementing efficient metadata management.
 
-Our strategy is simply to construct the design space, and winnow it down using
-a set of targetted experiments.
+\begin{enumerate}
+    \item {\bf Entry addressing.} We refer to the method by which a client
+        locates a log entry in Ceph as entry addressing, and we consider two
+        strategies. In a one-to-one (1:1) strategy each log entry is stored in
+        a distinct object with a name derived from the associated log entry
+        position. This is an attractive option because it is trivial for
+        clients to locate a log entry given its position.  In contrast, an N:1
+        strategy \emph{stripes} log entires across a smaller set of objects,
+        but adds complexity to both the client and the object interface which
+        must multiplex a set of entries.
 
-We'll start by forming a baseline performance profile without any protocol
-overhead.
+    \item {\bf Log entry storage.} Clients read and write binary data
+        associated with each log entry, and these entries can be stored in the
+        bytestream or in the key-value database associated with an object.
+        Retrieval of log entry payloads should perform well for both large
+        (e.g. database checkpoint) and small log entries.
 
-All designs store a log entry. We can benchmark the system without any
-overhead associated with indexing or metadata management.
+    \item {\bf Metadata management.} The CORFU protocol defines the storage
+        interface semantics, such as enforcing up-to-date epoch values and a
+        write-once address space. The object interface constructed in Ceph must
+        implement these semantics in software by storing metadata (e.g. the
+        current epoch) and validating requests against this metadata (e.g. has
+        the target position been written?). A key-value store is a natural
+        location for this type of data, but metadata management adds overhead
+        to each request and must be carefully designed.
+\end{enumerate}
 
-\paragraph*{Baseline Performance}
+In the remainder of this section we will explore the full design space defined
+by the cross product of these design challenges to arrive at a final design.
+In order to optimize this process we will iteratively winnow down the space
+through a series of targetted experiments.
 
-Figure~\ref{fig:pd-map} illustrates the two primary dimensions of the physical
-design space. The first dimension concerns the strategy by which a log entry
-is addressed within RADOS. In a one-to-one strategy each log entry is stored
-in a distinct object with a name based on the log entry position.  This is an
-attractive option because it is trivial for a client to address any log entry,
-and an object interface does not require any complexity associated with
-multiplexing multiple entries---addressing relies on native indexing provided
-by the OSDs themselves. In contrast to a 1:1 strategy, an N:1 strategy
-\emph{stripes} log entries across a smaller set of objects, introducing added
-complexity into both the client and object interface implementations. The
-second design dimension selects the primary storage interface for log
-entries, namely the key-value or bytestream interfaces, described in
-Section~\ref{sec:objclass}.
+\paragraph*{Baseline Entry Storage Performance}
+We begin the process of exploring the design space by exploiting the fact that
+metadata management is a complexity and performance overhead that a full
+implementation must incur beyond the costs of storing log entry data.
+Therefore we first explore the costs of the design space by restricting the
+space to log entry addressing and log entry storage.  These two dimensions are
+represented by the first two columns of Table~\ref{tab:pd-map} which describes
+the entire design space. In the I/O column \emph{KV} corresponds to the
+key-value interface, and the bytestream interface is represented by \emph{AP}
+for an append strategy, and \emph{EX} for a strategy that writes to an
+explicit bytestream offset.
 
-These two dimensions are represented by the first two columns of
-Table~\ref{tab:pd-map} which describes the entire design space, where
-\emph{KV} corresponds to the key-value interface, and the bytestream interface
-is represented by \emph{AP} and \emph{EX} for an append or explicit i/o
-straetgy.
+%\begin{figure}
+%\centering
+%\includegraphics[width=\columnwidth]{experiments/librados-sweep/jewel_ssd.png}
+%\caption{1hr, 1k, write}
+%\label{fig:vanilla_wr_jewel}
+%\end{figure}
 
-. Note that we
-decompose the bytestream I/O interface into two sub-strategies: I/O using
-explicit offsets (EX), and appends (AP).
+Figure~\ref{fig:vanilla_wr_jewel} shows the expected performance of 1K log
+appends without metadata management overhead using each of the five strategies
+defined in Table~\ref{tab:pd-map}. The first thing to notice in this figure is
+that both one-to-one strategies have relatively poor performance. The large
+period of reduced throughput for \emph{11wr} corresponds to the OSD splitting
+file system directories in order to maintain a maximum directory size, and
+will occur in \emph{11kv} although the threshold number of objects is not
+reached due to reduced overall throughput of the \emph{11kv} strategy.
 
-CORFU device interface requirements in Ceph as an object interface. So far we
-have 
+The second lesson that we can learn from Figure~\ref{fig:vanilla_wr_jewel} is
+that even when using an N:1 addressing strategy, the key-value interface
+imposes a large overhead. This is unfortuante because the key-value interface
+can provide a direct solution to addressing log entries within an object.
+Instead, what we find is that an N:1 addressing strategy that stores log
+entries in the bytestream using either object appends or writes to explicit
+offsets outperform all other strategies by a factor of over 2x.
 
+The apparent performance tie between the strategies of appending to an object
+and writing to explicit offsets can be broken by considering the flexibility
+offered by each approach. The third column \emph{entry size} shown in
+Table~\ref{tab:pd-map} lists if a particular strategy supports storage of
+entries with dynamic sizes, or if entries must be restricted to a fixed size.
+Notably the strategy that stores log entries at explicit object offsets is
+limited in this regard because each log entry is effectively pre-mapped into
+the storage system. This leaves the clear winner: an N:1 strategy that appends
+log entries to objects provides flexibilty and the best write performance in
+this particular configuration.
 
-append is more attractive, all things being equal, as it supports flexible
-mapping size.
+\begin{figure}[t]
+  \centering
+  \begin{subfigure}[b]{.47\linewidth}
+      \centering
+      \includegraphics[width=1.0\linewidth]{experiments/librados-sweep/jewel_ssd.png}
+      \caption{1hr,1k,wr}
+      \label{fig:osdx}
+  \end{subfigure}\quad
+  \begin{subfigure}[b]{.47\linewidth}
+      \centering
+      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
+      \caption{1hr,1k,rd}
+      \label{fig:cephx}
+  \end{subfigure}
+  \caption{Ceph and OSD... gotta cram more stuff in here...}
+\end{figure}
 
+%\begin{figure}
+%\centering
+%\includegraphics[width=\columnwidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
+%\caption{1hr, 1k, read}
+%\label{fig:vanilla_rd_jewel}
+%\end{figure}
 
-
-
-There is a finite set of strategies for mapping the CORFU interfaces onto the
-current set of native I/O interfaces used to construct object interfaces.
-Table~\ref{tab:pd-map} shows the design space for mapping the CORFU interfaces
-onto Ceph. In order to select the best mapping we performed a parameter sweet
-over the design space.
-
-\begin{figure*}[!ht]
-    \centering
-    \begin{subfigure}{.6\columnwidth}
-        \includegraphics[width=\columnwidth]{experiments/librados-sweep/jewel_ssd.png}
-        \caption{a}
-        \label{fig:vanilla-io-diff}
-    \end{subfigure}\hfill
-    \begin{subfigure}{.6\columnwidth}
-        \includegraphics[width=\columnwidth]{experiments/librados-sweep/firefly_ssd.png}
-        \caption{b}
-    \end{subfigure}\hfill
-    \begin{subfigure}{.6\columnwidth}
-        \includegraphics[width=\columnwidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
-        \caption{c}
-    \end{subfigure}\hfill
-    \caption{Shown here are the graphs and such that demonstrate that the same
-        physical design choices are not the same between differing version of
-    Ceph even on the same hardware.}
-\end{figure*}
-
-Figure~\ref{fig:vanilla-io-diff} shows the result of a parameter sweep which
-clearly shows that an N-1 mapping based on the bytestream interface provides
-superiour performance. However, the other two graphs show the same interfaces
-running on an old version of Ceph that show the same decision would not have
-been the optimal choice {\bf \emph{note: for the outline these are not the
-real graphs we'll be using}}.
+This result is corroborated by considering the read performance for each
+strategy as well. Figure~\ref{fig:vanilla_rd_jewel} shows the expected random
+read performance from a log containing 1K entries in which an addressing
+strategy that stores log entries in the bytestream has the best performance.
 
 \begin{table}
 \begin{tabular}{ | l | l | l | l | l |}
