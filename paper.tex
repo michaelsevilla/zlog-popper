@@ -373,9 +373,57 @@ physical design, and can affect performance and application flexibilty.
 For instance, one valid design option is to store each log position in
 an object with a name using a one-to-one mapping with the log entry position.
 However, as we will see in the next section this choice of a physical design
-results in poor performance in most circumstances.
+can result in poor performance compared to other designs.
 
 \subsection{Physical Design}
+
+We categorize the challenges of physical design into log entry management, or
+metadata management.
+
+Our strategy is simply to construct the design space, and winnow it down using
+a set of targetted experiments.
+
+We'll start by forming a baseline performance profile without any protocol
+overhead.
+
+All designs store a log entry. We can benchmark the system without any
+overhead associated with indexing or metadata management.
+
+\paragraph*{Baseline Performance}
+
+Figure~\ref{fig:pd-map} illustrates the two primary dimensions of the physical
+design space. The first dimension concerns the strategy by which a log entry
+is addressed within RADOS. In a one-to-one strategy each log entry is stored
+in a distinct object with a name based on the log entry position.  This is an
+attractive option because it is trivial for a client to address any log entry,
+and an object interface does not require any complexity associated with
+multiplexing multiple entries---addressing relies on native indexing provided
+by the OSDs themselves. In contrast to a 1:1 strategy, an N:1 strategy
+\emph{stripes} log entries across a smaller set of objects, introducing added
+complexity into both the client and object interface implementations. The
+second design dimension selects the primary storage interface for log
+entries, namely the key-value or bytestream interfaces, described in
+Section~\ref{sec:objclass}.
+
+These two dimensions are represented by the first two columns of
+Table~\ref{tab:pd-map} which describes the entire design space, where
+\emph{KV} corresponds to the key-value interface, and the bytestream interface
+is represented by \emph{AP} and \emph{EX} for an append or explicit i/o
+straetgy.
+
+. Note that we
+decompose the bytestream I/O interface into two sub-strategies: I/O using
+explicit offsets (EX), and appends (AP).
+
+CORFU device interface requirements in Ceph as an object interface. So far we
+have 
+
+
+append is more attractive, all things being equal, as it supports flexible
+mapping size.
+
+
+
 
 There is a finite set of strategies for mapping the CORFU interfaces onto the
 current set of native I/O interfaces used to construct object interfaces.
@@ -415,9 +463,9 @@ real graphs we'll be using}}.
 \hline
 Map & I/O & Entry Size & Addressing & Metadata \\ \hline
 \multirow{3}{*}{1:1} & KV  & Flex     & Ceph      & KV/BS \\ \cline{2-5}
-                     & BS  & Flex     & Ceph/VFS  & KV/BS \\ \hline
+                     & AP  & Flex     & Ceph/VFS  & KV/BS \\ \hline
 \multirow{4}{*}{N:1} & KV  & Flex     & \multicolumn{2}{|c|}{KV/BS} \\ \cline{2-5}
-                     & WR  & Fixed    & VFS       & KV/BS \\ \cline{2-5}
+                     & EX  & Fixed    & VFS       & KV/BS \\ \cline{2-5}
                      & AP  & Flex     & KV/BS     & KV/BS \\
 \hline
 \end{tabular}
