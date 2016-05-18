@@ -88,48 +88,21 @@ software extensions that will be difficult to maintain as system software and
 hardware continue to evolve.
 
 % why is it interesting
-The widely deployed Ceph distributed storage system is an example of a storage
-system that supports application-specific extensions in the form of custom I/O
-interfaces to objects managed by the underlying RADOS object storage
-system~\cite{weil:osdi06,weil:pdsw07}. Organizations are increasingly reliant
-upon these extensions as is shown in Figure~\ref{fig:objclass-dev} by a marked
-increase in the number of object operations that are packaged as part of the
-Ceph distribution and widely used by internal Ceph subystems and by
-applications such as OpenStack Swift and Cinder~\cite{openstack}. In addition
-to the growth in the quantity of operations, Figure~\ref{fig:objclass-dev}
-also depicts the amount of low-level C++ written to implement these
-operations. Unfortunately, this code is written assuming a performance profile
-defined by the combination of the hardware and software versions available at
-the time of development. As Ceph continues to evolve at a fast pace, the cost
-of adapting application-specific codes to changing assumptions regarding
-performance may become significant.
-
-%The construction of object operations is not limited to core Ceph developers;
-%the development community has been receptive to contributions with the recent
-%inclusion by CERN developers of an extension for performing limited numeric
-%operations on object data~\cite{cls_numops}. And while Ceph has not yet
-%reached the point of directly exposing these features to non-administrative
-%users, the recent inclusion of a mechanism for dynamically defining extensions
-%using Lua~\cite{cls_lua} suggests that aspects of this feature may soon appear.
-
-
-% a challenge is mapping application semantics onto these objects
-
-%Proprietary storage systems are prevalent, but have fixed interfaces that are
-%developed in response to market demand. Alternative storage interfaces are
-%prototyped in research systems.
-%For the first time Ceph is providing a high-performance production quality
-%storage system developed as open-source.
-
-% why is it hard / why do naive approaches fail
-%the naive approach here is the use of generic interfaces. one may
-%think that key-value is relatively slower than bytestreams, but by how much.
-%is this a principal we can bet the house on.
-%just building these simple interfaces don't work that well
-%Systems provide low-level native interfaces such as key-value or bytestream interfaces.
-%These abstract interfaces are useful, but they are not the only way to map
-%interfaces onto storage. For instance, a specialized key-value db could be serialized into
-%the bytestream interface.
+The standardization of the POSIX file I/O interface has been a major success,
+allowing application developers to avoid vendor lock-in. However, large-scale
+storage systems have been dominated by proprietary products, preventing
+exploration of alternative interfaces and complicating future migration paths,
+eliminating the benefits of commodity systems. But the recent availability of
+high-performance open-source storage systems is changing this because these
+systems are modifiable, enabling interface change, and reducing the risks of
+lock-in. The widely deployed Ceph distributed storage system is an example of
+a storage system that supports application-specific extensions in the form of
+custom I/O interfaces to objects managed by the underlying RADOS object
+storage system~\cite{weil:osdi06,weil:pdsw07}. Organizations are increasingly
+reliant upon these extensions as is shown in Figure~\ref{fig:objclass-dev} by
+a marked increase in the number of object operations that are packaged as part
+of the Ceph distribution and widely used by internal Ceph subsystems and by
+applications such as OpenStack Swift and Cinder~\cite{openstack}.
 
 \begin{figure}[t]
   \centering
@@ -143,24 +116,39 @@ corresponding to applications or utilities, such as reference counting}
 \label{fig:objclass-dev}
 \end{figure}
 
+%%% why is it hard / why do naive approaches fail
+In addition to the growth in the quantity of operations in use throughout Ceph
+installations, Figure~\ref{fig:objclass-dev} also depicts the amount of
+low-level C++ written to implement these operations. Unfortunately, this code
+is written assuming a performance profile defined by the combination of the
+hardware and software versions available at the time of development.  While
+the bulk of these interfaces are created by core Ceph developers with a
+complete view of the performance model, this may be changing as the
+development community has been receptive to outside contributions with the
+recent inclusion by CERN developers of an extension for performing limited
+numeric operations on object data~\cite{cls_numops}. And while Ceph has not
+yet reached the point of directly exposing these features to
+non-administrative users, the recent inclusion of a mechanism for dynamically
+defining extensions using Lua~\cite{cls_lua} suggests that aspects of this
+feature may soon appear. What is needed is support for creating storage
+interfaces using a method that allows transparent optimization as the system,
+application, and supporting environment evolve.
+
 % why hasn't it been solved before / why have previous approaches failed
-%As hardware becomes faster the differences in storage interface performance
-%will continue shift relative to one another.
-%Existing systems fall into the same trap.
+Previous work related to storage interface design has largely been in the
+context of standardization efforts and active storage. While the later has
+been specifically concerned with the creation of application-specific
+interfaces and demonstrating short-term benefits, the standardization seeks to
+develop a last set of interfaces. In neither case have we seen efforts focused
+on extensible interfaces with portability and longevity a primary concern.
+
 %This trend is also not limited to Ceph. AWS Lambda, Redis Lua, Redis Modules,
 %KV-Drives, and Rhea, are all recent examples of storage systems embracing the
 %power of including application-specific semantics.
-%Previous work in active storage has focused on the utility of moving
-%computation closer to data in an effort to reduce data movement and take
-%advantage of cpu and i/o parallelism, and gave little to no attention to
-%security or performance isolation concerns. In contrast, the interfaces being
-%deployed today focus on data management, indexing, and physical format.
-%Database systems solve this problem with a declarative query language, compiler, and
-%optimizer. So should we.
-%
-%We propose the introduction of a declarative language for building object
-%based interfaces that allows a storage system to meet the needs of an
-%application throughout the development process without requiring rewrites.
+
+We propose the introduction of a declarative language for building object
+based interfaces that allows a storage system to meet the needs of an
+application throughout the development process without requiring rewrites.
 
 \section{Background}
 
@@ -206,7 +194,7 @@ providing access to a set of
 named objects. The configuration of an OSD is flexible, and commonly contains
 a mix of commodity hardware such as HDD and SSD bulk storage, a multi-core
 CPU, GBs of RAM, and one or two 10 Gb Ethernet links. Clients access object
-data managed by an OSD by invoking object operations exposed by the OSD
+data managed by an OSD by invoking native object operations exposed by the OSD
 such as reading or writing bytes, as well as more complex operations like taking
 snapshots or composing one or more native operations into compound procedures
 that execute in a transactional context.
@@ -214,13 +202,14 @@ that execute in a transactional context.
 The native object operations in RADOS roughly fall into two categories based
 on the type of data being accessed: key-value items, or bulk bytestream data.
 The key-value interface operates as a dedicated database associated with each
-object, and the bytestream interface supports random byte-level access.  At a
+object, and the bytestream interface supports random byte-level access similar
+to a file.  At a
 low-level each of these abstract I/O interfaces map to hardware storage
 devices through a pluggable object backend storage service. For instance,
 LevelDB or RocksDB may be used to store key-value data, while the
 \emph{FileStore} implementation maps the bytestream interface onto a local
 POSIX file system~\cite{leveldb,rocksdb}. Several backend implementations
-exist for storing data in targets such as a Kinetic Drive or in NVMe devices,
+exist for storing data in targets such as the Kinetic Drive or in NVMe devices,
 among others.
 
 %Independent of the hardware or backends chosen, Ceph allows all
@@ -275,12 +264,11 @@ distributed shared-log designed to provide high-performance serialization
 across a set of flash storage devices~\cite{balakrishnan:nsdi12}. The
 shared-log is a powerful abstraction useful when building distributed systems
 and applications, but common implementations such as Paxos or Raft funnel I/O
-through a single node limiting the throughput of log
-operations~\cite{lamport:tocs89}. The CORFU protocol addresses this limitation
+through a single node limiting total throughput~\cite{lamport:tocs89}. The CORFU protocol addresses this limitation
 by de-coupling log entry storage from log metadata management, making use of a
-centeralized, volatile, in-memory \emph{sequencer service} that assigns log
+centralized, volatile, in-memory \emph{sequencer service} that assigns
 positions to clients that are appending to the log. Since the sequencer is
-centeralized serialization is trivial, and the use of non-durable state allows
+centralized serialization is trivial, and the use of non-durable state allows
 the sequencer service to operate at very high rates. The CORFU system has been
 used to demonstrate a number of interesting services such as transactional
 key-value and metadata services, replicated state machines, and an elastic
@@ -293,9 +281,9 @@ difficult to achieve high-performance with spinning disks. However, the speed
 of the underlying storage does not affect correctness. Thus, in a
 software-defined storage system such as Ceph a single implementation can
 transparently take advantage of any software or hardware upgrades, and make use
-of existing and future data management features such as tiering in RADOS,
+of existing and future data management features such as tiering,
 allowing users to freely choose between media types such as SSD, spinning
-disks, or emerging NVRAM technologies.
+disks for archival storage, or emerging NVRAM technologies.
 
 \paragraph*{CORFU and Storage Programmability}
 The second property of CORFU relevant in the context of Ceph is the dependency
@@ -306,31 +294,29 @@ interfaces \emph{write(pos, data)} and \emph{read(pos)} for accessing log
 entries, as well as \emph{fill(pos)} and \emph{trim(pos)} that invalidate and
 reclaim log entries, respectively. All I/O operations in CORFU initiated by
 clients are tagged with an \emph{epoch} value, and flash devices are expected
-to reject client requests that contian an old epoch value. To facilitate
+to reject client requests that contain an old epoch value. To facilitate
 recovery or handle system reconfiguration in CORFU, the storage devices are
-also required to support a \emph{seal(epoch)} command that marks the latest
+also required to support a \emph{seal(epoch)} command that stores the latest
 epoch and returns the maximum position written to that device. The seal
 interface is used following the failure of a sequencer to calculate the tail of
 the log that the sequencer should use to repopulate its in-memory state.
 
-While the authors of the CORFU paper describe prototype device interfaces using
-both host-based and FPGA-based implementations, RADOS \emph{directly} supports
+While the authors of the CORFU paper describe prototype device interfaces
+implemented as both host-based and FPGA-based solutions, RADOS \emph{directly} supports
 the creation of logical storage devices through its object class feature
 described previously in Section~\ref{sec:objclass}. Thus, by using
 software-based object interfaces offered by RADOS flash devices in CORFU can be
 replaced by software-defined storage offering significant flexibility and a
 simplified design.
 
-The implementation of a custom object class that satisifies the needs of an
+The implementation of a custom object class that satisfies the needs of an
 application such as CORFU is often straightforward. However, as described in
 Section~\ref{sec:objclass} there are a variety of native object I/O interfaces
 available, and it is not always immediately clear how best to utilize these
-interfaces. A common approach is to first define the set of requirements for
-the desired interface, construct a design space parameterized on the set of
-native interfaces, and winnow this space down through a process of elimination.
+interfaces.
 
 \paragraph*{Towards a CORFU Object Interface}
-The state-machine shown in Figure~\ref{fig:corfu-sm} shows the composition of
+The state-machine diagram in Figure~\ref{fig:corfu-sm} shows the composition of
 actions for each component of the CORFU interface. For instance, all operations
 begin by applying an \emph{epoch guard} that ensures the request is tagged with
 an up-to-date epoch value. The \emph{read} (R) and \emph{write} (W) operations
@@ -360,7 +346,7 @@ updates metadata for the target log position.
         (E) edge        node {F,T,W} (F);
 \end{tikzpicture}
 \caption{State transition diagram for read ($R$), write ($W$), fill ($F$), and
-trim ($T$) CORFU operaitons. The states epoch guard ($EG$), check position ($CP$),
+trim ($T$) CORFU operations. The states epoch guard ($EG$), check position ($CP$),
 and update state ($US$) access metadata. The I/O performs a log entry read or
 write, and garbage collection ($GC$) marks entries for reclamation.}
 \label{fig:corfu-sm}
@@ -369,18 +355,20 @@ write, and garbage collection ($GC$) marks entries for reclamation.}
 The primary concern of an application developer when implementing an object
 interface in Ceph is deciding how native interfaces are composed into a
 compound operation. These types of decisions are commonly referred to as
-physical design, and can affect performance and application flexibilty.
-For instance, one valid design option is to store each log position in
-an object with a name using a one-to-one mapping with the log entry position.
-However, as we will see in the next section this choice of a physical design
-can result in poor performance compared to other designs.
+physical design, and can affect performance and application flexibility.  For
+instance, one valid design option is to store each log position in an object
+with a name using a one-to-one mapping with the log entry position.  This
+would simplify the design of the \emph{write} interface because a small amount
+of metadata stored as a header in the object could describe the state of the
+log entry.  However, as we will see in the next section this choice of a
+physical design can result in poor performance compared to other designs.
 
 \subsection{Physical Design}
 
 As we have seen, Ceph provides a rich storage API and places few restrictions
 on the structure of applications. So how should we go about implementing CORFU
 on Ceph? Our strategy is straightforward: first we will define the entire
-design space, and we will then winnow down this space using a set of targetted
+design space, and we will then winnow down this space using a set of targeted
 benchmarks. The design space can be divided into three challenges:
 selecting a strategy for log entry addressing, choosing a native I/O interface
 for storing log entry content, and implementing efficient metadata management.
@@ -393,7 +381,7 @@ for storing log entry content, and implementing efficient metadata management.
         position. This is an attractive option because it is trivial for
         clients to locate a log entry given its position.  In contrast, an N:1
         strategy \emph{stripes} log entires across a smaller set of objects,
-        but adds complexity to both the client and the object interface which
+        but this adds complexity to both the client and the object interface which
         must multiplex a set of entries.
 
     \item {\bf Log entry storage.} Clients read and write binary data
@@ -414,27 +402,18 @@ for storing log entry content, and implementing efficient metadata management.
 
 In the remainder of this section we will explore the full design space defined
 by the cross product of these design challenges to arrive at a final design.
-In order to optimize this process we will iteratively winnow down the space
-through a series of targetted experiments.
 
 \paragraph*{Baseline Entry Storage Performance}
 We begin the process of exploring the design space by exploiting the fact that
 metadata management is a complexity and performance overhead that a full
 implementation must incur beyond the costs of storing log entry data.
-Therefore we first explore the costs of the design space by restricting the
+Therefore we first explore the design space by restricting the
 space to log entry addressing and log entry storage.  These two dimensions are
 represented by the first two columns of Table~\ref{tab:pd-map} which describes
 the entire design space. In the I/O column \emph{KV} corresponds to the
 key-value interface, and the bytestream interface is represented by \emph{AP}
 for an append strategy, and \emph{EX} for a strategy that writes to an
-explicit bytestream offset.
-
-%\begin{figure}
-%\centering
-%\includegraphics[width=\columnwidth]{experiments/librados-sweep/jewel_ssd.png}
-%\caption{1hr, 1k, write}
-%\label{fig:vanilla_wr_jewel}
-%\end{figure}
+explicit bytestream offset (both described shortly).
 
 Figure~\ref{fig:vanilla_wr_jewel} shows the expected performance of 1K log
 appends without metadata management overhead using each of the five strategies
@@ -443,11 +422,11 @@ that both one-to-one strategies have relatively poor performance. The large
 period of reduced throughput for \emph{11wr} corresponds to the OSD splitting
 file system directories in order to maintain a maximum directory size, and
 will occur in \emph{11kv} although the threshold number of objects is not
-reached due to reduced overall throughput of the \emph{11kv} strategy.
+reached in this example due to reduced overall throughput of the \emph{11kv} strategy.
 
 The second lesson that we can learn from Figure~\ref{fig:vanilla_wr_jewel} is
 that even when using an N:1 addressing strategy, the key-value interface
-imposes a large overhead. This is unfortuante because the key-value interface
+imposes a large overhead. This is unfortunate because the key-value interface
 can provide a direct solution to addressing log entries within an object.
 Instead, what we find is that an N:1 addressing strategy that stores log
 entries in the bytestream using either object appends or writes to explicit
@@ -455,14 +434,18 @@ offsets outperform all other strategies by a factor of over 2x.
 
 The apparent performance tie between the strategies of appending to an object
 and writing to explicit offsets can be broken by considering the flexibility
-offered by each approach. The third column \emph{entry size} shown in
-Table~\ref{tab:pd-map} lists if a particular strategy supports storage of
+offered by each approach. The third column \emph{entry size} in
+Table~\ref{tab:pd-map} shows if a particular strategy supports storage of
 entries with dynamic sizes, or if entries must be restricted to a fixed size.
 Notably the strategy that stores log entries at explicit object offsets is
 limited in this regard because each log entry is effectively pre-mapped into
 the storage system. This leaves the clear winner: an N:1 strategy that appends
-log entries to objects provides flexibilty and the best write performance in
-this particular configuration.
+log entries to objects provides flexibility and the best write performance in
+this particular configuration.  This result is corroborated by considering the
+read performance for each strategy as well. Figure~\ref{fig:vanilla_rd_jewel}
+shows the expected random read performance from a log containing 1K entries in
+which an addressing strategy that stores log entries in the bytestream has the
+best performance.
 
 \begin{figure}[t]
   \centering
@@ -470,28 +453,16 @@ this particular configuration.
       \centering
       \includegraphics[width=1.0\linewidth]{experiments/librados-sweep/jewel_ssd.png}
       \caption{1hr,1k,wr}
-      \label{fig:osdx}
+      \label{fig:vanilla_wr_jewel}
   \end{subfigure}\quad
   \begin{subfigure}[b]{.47\linewidth}
       \centering
       \includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
       \caption{1hr,1k,rd}
-      \label{fig:cephx}
+      \label{fig:vanilla_rd_jewel}
   \end{subfigure}
   \caption{Ceph and OSD... gotta cram more stuff in here...}
 \end{figure}
-
-%\begin{figure}
-%\centering
-%\includegraphics[width=\columnwidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
-%\caption{1hr, 1k, read}
-%\label{fig:vanilla_rd_jewel}
-%\end{figure}
-
-This result is corroborated by considering the read performance for each
-strategy as well. Figure~\ref{fig:vanilla_rd_jewel} shows the expected random
-read performance from a log containing 1K entries in which an addressing
-strategy that stores log entries in the bytestream has the best performance.
 
 \begin{table}
 \begin{tabular}{ | l | l | l | l | l |}
@@ -508,6 +479,14 @@ Map & I/O & Entry Size & Addressing & Metadata \\ \hline
 the RADOS object storage system.}
 \label{tab:pd-map}
 \end{table}
+
+\paragraph*{Metadata Management}
+
+Adds in indexing and that sort of overheads.
+
+\paragraph*{Hardware and Software}
+
+Different hardware and different Ceph versions.
 
 \section{Programming Model}
 
