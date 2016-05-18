@@ -368,7 +368,7 @@ physical design can result in poor performance compared to other designs.
 As we have seen, Ceph provides a rich storage API and places few restrictions
 on the structure of applications. So how should we go about implementing CORFU
 on Ceph? Our strategy is straightforward: first we will define the entire
-design space, and we will then winnow down this space using a set of targeted
+design space, and then winnow down this space using a set of targeted
 benchmarks. The design space can be divided into three challenges:
 selecting a strategy for log entry addressing, choosing a native I/O interface
 for storing log entry content, and implementing efficient metadata management.
@@ -408,12 +408,29 @@ We begin the process of exploring the design space by exploiting the fact that
 metadata management is a complexity and performance overhead that a full
 implementation must incur beyond the costs of storing log entry data.
 Therefore we first explore the design space by restricting the
-space to log entry addressing and log entry storage.  These two dimensions are
+space to log entry addressing and log entry storage (the \emph{I/O} action
+shown in Figure~\ref{fig:corfu-sm}).  These two dimensions are
 represented by the first two columns of Table~\ref{tab:pd-map} which describes
 the entire design space. In the I/O column \emph{KV} corresponds to the
 key-value interface, and the bytestream interface is represented by \emph{AP}
 for an append strategy, and \emph{EX} for a strategy that writes to an
 explicit bytestream offset (both described shortly).
+
+\begin{table}[h]
+\begin{tabular}{ | l | l | l | l | l |}
+\hline
+Map & I/O & Entry Size & Addressing & Metadata \\ \hline
+\multirow{3}{*}{1:1} & KV  & Flex     & Ceph      & KV/BS \\ \cline{2-5}
+                     & AP  & Flex     & Ceph/VFS  & KV/BS \\ \hline
+\multirow{4}{*}{N:1} & KV  & Flex     & \multicolumn{2}{|c|}{KV/BS} \\ \cline{2-5}
+                     & EX  & Fixed    & VFS       & KV/BS \\ \cline{2-5}
+                     & AP  & Flex     & KV/BS     & KV/BS \\
+\hline
+\end{tabular}
+\caption{The high-level design space of mapping CORFU log entry storage onto
+the RADOS object storage system.}
+\label{tab:pd-map}
+\end{table}
 
 Figure~\ref{fig:vanilla_wr_jewel} shows the expected performance of 1K log
 appends without metadata management overhead using each of the five strategies
@@ -422,7 +439,8 @@ that both one-to-one strategies have relatively poor performance. The large
 period of reduced throughput for \emph{11wr} corresponds to the OSD splitting
 file system directories in order to maintain a maximum directory size, and
 will occur in \emph{11kv} although the threshold number of objects is not
-reached in this example due to reduced overall throughput of the \emph{11kv} strategy.
+reached in this example due to reduced overall throughput of the \emph{11kv}
+strategy.
 
 The second lesson that we can learn from Figure~\ref{fig:vanilla_wr_jewel} is
 that even when using an N:1 addressing strategy, the key-value interface
@@ -452,37 +470,94 @@ best performance.
   \begin{subfigure}[b]{.47\linewidth}
       \centering
       \includegraphics[width=1.0\linewidth]{experiments/librados-sweep/jewel_ssd.png}
-      \caption{1hr,1k,wr}
+      \caption{1hr,1k,wr,jewel}
       \label{fig:vanilla_wr_jewel}
-  \end{subfigure}\quad
+  \end{subfigure}
   \begin{subfigure}[b]{.47\linewidth}
       \centering
       \includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
-      \caption{1hr,1k,rd}
+      \caption{1hr,1k,rd,jewel}
       \label{fig:vanilla_rd_jewel}
   \end{subfigure}
-  \caption{Ceph and OSD... gotta cram more stuff in here...}
+  \begin{subfigure}[b]{.47\linewidth}
+      \centering
+      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
+      \caption{1hr,1k,cls\_wr,jewel}
+      \label{fig:cls_wr_jewel}
+  \end{subfigure}
+  \begin{subfigure}[b]{.47\linewidth}
+      \centering
+      \includegraphics[width=1.0\linewidth]{experiments/librados-sweep/firefly_ssd.png}
+      \caption{1hr,1k,wr,firefly}
+      \label{fig:vanilla_wr_firefly}
+  \end{subfigure}
+  \caption{placeholder.}
 \end{figure}
-
-\begin{table}
-\begin{tabular}{ | l | l | l | l | l |}
-\hline
-Map & I/O & Entry Size & Addressing & Metadata \\ \hline
-\multirow{3}{*}{1:1} & KV  & Flex     & Ceph      & KV/BS \\ \cline{2-5}
-                     & AP  & Flex     & Ceph/VFS  & KV/BS \\ \hline
-\multirow{4}{*}{N:1} & KV  & Flex     & \multicolumn{2}{|c|}{KV/BS} \\ \cline{2-5}
-                     & EX  & Fixed    & VFS       & KV/BS \\ \cline{2-5}
-                     & AP  & Flex     & KV/BS     & KV/BS \\
-\hline
-\end{tabular}
-\caption{The high-level design space of mapping CORFU log entry storage onto
-the RADOS object storage system.}
-\label{tab:pd-map}
-\end{table}
 
 \paragraph*{Metadata Management}
 
-Adds in indexing and that sort of overheads.
+The previous results show that storing log entries in the bytestream has the
+potential to provide the best overall performance, but by design, those
+results do not contain the real-world overheads introduced by metadata
+management such as validating that requests are tagged with an up-to-date
+epoch value. Having only focused on entry I/O costs, in this section we
+consider the overhead of the remaining actions shown in
+Figure~\ref{fig:corfu-sm}.
+
+\begin{enumerate}
+    \item {\bf Epoch guard.} Each client request must be validated against the
+        current epoch. This singleton value in infrequently updated, but the
+        cost of accessing the value must be incurred for every request.
+
+    \item {\bf Per-entry metadata.} Unlike the singleton epoch value, metadata
+        associated with each log position must be read, and optionally updated
+        for every request. For instance the \emph{fill} operation must ensure
+        that it is not applied to a log position that has already been
+        written. When an operation that changes a log position is successful
+        (i.e. \emph{write}, \emph{fill}, \emph{trim}) the per-entry metadata
+        must also be updated to reflect the change. While the size of the
+        per-entry metadata is small, it is accessed for every operation and a
+        single object may manage a large number of entries.
+\end{enumerate}
+
+The design space for managing metadata can be large depending on the
+application. In many cases this space is significantly reduced when the
+key-value interface is used because it handles a large portion of common data
+management challenges such as indexing. On the other hand, we have seen that
+the bytestream can be used to achieve much higher performance when used in
+lieu of the key-value database, but leaves the design space wide open.
+
+We consider two high-level design prototypes in this paper based on both the
+key-value and bytestream interfaces. The summary of performance of these
+designs is shown in Figure~\ref{fig:cls_wr_jewel} where we begin by
+highlighting two baseline throughputs labeled \emph{librados} and
+\emph{cls\_null} that correspond to the baseline append throughput described
+in the previous section, and the append throughput achieved with \emph{object
+class} overhead included. We will discuss the performance of our two prototype
+designs relative to the base cost of using \emph{object class} facility.
+
+The first design is based on the key-value interface. In this design the epoch
+value is stored under a fixed key, and the metadata associated with each log
+entry is stored under a key derived from the log position. The expected throughput of
+this design is shown in Figure~\ref{fig:cls_wr_jewel} and labeled as
+\emph{cls\_full\_omap}. This result shows us that even for very small values
+the cost of managing data in the key-value store introduces significant
+overhead. In contrast, the unstructured bytestream interface imposes little
+to no restriction on how it is used.
+
+An obvious choice for encoding the singleton epoch value in the bytestream is
+to position it at a fixed offset such as in a header. A method for indexing
+entry metadata is far less obvious. Solutions span a wide design spectrum and
+include approaches such as encoding a search tree into the bytestream, or
+exploiting the regularity log addressing and storing a dense array that can be
+efficiently indexed. While there is clearly a wide variety of approaches, we
+have chosen to examine the overhead incurred by an hypothetical best-case
+design in which per-entry metadata can be accessed with a single I/O. The I/O
+overhead of the test includes (1) read epoch value from a fixed header
+location, (2) read the per-entry metadata, and in the case of an update (3)
+write the updated per-entry metadata. The expected throughput from such a
+design is shown in Figure~\ref{fig:cls_wr_jewel} labeled as
+\emph{cls\_full\_hdr} and performs with roughly a 6\% overhead.
 
 \paragraph*{Hardware and Software}
 
