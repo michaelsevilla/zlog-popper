@@ -66,7 +66,7 @@
   - name: disk zap again
     command: sgdisk --zap-all --clear --mbrtogpt -g -- {{ item }}
     with_items: ceph_osd_docker_devices
-  - name: journal zap
-    command: sgdisk --zap-all --clear --mbrtogpt -g -- {{ journal }}
-  - name: journal zap again
-    command: sgdisk --zap-all --clear --mbrtogpt -g -- {{ journal }}
+#  - name: journal zap
+#    command: sgdisk --zap-all --clear --mbrtogpt -g -- {{ journal }}
+#  - name: journal zap again
+#    command: sgdisk --zap-all --clear --mbrtogpt -g -- {{ journal }}

@@ -9,10 +9,8 @@ install_docker: false
 ceph_conf_overrides:
    global:
      osd pool default size: 1
-     osd pool default pg num: 4096
-     osd pool default pgp num: 4096
-     mds cache size: 0
-     client cache size: 0
+     osd pool default pg num: 512
+     osd pool default pgp num: 512
    mon:
      debug mon: 1
    osd:
@@ -20,8 +18,7 @@ ceph_conf_overrides:
      osd mkfs type: ext4
      osd max object name len: 256
      osd max object namespace len: 64
-     osd op threads: 4
-     filestore max sync interval: 20
+     osd journal size: 10000
    mds: 
      debug ms: 0
      debug mds: 0

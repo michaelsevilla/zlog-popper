@@ -7,7 +7,7 @@ issdm-18
 [osds]
 issdm-0
 issdm-1
-issdm-11
+#issdm-11
 issdm-14
 issdm-16
 issdm-17
@@ -21,8 +21,8 @@ issdm-40
 issdm-3 
 
 [mdss]
-issdm-10
-issdm-12
+#issdm-10
+#issdm-12
 issdm-15
 
 [clients]

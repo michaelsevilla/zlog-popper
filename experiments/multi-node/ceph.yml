@@ -3,20 +3,20 @@
 
 - include: cleanup.yml
 
-- name: setup gdisk
-  hosts: all
-  become: True
-  tasks:
-  - name: install the latest version of gdisk
-    package: name=gdisk state=present
-
-- name: setup the journal device
-  hosts: osds
-  become: True
-  tasks:
-  - shell: sgdisk -g -n 1:0:+35G /dev/sde
-  - shell: sgdisk -g -n 2:+35G /dev/sde
-  - shell: sgdisk -g -N 3 /dev/sde
+#- name: setup gdisk
+#  hosts: all
+#  become: True
+#  tasks:
+#  - name: install the latest version of gdisk
+#    package: name=gdisk state=present
+#
+#- name: setup the journal device
+#  hosts: osds
+#  become: True
+#  tasks:
+#  - shell: sgdisk -g -n 1:0:+35G /dev/sde
+#  - shell: sgdisk -g -n 2:+35G /dev/sde
+#  - shell: sgdisk -g -N 3 /dev/sde
 
 - hosts: mons
   become: True

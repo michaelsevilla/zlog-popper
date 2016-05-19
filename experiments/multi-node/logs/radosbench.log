@@ -1,0 +1,1221 @@
+2016-05-17 19:31:03,863 p=17722 u=issdm |  PLAY [localhost] ***************************************************************
+2016-05-17 19:31:03,883 p=17722 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:31:04,941 p=17722 u=issdm |  ok: [localhost]
+2016-05-17 19:31:04,946 p=17722 u=issdm |  TASK [delete the config directory on the ansible server] ***********************
+2016-05-17 19:31:05,130 p=17722 u=issdm |  changed: [localhost]
+2016-05-17 19:31:05,142 p=17722 u=issdm |  PLAY [all] *********************************************************************
+2016-05-17 19:31:05,158 p=17722 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:31:09,206 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:09,315 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:31:09,321 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:31:09,342 p=17722 u=issdm |  TASK [cleanup : remove containers [u'piha.soe.ucsc.edu:5000/zlog/ceph:jewel', u'piha.soe.ucsc.edu:5000/zlog/client:jewel', u'piha.soe.ucsc.edu:5000/zlog/sequencer:jewel', u'michaelsevilla/graphite', u'michaelsevilla/collectl', u'michaelsevilla/mdtest']] ***
+2016-05-17 19:31:09,990 p=17722 u=issdm |  changed: [issdm-3] => (item=piha.soe.ucsc.edu:5000/zlog/ceph:jewel)
+2016-05-17 19:31:10,438 p=17722 u=issdm |  ok: [issdm-3] => (item=piha.soe.ucsc.edu:5000/zlog/client:jewel)
+2016-05-17 19:31:10,885 p=17722 u=issdm |  ok: [issdm-3] => (item=piha.soe.ucsc.edu:5000/zlog/sequencer:jewel)
+2016-05-17 19:31:11,325 p=17722 u=issdm |  ok: [issdm-3] => (item=michaelsevilla/graphite)
+2016-05-17 19:31:11,776 p=17722 u=issdm |  ok: [issdm-3] => (item=michaelsevilla/collectl)
+2016-05-17 19:31:12,215 p=17722 u=issdm |  ok: [issdm-3] => (item=michaelsevilla/mdtest)
+2016-05-17 19:31:12,594 p=17722 u=issdm |  changed: [issdm-0] => (item=piha.soe.ucsc.edu:5000/zlog/ceph:jewel)
+2016-05-17 19:31:13,043 p=17722 u=issdm |  ok: [issdm-0] => (item=piha.soe.ucsc.edu:5000/zlog/client:jewel)
+2016-05-17 19:31:13,478 p=17722 u=issdm |  ok: [issdm-0] => (item=piha.soe.ucsc.edu:5000/zlog/sequencer:jewel)
+2016-05-17 19:31:13,910 p=17722 u=issdm |  ok: [issdm-0] => (item=michaelsevilla/graphite)
+2016-05-17 19:31:14,354 p=17722 u=issdm |  ok: [issdm-0] => (item=michaelsevilla/collectl)
+2016-05-17 19:31:14,792 p=17722 u=issdm |  ok: [issdm-0] => (item=michaelsevilla/mdtest)
+2016-05-17 19:31:17,745 p=17722 u=issdm |  changed: [issdm-1] => (item=piha.soe.ucsc.edu:5000/zlog/ceph:jewel)
+2016-05-17 19:31:18,340 p=17722 u=issdm |  ok: [issdm-1] => (item=piha.soe.ucsc.edu:5000/zlog/client:jewel)
+2016-05-17 19:31:18,786 p=17722 u=issdm |  ok: [issdm-1] => (item=piha.soe.ucsc.edu:5000/zlog/sequencer:jewel)
+2016-05-17 19:31:19,239 p=17722 u=issdm |  ok: [issdm-1] => (item=michaelsevilla/graphite)
+2016-05-17 19:31:19,825 p=17722 u=issdm |  ok: [issdm-1] => (item=michaelsevilla/collectl)
+2016-05-17 19:31:20,269 p=17722 u=issdm |  ok: [issdm-1] => (item=michaelsevilla/mdtest)
+2016-05-17 19:31:20,291 p=17722 u=issdm |  TASK [cleanup : delete user defined files] *************************************
+2016-05-17 19:31:20,586 p=17722 u=issdm |  changed: [issdm-0] => (item=/etc/ceph/)
+2016-05-17 19:31:20,590 p=17722 u=issdm |  changed: [issdm-1] => (item=/etc/ceph/)
+2016-05-17 19:31:20,599 p=17722 u=issdm |  changed: [issdm-3] => (item=/etc/ceph/)
+2016-05-17 19:31:20,855 p=17722 u=issdm |  changed: [issdm-1] => (item=/var/lib/ceph)
+2016-05-17 19:31:20,861 p=17722 u=issdm |  changed: [issdm-0] => (item=/var/lib/ceph)
+2016-05-17 19:31:20,865 p=17722 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph)
+2016-05-17 19:31:21,120 p=17722 u=issdm |  ok: [issdm-0] => (item=/tmp/graphite)
+2016-05-17 19:31:21,123 p=17722 u=issdm |  ok: [issdm-1] => (item=/tmp/graphite)
+2016-05-17 19:31:21,128 p=17722 u=issdm |  ok: [issdm-3] => (item=/tmp/graphite)
+2016-05-17 19:31:21,145 p=17722 u=issdm |  TASK [command] *****************************************************************
+2016-05-17 19:31:21,451 p=17722 u=issdm |  fatal: [issdm-0]: FAILED! => {"changed": true, "cmd": ["docker", "rm", "cephfs", "-f"], "delta": "0:00:00.035051", "end": "2016-05-17 19:31:21.428782", "failed": true, "rc": 1, "start": "2016-05-17 19:31:21.393731", "stderr": "Error response from daemon: No such container: cephfs\nError response from daemon: No such container: -f", "stdout": "", "stdout_lines": [], "warnings": []}
+2016-05-17 19:31:21,452 p=17722 u=issdm |  ...ignoring
+2016-05-17 19:31:21,454 p=17722 u=issdm |  fatal: [issdm-1]: FAILED! => {"changed": true, "cmd": ["docker", "rm", "cephfs", "-f"], "delta": "0:00:00.034246", "end": "2016-05-17 19:31:21.433098", "failed": true, "rc": 1, "start": "2016-05-17 19:31:21.398852", "stderr": "Error response from daemon: No such container: cephfs\nError response from daemon: No such container: -f", "stdout": "", "stdout_lines": [], "warnings": []}
+2016-05-17 19:31:21,454 p=17722 u=issdm |  ...ignoring
+2016-05-17 19:31:21,463 p=17722 u=issdm |  fatal: [issdm-3]: FAILED! => {"changed": true, "cmd": ["docker", "rm", "cephfs", "-f"], "delta": "0:00:00.035310", "end": "2016-05-17 19:31:21.444367", "failed": true, "rc": 1, "start": "2016-05-17 19:31:21.409057", "stderr": "Error response from daemon: No such container: cephfs\nError response from daemon: No such container: -f", "stdout": "", "stdout_lines": [], "warnings": []}
+2016-05-17 19:31:21,464 p=17722 u=issdm |  ...ignoring
+2016-05-17 19:31:21,478 p=17722 u=issdm |  PLAY [all] *********************************************************************
+2016-05-17 19:31:21,490 p=17722 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:31:24,718 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:31:25,026 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:31:25,845 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:25,851 p=17722 u=issdm |  TASK [decimate all containers] *************************************************
+2016-05-17 19:31:26,173 p=17722 u=issdm |  changed: [issdm-1]
+2016-05-17 19:31:26,175 p=17722 u=issdm |  changed: [issdm-0]
+2016-05-17 19:31:26,178 p=17722 u=issdm |  changed: [issdm-3]
+2016-05-17 19:31:26,182 p=17722 u=issdm |  TASK [delete ceph containers] **************************************************
+2016-05-17 19:31:26,235 p=17722 u=issdm |  TASK [decimate all containers] *************************************************
+2016-05-17 19:31:26,553 p=17722 u=issdm |  changed: [issdm-0]
+2016-05-17 19:31:26,555 p=17722 u=issdm |  changed: [issdm-1]
+2016-05-17 19:31:26,567 p=17722 u=issdm |  changed: [issdm-3]
+2016-05-17 19:31:26,571 p=17722 u=issdm |  TASK [delete ceph containers] **************************************************
+2016-05-17 19:31:26,617 p=17722 u=issdm |  TASK [decimate all containers] *************************************************
+2016-05-17 19:31:26,925 p=17722 u=issdm |  changed: [issdm-0]
+2016-05-17 19:31:26,929 p=17722 u=issdm |  changed: [issdm-1]
+2016-05-17 19:31:26,937 p=17722 u=issdm |  changed: [issdm-3]
+2016-05-17 19:31:26,940 p=17722 u=issdm |  TASK [delete ceph containers] **************************************************
+2016-05-17 19:31:26,985 p=17722 u=issdm |  TASK [purge ceph directories] **************************************************
+2016-05-17 19:31:27,271 p=17722 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/)
+2016-05-17 19:31:27,275 p=17722 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/)
+2016-05-17 19:31:27,289 p=17722 u=issdm |  ok: [issdm-3] => (item=/etc/ceph/)
+2016-05-17 19:31:27,521 p=17722 u=issdm |  ok: [issdm-0] => (item=/var/lib/ceph/)
+2016-05-17 19:31:27,528 p=17722 u=issdm |  ok: [issdm-1] => (item=/var/lib/ceph/)
+2016-05-17 19:31:27,538 p=17722 u=issdm |  ok: [issdm-3] => (item=/var/lib/ceph/)
+2016-05-17 19:31:27,554 p=17722 u=issdm |  PLAY [osds] ********************************************************************
+2016-05-17 19:31:27,566 p=17722 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:31:30,852 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:31:31,054 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:31:31,061 p=17722 u=issdm |  TASK [disk zap] ****************************************************************
+2016-05-17 19:31:33,672 p=17722 u=issdm |  changed: [issdm-0] => (item=/dev/sde)
+2016-05-17 19:31:33,794 p=17722 u=issdm |  changed: [issdm-1] => (item=/dev/sde)
+2016-05-17 19:31:33,800 p=17722 u=issdm |  TASK [disk zap again] **********************************************************
+2016-05-17 19:31:36,222 p=17722 u=issdm |  changed: [issdm-0] => (item=/dev/sde)
+2016-05-17 19:31:36,245 p=17722 u=issdm |  changed: [issdm-1] => (item=/dev/sde)
+2016-05-17 19:31:36,261 p=17722 u=issdm |  PLAY [mons] ********************************************************************
+2016-05-17 19:31:36,333 p=17722 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:31:39,725 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:39,746 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:39,799 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:39,804 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:39,858 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:39,862 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:39,915 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:39,920 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:39,973 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:39,977 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:40,031 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,035 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:40,089 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,094 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:40,147 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,152 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:40,211 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,215 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:40,271 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,275 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:40,329 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,334 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:40,387 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,392 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:31:40,446 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,450 p=17722 u=issdm |  TASK [ceph.ceph-common : get ceph version] *************************************
+2016-05-17 19:31:40,510 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,515 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:40,569 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,573 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:40,627 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,631 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:40,685 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,690 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:40,744 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,749 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:40,803 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,807 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:40,864 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,869 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:40,922 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,926 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:40,980 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:40,985 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:41,039 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,043 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:41,097 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,102 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:41,156 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,160 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:41,214 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,219 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:41,273 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,277 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:31:41,331 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,336 p=17722 u=issdm |  TASK [ceph.ceph-common : check for a ceph socket] ******************************
+2016-05-17 19:31:41,396 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,400 p=17722 u=issdm |  TASK [ceph.ceph-common : check for a rados gateway socket] *********************
+2016-05-17 19:31:41,460 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,467 p=17722 u=issdm |  TASK [ceph.ceph-common : create a local fetch directory if it does not exist] **
+2016-05-17 19:31:41,520 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,527 p=17722 u=issdm |  TASK [ceph.ceph-common : generate cluster uuid] ********************************
+2016-05-17 19:31:41,586 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,593 p=17722 u=issdm |  TASK [ceph.ceph-common : read cluster uuid if it already exists] ***************
+2016-05-17 19:31:41,652 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,656 p=17722 u=issdm |  TASK [ceph.ceph-common : create ceph conf directory] ***************************
+2016-05-17 19:31:41,710 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,717 p=17722 u=issdm |  TASK [ceph.ceph-common : generate ceph configuration file] *********************
+2016-05-17 19:31:41,772 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:41,777 p=17722 u=issdm |  TASK [ceph.ceph-common : create rbd client directory] **************************
+2016-05-17 19:31:41,890 p=17722 u=issdm |  skipping: [issdm-3] => (item=/var/run/ceph) 
+2016-05-17 19:31:41,948 p=17722 u=issdm |  skipping: [issdm-3] => (item=/var/log/ceph) 
+2016-05-17 19:31:41,964 p=17722 u=issdm |  TASK [ceph.ceph-common : configure cluster name] *******************************
+2016-05-17 19:31:42,018 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:42,023 p=17722 u=issdm |  TASK [ceph.ceph-common : configure cluster name] *******************************
+2016-05-17 19:31:42,080 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:42,085 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:42,212 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:42,216 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:42,268 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:42,273 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:42,326 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:42,331 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:42,386 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:42,391 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:42,444 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:42,449 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:42,558 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/./docker/main.yml for issdm-3
+2016-05-17 19:31:42,578 p=17722 u=issdm |  TASK [ceph-mon : check if a cluster is already running] ************************
+2016-05-17 19:31:42,965 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:42,970 p=17722 u=issdm |  TASK [ceph-mon : check if it is Atomic host] ***********************************
+2016-05-17 19:31:43,297 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:43,302 p=17722 u=issdm |  TASK [ceph-mon : set fact for using Atomic host] *******************************
+2016-05-17 19:31:43,416 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:43,421 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:43,579 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/checks.yml for issdm-3
+2016-05-17 19:31:43,638 p=17722 u=issdm |  TASK [ceph-mon : set config and keys paths] ************************************
+2016-05-17 19:31:43,829 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:43,835 p=17722 u=issdm |  TASK [ceph-mon : stat for ceph config and keys] ********************************
+2016-05-17 19:31:44,314 p=17722 u=issdm |  ok: [issdm-3] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:31:44,683 p=17722 u=issdm |  ok: [issdm-3] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:31:45,056 p=17722 u=issdm |  ok: [issdm-3] => (item=/etc/ceph/monmap)
+2016-05-17 19:31:45,426 p=17722 u=issdm |  ok: [issdm-3] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:31:45,799 p=17722 u=issdm |  ok: [issdm-3] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:31:46,172 p=17722 u=issdm |  ok: [issdm-3] => (item=/var/lib/ceph/bootstrap-rgw/ceph.keyring)
+2016-05-17 19:31:46,541 p=17722 u=issdm |  ok: [issdm-3] => (item=/var/lib/ceph/bootstrap-mds/ceph.keyring)
+2016-05-17 19:31:46,612 p=17722 u=issdm |  TASK [ceph-mon : fail if we find existing cluster files] ***********************
+2016-05-17 19:31:46,862 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.client.admin.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.client.admin.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.client.admin.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:47,003 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.conf', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.conf', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.conf', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:47,147 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/monmap', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/monmap', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/monmap', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:47,282 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.mon.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.mon.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.mon.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:47,421 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-osd/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:47,561 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:47,696 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-mds/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:47,746 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:47,936 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/pre_requisite.yml for issdm-3
+2016-05-17 19:31:48,018 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:48,168 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/create_configs.yml for issdm-3
+2016-05-17 19:31:48,244 p=17722 u=issdm |  TASK [ceph-mon : ensure conf dirs exist] ***************************************
+2016-05-17 19:31:48,724 p=17722 u=issdm |  changed: [issdm-3] => (item=/etc/ceph)
+2016-05-17 19:31:49,095 p=17722 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/)
+2016-05-17 19:31:49,461 p=17722 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-osd)
+2016-05-17 19:31:49,836 p=17722 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-rgw)
+2016-05-17 19:31:50,204 p=17722 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-mds)
+2016-05-17 19:31:50,252 p=17722 u=issdm |  TASK [ceph-mon : generate ceph configuration file] *****************************
+2016-05-17 19:31:50,850 p=17722 u=issdm |  changed: [issdm-3]
+2016-05-17 19:31:50,856 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:51,013 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/fetch_configs.yml for issdm-3
+2016-05-17 19:31:51,113 p=17722 u=issdm |  TASK [ceph-mon : set config and keys paths] ************************************
+2016-05-17 19:31:51,298 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:51,312 p=17722 u=issdm |  TASK [ceph-mon : stat for ceph config and keys] ********************************
+2016-05-17 19:31:51,696 p=17722 u=issdm |  ok: [issdm-3 -> localhost] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:31:51,968 p=17722 u=issdm |  ok: [issdm-3 -> localhost] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:31:52,233 p=17722 u=issdm |  ok: [issdm-3 -> localhost] => (item=/etc/ceph/monmap)
+2016-05-17 19:31:52,509 p=17722 u=issdm |  ok: [issdm-3 -> localhost] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:31:52,780 p=17722 u=issdm |  ok: [issdm-3 -> localhost] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:31:53,050 p=17722 u=issdm |  ok: [issdm-3 -> localhost] => (item=/var/lib/ceph/bootstrap-rgw/ceph.keyring)
+2016-05-17 19:31:53,321 p=17722 u=issdm |  ok: [issdm-3 -> localhost] => (item=/var/lib/ceph/bootstrap-mds/ceph.keyring)
+2016-05-17 19:31:53,392 p=17722 u=issdm |  TASK [ceph-mon : try to fetch ceph config and keys] ****************************
+2016-05-17 19:31:53,643 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.conf', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.conf', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.conf', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:53,771 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.client.admin.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.client.admin.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.client.admin.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:53,906 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/monmap', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/monmap', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/monmap', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:54,086 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.mon.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.mon.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.mon.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:54,181 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-osd/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-osd/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:54,317 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-rgw/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:54,455 p=17722 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-mds/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-mds/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:31:54,512 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:54,679 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/dirs_permissions.yml for issdm-3
+2016-05-17 19:31:54,803 p=17722 u=issdm |  TASK [ceph-mon : pull ceph daemon image] ***************************************
+2016-05-17 19:31:55,269 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:55,275 p=17722 u=issdm |  TASK [ceph-mon : inspect ceph version] *****************************************
+2016-05-17 19:31:55,712 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:55,719 p=17722 u=issdm |  TASK [ceph-mon : set_fact] *****************************************************
+2016-05-17 19:31:55,908 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:31:55,915 p=17722 u=issdm |  TASK [ceph-mon : create bootstrap directories (for or before hammer)] **********
+2016-05-17 19:31:56,154 p=17722 u=issdm |  skipping: [issdm-3] => (item=/etc/ceph/) 
+2016-05-17 19:31:56,293 p=17722 u=issdm |  skipping: [issdm-3] => (item=/var/lib/ceph/bootstrap-osd) 
+2016-05-17 19:31:56,437 p=17722 u=issdm |  skipping: [issdm-3] => (item=/var/lib/ceph/bootstrap-mds) 
+2016-05-17 19:31:56,578 p=17722 u=issdm |  skipping: [issdm-3] => (item=/var/lib/ceph/bootstrap-rgw) 
+2016-05-17 19:31:56,653 p=17722 u=issdm |  TASK [ceph-mon : create bootstrap directories (after hammer)] ******************
+2016-05-17 19:31:57,141 p=17722 u=issdm |  changed: [issdm-3] => (item=/etc/ceph/)
+2016-05-17 19:31:57,524 p=17722 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-osd)
+2016-05-17 19:31:57,909 p=17722 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-mds)
+2016-05-17 19:31:58,291 p=17722 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-rgw)
+2016-05-17 19:31:58,338 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:58,410 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:58,416 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:31:58,620 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/start_docker_monitor.yml for issdm-3
+2016-05-17 19:31:58,780 p=17722 u=issdm |  TASK [ceph-mon : populate kv_store with default ceph.conf] *********************
+2016-05-17 19:31:58,910 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:58,916 p=17722 u=issdm |  TASK [ceph-mon : populate kv_store with custom ceph.conf] **********************
+2016-05-17 19:31:59,048 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:59,054 p=17722 u=issdm |  TASK [ceph-mon : delete populate-kv-store docker] ******************************
+2016-05-17 19:31:59,183 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:59,190 p=17722 u=issdm |  TASK [ceph-mon : generate systemd unit file] ***********************************
+2016-05-17 19:31:59,321 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:59,328 p=17722 u=issdm |  TASK [ceph-mon : link systemd unit file for mon instance] **********************
+2016-05-17 19:31:59,456 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:59,462 p=17722 u=issdm |  TASK [ceph-mon : enable systemd unit file for mon instance] ********************
+2016-05-17 19:31:59,593 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:59,600 p=17722 u=issdm |  TASK [ceph-mon : reload systemd unit files] ************************************
+2016-05-17 19:31:59,727 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:59,734 p=17722 u=issdm |  TASK [ceph-mon : systemd start mon container] **********************************
+2016-05-17 19:31:59,862 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:31:59,869 p=17722 u=issdm |  TASK [ceph-mon : wait for ceph.conf exists] ************************************
+2016-05-17 19:31:59,996 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:32:00,003 p=17722 u=issdm |  TASK [ceph-mon : run the ceph monitor docker image] ****************************
+2016-05-17 19:32:00,858 p=17722 u=issdm |  changed: [issdm-3]
+2016-05-17 19:32:00,865 p=17722 u=issdm |  TASK [ceph-mon : run the ceph monitor docker image with kv] ********************
+2016-05-17 19:32:01,001 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:32:01,007 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:32:01,150 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/copy_configs.yml for issdm-3
+2016-05-17 19:32:01,383 p=17722 u=issdm |  TASK [ceph-mon : push ceph files to the ansible server] ************************
+2016-05-17 19:32:01,861 p=17722 u=issdm |  changed: [issdm-3] => (item=[u'/etc/ceph/ceph.conf', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.conf', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.conf', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:32:02,230 p=17722 u=issdm |  changed: [issdm-3] => (item=[u'/etc/ceph/ceph.client.admin.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.client.admin.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.client.admin.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:32:02,593 p=17722 u=issdm |  changed: [issdm-3] => (item=[u'/etc/ceph/monmap', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/monmap', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/monmap', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:32:02,962 p=17722 u=issdm |  changed: [issdm-3] => (item=[u'/etc/ceph/ceph.mon.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.mon.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.mon.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:32:03,320 p=17722 u=issdm |  changed: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-osd/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-osd/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:32:03,691 p=17722 u=issdm |  changed: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-rgw/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:32:04,040 p=17722 u=issdm |  changed: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-mds/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-mds/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:32:04,088 p=17722 u=issdm |  TASK [ceph-mon : create ceph rest api keyring when mon is containerized] *******
+2016-05-17 19:32:04,166 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:32:04,171 p=17722 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:32:04,221 p=17722 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:32:04,277 p=17722 u=issdm |  PLAY [osds] ********************************************************************
+2016-05-17 19:32:04,353 p=17722 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:32:07,603 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:32:07,863 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:32:07,898 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:07,954 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:07,964 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:07,969 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,026 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,032 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,037 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,092 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,101 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,106 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,161 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,170 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,175 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,235 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,244 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,249 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,303 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,312 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,317 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,376 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,382 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,387 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,441 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,450 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,455 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,509 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,518 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,523 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,578 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,587 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,592 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,649 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,708 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,713 p=17722 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:32:08,808 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,816 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,822 p=17722 u=issdm |  TASK [ceph.ceph-common : get ceph version] *************************************
+2016-05-17 19:32:08,881 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,893 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,898 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:08,952 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:08,961 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:08,966 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,019 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,028 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,033 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,089 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,099 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,104 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,157 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,166 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,171 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,224 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,233 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,238 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,295 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,301 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,306 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,361 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,369 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,374 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,428 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,437 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,442 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,497 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,507 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,512 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,566 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,574 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,579 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,633 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,642 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,647 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,701 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,710 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,715 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,769 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,778 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,783 p=17722 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:32:09,838 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,846 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,851 p=17722 u=issdm |  TASK [ceph.ceph-common : check for a ceph socket] ******************************
+2016-05-17 19:32:09,914 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:09,926 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:09,930 p=17722 u=issdm |  TASK [ceph.ceph-common : check for a rados gateway socket] *********************
+2016-05-17 19:32:09,990 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,002 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,009 p=17722 u=issdm |  TASK [ceph.ceph-common : create a local fetch directory if it does not exist] **
+2016-05-17 19:32:10,062 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,069 p=17722 u=issdm |  TASK [ceph.ceph-common : generate cluster uuid] ********************************
+2016-05-17 19:32:10,128 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,141 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,148 p=17722 u=issdm |  TASK [ceph.ceph-common : read cluster uuid if it already exists] ***************
+2016-05-17 19:32:10,209 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,222 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,227 p=17722 u=issdm |  TASK [ceph.ceph-common : create ceph conf directory] ***************************
+2016-05-17 19:32:10,281 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,290 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,295 p=17722 u=issdm |  TASK [ceph.ceph-common : generate ceph configuration file] *********************
+2016-05-17 19:32:10,350 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,359 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,364 p=17722 u=issdm |  TASK [ceph.ceph-common : create rbd client directory] **************************
+2016-05-17 19:32:10,475 p=17722 u=issdm |  skipping: [issdm-0] => (item=/var/run/ceph) 
+2016-05-17 19:32:10,484 p=17722 u=issdm |  skipping: [issdm-1] => (item=/var/run/ceph) 
+2016-05-17 19:32:10,533 p=17722 u=issdm |  skipping: [issdm-0] => (item=/var/log/ceph) 
+2016-05-17 19:32:10,557 p=17722 u=issdm |  skipping: [issdm-1] => (item=/var/log/ceph) 
+2016-05-17 19:32:10,571 p=17722 u=issdm |  TASK [ceph.ceph-common : configure cluster name] *******************************
+2016-05-17 19:32:10,627 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,635 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,640 p=17722 u=issdm |  TASK [ceph.ceph-common : configure cluster name] *******************************
+2016-05-17 19:32:10,694 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,704 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,709 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:10,762 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,771 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,776 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:10,830 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,839 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,844 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:10,898 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,907 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,912 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:10,969 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:10,978 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:10,983 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:11,038 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:11,047 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:11,052 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:11,160 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/./docker/main.yml for issdm-0, issdm-1
+2016-05-17 19:32:11,186 p=17722 u=issdm |  TASK [ceph-osd : check if a cluster is already running] ************************
+2016-05-17 19:32:11,576 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:32:11,602 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:32:11,608 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:11,778 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/docker/checks.yml for issdm-0, issdm-1
+2016-05-17 19:32:11,861 p=17722 u=issdm |  TASK [ceph-osd : set config and keys paths] ************************************
+2016-05-17 19:32:12,050 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:32:12,108 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:32:12,115 p=17722 u=issdm |  TASK [ceph-osd : stat for ceph config and keys] ********************************
+2016-05-17 19:32:12,595 p=17722 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:32:12,633 p=17722 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:32:12,964 p=17722 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:32:13,006 p=17722 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:32:13,348 p=17722 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/monmap)
+2016-05-17 19:32:13,390 p=17722 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/monmap)
+2016-05-17 19:32:13,717 p=17722 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:32:13,758 p=17722 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:32:14,090 p=17722 u=issdm |  ok: [issdm-0] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:32:14,131 p=17722 u=issdm |  ok: [issdm-1] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:32:14,477 p=17722 u=issdm |  ok: [issdm-0] => (item=/var/lib/ceph/bootstrap-rgw/ceph.keyring)
+2016-05-17 19:32:14,519 p=17722 u=issdm |  ok: [issdm-1] => (item=/var/lib/ceph/bootstrap-rgw/ceph.keyring)
+2016-05-17 19:32:14,833 p=17722 u=issdm |  ok: [issdm-0] => (item=/var/lib/ceph/bootstrap-mds/ceph.keyring)
+2016-05-17 19:32:14,873 p=17722 u=issdm |  ok: [issdm-1] => (item=/var/lib/ceph/bootstrap-mds/ceph.keyring)
+2016-05-17 19:32:15,008 p=17722 u=issdm |  TASK [ceph-osd : fail if we find existing cluster files] ***********************
+2016-05-17 19:32:15,314 p=17722 u=issdm |  skipping: [issdm-0] => (item=[u'/etc/ceph/ceph.client.admin.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.client.admin.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.client.admin.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,337 p=17722 u=issdm |  skipping: [issdm-1] => (item=[u'/etc/ceph/ceph.client.admin.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.client.admin.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.client.admin.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,407 p=17722 u=issdm |  skipping: [issdm-0] => (item=[u'/etc/ceph/ceph.conf', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.conf', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.conf', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,449 p=17722 u=issdm |  skipping: [issdm-1] => (item=[u'/etc/ceph/ceph.conf', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.conf', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.conf', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,535 p=17722 u=issdm |  skipping: [issdm-0] => (item=[u'/etc/ceph/monmap', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/monmap', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/monmap', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,578 p=17722 u=issdm |  skipping: [issdm-1] => (item=[u'/etc/ceph/monmap', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/monmap', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/monmap', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,664 p=17722 u=issdm |  skipping: [issdm-0] => (item=[u'/etc/ceph/ceph.mon.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.mon.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.mon.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,706 p=17722 u=issdm |  skipping: [issdm-1] => (item=[u'/etc/ceph/ceph.mon.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.mon.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.mon.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,792 p=17722 u=issdm |  skipping: [issdm-0] => (item=[u'/var/lib/ceph/bootstrap-osd/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,834 p=17722 u=issdm |  skipping: [issdm-1] => (item=[u'/var/lib/ceph/bootstrap-osd/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,924 p=17722 u=issdm |  skipping: [issdm-0] => (item=[u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:15,966 p=17722 u=issdm |  skipping: [issdm-1] => (item=[u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:16,073 p=17722 u=issdm |  skipping: [issdm-0] => (item=[u'/var/lib/ceph/bootstrap-mds/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:16,114 p=17722 u=issdm |  skipping: [issdm-1] => (item=[u'/var/lib/ceph/bootstrap-mds/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:32:16,203 p=17722 u=issdm |  TASK [ceph-osd : check if it is Atomic host] ***********************************
+2016-05-17 19:32:16,533 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:32:16,555 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:32:16,560 p=17722 u=issdm |  TASK [ceph-osd : set fact for using Atomic host] *******************************
+2016-05-17 19:32:16,669 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:32:16,691 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:32:16,697 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:16,891 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/docker/pre_requisite.yml for issdm-0, issdm-1
+2016-05-17 19:32:17,019 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:17,189 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/docker/fetch_configs.yml for issdm-0, issdm-1
+2016-05-17 19:32:17,315 p=17722 u=issdm |  TASK [ceph-osd : set config and keys paths] ************************************
+2016-05-17 19:32:17,499 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:32:17,558 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:32:17,572 p=17722 u=issdm |  TASK [ceph-osd : stat for ceph config and keys] ********************************
+2016-05-17 19:32:17,962 p=17722 u=issdm |  ok: [issdm-0 -> localhost] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:32:17,997 p=17722 u=issdm |  ok: [issdm-1 -> localhost] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:32:18,234 p=17722 u=issdm |  ok: [issdm-0 -> localhost] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:32:18,278 p=17722 u=issdm |  ok: [issdm-1 -> localhost] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:32:18,507 p=17722 u=issdm |  ok: [issdm-0 -> localhost] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:32:18,550 p=17722 u=issdm |  ok: [issdm-1 -> localhost] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:32:18,772 p=17722 u=issdm |  ok: [issdm-0 -> localhost] => (item=/etc/ceph/monmap)
+2016-05-17 19:32:18,817 p=17722 u=issdm |  ok: [issdm-1 -> localhost] => (item=/etc/ceph/monmap)
+2016-05-17 19:32:19,046 p=17722 u=issdm |  ok: [issdm-0 -> localhost] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:32:19,087 p=17722 u=issdm |  ok: [issdm-1 -> localhost] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:32:19,226 p=17722 u=issdm |  TASK [ceph-osd : ensure conf dirs exist] ***************************************
+2016-05-17 19:32:19,714 p=17722 u=issdm |  changed: [issdm-0] => (item=/etc/ceph)
+2016-05-17 19:32:19,752 p=17722 u=issdm |  changed: [issdm-1] => (item=/etc/ceph)
+2016-05-17 19:32:20,091 p=17722 u=issdm |  changed: [issdm-0] => (item=/var/lib/ceph/bootstrap-osd/)
+2016-05-17 19:32:20,132 p=17722 u=issdm |  changed: [issdm-1] => (item=/var/lib/ceph/bootstrap-osd/)
+2016-05-17 19:32:20,222 p=17722 u=issdm |  TASK [ceph-osd : try to copy ceph config and keys] *****************************
+2016-05-17 19:32:21,003 p=17722 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:32:21,042 p=17722 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:32:21,672 p=17722 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:32:21,714 p=17722 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:32:22,346 p=17722 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:32:22,387 p=17722 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:32:23,022 p=17722 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/monmap)
+2016-05-17 19:32:23,064 p=17722 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/monmap)
+2016-05-17 19:32:23,690 p=17722 u=issdm |  ok: [issdm-1] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:32:23,731 p=17722 u=issdm |  ok: [issdm-0] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:32:23,821 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:23,990 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/docker/dirs_permissions.yml for issdm-0, issdm-1
+2016-05-17 19:32:24,188 p=17722 u=issdm |  TASK [ceph-osd : pull ceph daemon image] ***************************************
+2016-05-17 19:32:24,667 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:32:24,708 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:32:24,715 p=17722 u=issdm |  TASK [ceph-osd : inspect ceph version] *****************************************
+2016-05-17 19:32:25,256 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:32:25,262 p=17722 u=issdm |  TASK [ceph-osd : set_fact] *****************************************************
+2016-05-17 19:32:25,448 p=17722 u=issdm |  ok: [issdm-0]
+2016-05-17 19:32:25,507 p=17722 u=issdm |  ok: [issdm-1]
+2016-05-17 19:32:25,514 p=17722 u=issdm |  TASK [ceph-osd : create bootstrap directories (for or before hammer)] **********
+2016-05-17 19:32:25,751 p=17722 u=issdm |  skipping: [issdm-0] => (item=/etc/ceph/) 
+2016-05-17 19:32:25,787 p=17722 u=issdm |  skipping: [issdm-1] => (item=/etc/ceph/) 
+2016-05-17 19:32:25,872 p=17722 u=issdm |  skipping: [issdm-0] => (item=/var/lib/ceph/bootstrap-osd) 
+2016-05-17 19:32:25,913 p=17722 u=issdm |  skipping: [issdm-1] => (item=/var/lib/ceph/bootstrap-osd) 
+2016-05-17 19:32:26,004 p=17722 u=issdm |  TASK [ceph-osd : create bootstrap directories (after hammer)] ******************
+2016-05-17 19:32:26,500 p=17722 u=issdm |  changed: [issdm-0] => (item=/etc/ceph/)
+2016-05-17 19:32:26,538 p=17722 u=issdm |  changed: [issdm-1] => (item=/etc/ceph/)
+2016-05-17 19:32:26,882 p=17722 u=issdm |  changed: [issdm-0] => (item=/var/lib/ceph/bootstrap-osd)
+2016-05-17 19:32:26,924 p=17722 u=issdm |  changed: [issdm-1] => (item=/var/lib/ceph/bootstrap-osd)
+2016-05-17 19:32:27,017 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:27,090 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:27,108 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:27,114 p=17722 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:32:27,346 p=17722 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/docker/start_docker_osd.yml for issdm-0, issdm-1
+2016-05-17 19:32:27,612 p=17722 u=issdm |  TASK [ceph-osd : umount ceph disk (if on openstack)] ***************************
+2016-05-17 19:32:27,737 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:27,781 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:27,788 p=17722 u=issdm |  TASK [ceph-osd : verify if the disk was already prepared] **********************
+2016-05-17 19:32:28,340 p=17722 u=issdm |  ok: [issdm-0] => (item=/dev/sde)
+2016-05-17 19:32:28,381 p=17722 u=issdm |  ok: [issdm-1] => (item=/dev/sde)
+2016-05-17 19:32:28,549 p=17722 u=issdm |  TASK [ceph-osd : prepare ceph osd disk] ****************************************
+2016-05-17 19:32:44,331 p=17722 u=issdm |  changed: [issdm-0] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:32:28.228749', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005501', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:32:28.223248', u'warnings': [], 'failed': False}])
+2016-05-17 19:32:44,456 p=17722 u=issdm |  changed: [issdm-1] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:32:28.238472', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005194', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:32:28.233278', u'warnings': [], 'failed': False}])
+2016-05-17 19:32:44,504 p=17722 u=issdm |  TASK [ceph-osd : prepare ceph osd disk with kv_store] **************************
+2016-05-17 19:32:44,796 p=17722 u=issdm |  skipping: [issdm-0] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:32:28.228749', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005501', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:32:28.223248', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:32:44,837 p=17722 u=issdm |  skipping: [issdm-1] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:32:28.238472', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005194', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:32:28.233278', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:32:44,928 p=17722 u=issdm |  TASK [ceph-osd : prepare ceph osd disk for container operating systems] ********
+2016-05-17 19:32:45,220 p=17722 u=issdm |  skipping: [issdm-0] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:32:28.228749', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005501', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:32:28.223248', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:32:45,262 p=17722 u=issdm |  skipping: [issdm-1] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:32:28.238472', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005194', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:32:28.233278', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:32:45,360 p=17722 u=issdm |  TASK [ceph-osd : prepare ceph osd disk for container operating systems with kv_store] ***
+2016-05-17 19:32:45,653 p=17722 u=issdm |  skipping: [issdm-0] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:32:28.228749', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005501', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:32:28.223248', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:32:45,691 p=17722 u=issdm |  skipping: [issdm-1] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:32:28.238472', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005194', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:32:28.233278', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:32:45,782 p=17722 u=issdm |  TASK [ceph-osd : generate systemd unit file] ***********************************
+2016-05-17 19:32:45,914 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:45,954 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:45,961 p=17722 u=issdm |  TASK [ceph-osd : link systemd unit file for osd instance] **********************
+2016-05-17 19:32:46,245 p=17722 u=issdm |  skipping: [issdm-0] => (item=/dev/sde) 
+2016-05-17 19:32:46,282 p=17722 u=issdm |  skipping: [issdm-1] => (item=/dev/sde) 
+2016-05-17 19:32:46,372 p=17722 u=issdm |  TASK [ceph-osd : enable systemd unit file for osd instance] ********************
+2016-05-17 19:32:46,657 p=17722 u=issdm |  skipping: [issdm-0] => (item=/dev/sde) 
+2016-05-17 19:32:46,696 p=17722 u=issdm |  skipping: [issdm-1] => (item=/dev/sde) 
+2016-05-17 19:32:46,784 p=17722 u=issdm |  TASK [ceph-osd : reload systemd unit files] ************************************
+2016-05-17 19:32:46,912 p=17722 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:32:46,951 p=17722 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:32:46,958 p=17722 u=issdm |  TASK [ceph-osd : systemd start osd container] **********************************
+2016-05-17 19:32:47,242 p=17722 u=issdm |  skipping: [issdm-0] => (item=/dev/sde) 
+2016-05-17 19:32:47,281 p=17722 u=issdm |  skipping: [issdm-1] => (item=/dev/sde) 
+2016-05-17 19:32:47,370 p=17722 u=issdm |  TASK [ceph-osd : run the ceph osd docker image] ********************************
+2016-05-17 19:32:48,430 p=17722 u=issdm |  changed: [issdm-0] => (item=/dev/sde)
+2016-05-17 19:32:48,565 p=17722 u=issdm |  changed: [issdm-1] => (item=/dev/sde)
+2016-05-17 19:32:48,673 p=17722 u=issdm |  TASK [ceph-osd : run the ceph osd docker image with kv] ************************
+2016-05-17 19:32:48,958 p=17722 u=issdm |  skipping: [issdm-0] => (item=/dev/sde) 
+2016-05-17 19:32:48,998 p=17722 u=issdm |  skipping: [issdm-1] => (item=/dev/sde) 
+2016-05-17 19:32:49,173 p=17722 u=issdm |  PLAY [wait for the cluster to come up] *****************************************
+2016-05-17 19:32:49,187 p=17722 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:32:52,555 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:32:52,561 p=17722 u=issdm |  TASK [command] *****************************************************************
+2016-05-17 19:32:53,242 p=17722 u=issdm |  changed: [issdm-3]
+2016-05-17 19:32:53,247 p=17722 u=issdm |  TASK [debug] *******************************************************************
+2016-05-17 19:32:53,303 p=17722 u=issdm |  ok: [issdm-3] => {
+    "result.stdout_lines": [
+        "    cluster e9570dd8-03ad-45f0-8a74-ec9b3bb7095f", 
+        "     health HEALTH_OK", 
+        "     monmap e1: 1 mons at {issdm-3=192.168.140.224:6789/0}", 
+        "            election epoch 3, quorum 0 issdm-3", 
+        "     osdmap e5: 2 osds: 0 up, 0 in", 
+        "            flags sortbitwise", 
+        "      pgmap v6: 64 pgs, 1 pools, 0 bytes data, 0 objects", 
+        "            0 kB used, 0 kB / 0 kB avail", 
+        "                  64 creating"
+    ]
+}
+2016-05-17 19:32:53,309 p=17722 u=issdm |  PLAY [graphite] ****************************************************************
+2016-05-17 19:32:53,309 p=17722 u=issdm |  skipping: no hosts matched
+2016-05-17 19:32:53,311 p=17722 u=issdm |  PLAY [mdss] ********************************************************************
+2016-05-17 19:32:53,311 p=17722 u=issdm |  skipping: no hosts matched
+2016-05-17 19:32:53,313 p=17722 u=issdm |  PLAY [clients] *****************************************************************
+2016-05-17 19:32:53,313 p=17722 u=issdm |  skipping: no hosts matched
+2016-05-17 19:32:53,316 p=17722 u=issdm |  PLAY [zlog-sequencer] **********************************************************
+2016-05-17 19:32:53,316 p=17722 u=issdm |  skipping: no hosts matched
+2016-05-17 19:32:53,318 p=17722 u=issdm |  PLAY [zlog-client] *************************************************************
+2016-05-17 19:32:53,318 p=17722 u=issdm |  skipping: no hosts matched
+2016-05-17 19:32:53,318 p=17722 u=issdm |  PLAY RECAP *********************************************************************
+2016-05-17 19:32:53,319 p=17722 u=issdm |  issdm-0                    : ok=35   changed=11   unreachable=0    failed=0   
+2016-05-17 19:32:53,319 p=17722 u=issdm |  issdm-1                    : ok=34   changed=11   unreachable=0    failed=0   
+2016-05-17 19:32:53,319 p=17722 u=issdm |  issdm-3                    : ok=36   changed=11   unreachable=0    failed=0   
+2016-05-17 19:32:53,319 p=17722 u=issdm |  localhost                  : ok=2    changed=1    unreachable=0    failed=0   
+2016-05-17 19:32:53,341 p=17722 u=issdm |  PLAY [mons] ********************************************************************
+2016-05-17 19:32:53,356 p=17722 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:32:56,757 p=17722 u=issdm |  ok: [issdm-3]
+2016-05-17 19:32:56,763 p=17722 u=issdm |  TASK [run el benchmark] ********************************************************
+2016-05-17 19:33:09,014 p=17722 u=issdm |  changed: [issdm-3]
+2016-05-17 19:33:09,020 p=17722 u=issdm |  TASK [spit results to a file] **************************************************
+2016-05-17 19:33:09,053 p=17722 u=issdm |  fatal: [issdm-3]: FAILED! => {"failed": true, "msg": "'inventory_name' is undefined"}
+2016-05-17 19:33:09,055 p=17722 u=issdm |  NO MORE HOSTS LEFT *************************************************************
+2016-05-17 19:33:09,055 p=17722 u=issdm |  PLAY RECAP *********************************************************************
+2016-05-17 19:33:09,056 p=17722 u=issdm |  issdm-0                    : ok=35   changed=11   unreachable=0    failed=0   
+2016-05-17 19:33:09,056 p=17722 u=issdm |  issdm-1                    : ok=34   changed=11   unreachable=0    failed=0   
+2016-05-17 19:33:09,056 p=17722 u=issdm |  issdm-3                    : ok=38   changed=12   unreachable=0    failed=1   
+2016-05-17 19:33:09,056 p=17722 u=issdm |  localhost                  : ok=2    changed=1    unreachable=0    failed=0   
+2016-05-17 19:33:29,112 p=19711 u=issdm |  PLAY [localhost] ***************************************************************
+2016-05-17 19:33:29,133 p=19711 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:33:30,196 p=19711 u=issdm |  ok: [localhost]
+2016-05-17 19:33:30,201 p=19711 u=issdm |  TASK [delete the config directory on the ansible server] ***********************
+2016-05-17 19:33:30,384 p=19711 u=issdm |  changed: [localhost]
+2016-05-17 19:33:30,397 p=19711 u=issdm |  PLAY [all] *********************************************************************
+2016-05-17 19:33:30,412 p=19711 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:33:33,528 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:33:33,987 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:33:34,032 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:33:34,054 p=19711 u=issdm |  TASK [cleanup : remove containers [u'piha.soe.ucsc.edu:5000/zlog/ceph:jewel', u'piha.soe.ucsc.edu:5000/zlog/client:jewel', u'piha.soe.ucsc.edu:5000/zlog/sequencer:jewel', u'michaelsevilla/graphite', u'michaelsevilla/collectl', u'michaelsevilla/mdtest']] ***
+2016-05-17 19:33:34,693 p=19711 u=issdm |  changed: [issdm-3] => (item=piha.soe.ucsc.edu:5000/zlog/ceph:jewel)
+2016-05-17 19:33:34,832 p=19711 u=issdm |  changed: [issdm-0] => (item=piha.soe.ucsc.edu:5000/zlog/ceph:jewel)
+2016-05-17 19:33:35,142 p=19711 u=issdm |  ok: [issdm-3] => (item=piha.soe.ucsc.edu:5000/zlog/client:jewel)
+2016-05-17 19:33:35,277 p=19711 u=issdm |  ok: [issdm-0] => (item=piha.soe.ucsc.edu:5000/zlog/client:jewel)
+2016-05-17 19:33:35,591 p=19711 u=issdm |  ok: [issdm-3] => (item=piha.soe.ucsc.edu:5000/zlog/sequencer:jewel)
+2016-05-17 19:33:35,700 p=19711 u=issdm |  ok: [issdm-0] => (item=piha.soe.ucsc.edu:5000/zlog/sequencer:jewel)
+2016-05-17 19:33:36,031 p=19711 u=issdm |  ok: [issdm-3] => (item=michaelsevilla/graphite)
+2016-05-17 19:33:36,138 p=19711 u=issdm |  ok: [issdm-0] => (item=michaelsevilla/graphite)
+2016-05-17 19:33:36,482 p=19711 u=issdm |  ok: [issdm-3] => (item=michaelsevilla/collectl)
+2016-05-17 19:33:36,585 p=19711 u=issdm |  ok: [issdm-0] => (item=michaelsevilla/collectl)
+2016-05-17 19:33:36,924 p=19711 u=issdm |  ok: [issdm-3] => (item=michaelsevilla/mdtest)
+2016-05-17 19:33:37,026 p=19711 u=issdm |  ok: [issdm-0] => (item=michaelsevilla/mdtest)
+2016-05-17 19:33:41,951 p=19711 u=issdm |  changed: [issdm-1] => (item=piha.soe.ucsc.edu:5000/zlog/ceph:jewel)
+2016-05-17 19:33:42,549 p=19711 u=issdm |  ok: [issdm-1] => (item=piha.soe.ucsc.edu:5000/zlog/client:jewel)
+2016-05-17 19:33:42,992 p=19711 u=issdm |  ok: [issdm-1] => (item=piha.soe.ucsc.edu:5000/zlog/sequencer:jewel)
+2016-05-17 19:33:43,446 p=19711 u=issdm |  ok: [issdm-1] => (item=michaelsevilla/graphite)
+2016-05-17 19:33:44,015 p=19711 u=issdm |  ok: [issdm-1] => (item=michaelsevilla/collectl)
+2016-05-17 19:33:44,461 p=19711 u=issdm |  ok: [issdm-1] => (item=michaelsevilla/mdtest)
+2016-05-17 19:33:44,484 p=19711 u=issdm |  TASK [cleanup : delete user defined files] *************************************
+2016-05-17 19:33:44,777 p=19711 u=issdm |  changed: [issdm-0] => (item=/etc/ceph/)
+2016-05-17 19:33:44,783 p=19711 u=issdm |  changed: [issdm-1] => (item=/etc/ceph/)
+2016-05-17 19:33:44,790 p=19711 u=issdm |  changed: [issdm-3] => (item=/etc/ceph/)
+2016-05-17 19:33:45,051 p=19711 u=issdm |  changed: [issdm-1] => (item=/var/lib/ceph)
+2016-05-17 19:33:45,056 p=19711 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph)
+2016-05-17 19:33:45,061 p=19711 u=issdm |  changed: [issdm-0] => (item=/var/lib/ceph)
+2016-05-17 19:33:45,312 p=19711 u=issdm |  ok: [issdm-1] => (item=/tmp/graphite)
+2016-05-17 19:33:45,320 p=19711 u=issdm |  ok: [issdm-3] => (item=/tmp/graphite)
+2016-05-17 19:33:45,324 p=19711 u=issdm |  ok: [issdm-0] => (item=/tmp/graphite)
+2016-05-17 19:33:45,335 p=19711 u=issdm |  TASK [command] *****************************************************************
+2016-05-17 19:33:45,642 p=19711 u=issdm |  fatal: [issdm-0]: FAILED! => {"changed": true, "cmd": ["docker", "rm", "cephfs", "-f"], "delta": "0:00:00.035436", "end": "2016-05-17 19:33:45.619739", "failed": true, "rc": 1, "start": "2016-05-17 19:33:45.584303", "stderr": "Error response from daemon: No such container: cephfs\nError response from daemon: No such container: -f", "stdout": "", "stdout_lines": [], "warnings": []}
+2016-05-17 19:33:45,643 p=19711 u=issdm |  ...ignoring
+2016-05-17 19:33:45,644 p=19711 u=issdm |  fatal: [issdm-1]: FAILED! => {"changed": true, "cmd": ["docker", "rm", "cephfs", "-f"], "delta": "0:00:00.035482", "end": "2016-05-17 19:33:45.623278", "failed": true, "rc": 1, "start": "2016-05-17 19:33:45.587796", "stderr": "Error response from daemon: No such container: cephfs\nError response from daemon: No such container: -f", "stdout": "", "stdout_lines": [], "warnings": []}
+2016-05-17 19:33:45,644 p=19711 u=issdm |  ...ignoring
+2016-05-17 19:33:45,653 p=19711 u=issdm |  fatal: [issdm-3]: FAILED! => {"changed": true, "cmd": ["docker", "rm", "cephfs", "-f"], "delta": "0:00:00.033324", "end": "2016-05-17 19:33:45.633210", "failed": true, "rc": 1, "start": "2016-05-17 19:33:45.599886", "stderr": "Error response from daemon: No such container: cephfs\nError response from daemon: No such container: -f", "stdout": "", "stdout_lines": [], "warnings": []}
+2016-05-17 19:33:45,653 p=19711 u=issdm |  ...ignoring
+2016-05-17 19:33:45,667 p=19711 u=issdm |  PLAY [all] *********************************************************************
+2016-05-17 19:33:45,680 p=19711 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:33:48,881 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:33:49,193 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:33:50,040 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:33:50,046 p=19711 u=issdm |  TASK [decimate all containers] *************************************************
+2016-05-17 19:33:50,365 p=19711 u=issdm |  changed: [issdm-0]
+2016-05-17 19:33:50,370 p=19711 u=issdm |  changed: [issdm-1]
+2016-05-17 19:33:50,378 p=19711 u=issdm |  changed: [issdm-3]
+2016-05-17 19:33:50,382 p=19711 u=issdm |  TASK [delete ceph containers] **************************************************
+2016-05-17 19:33:50,435 p=19711 u=issdm |  TASK [decimate all containers] *************************************************
+2016-05-17 19:33:50,748 p=19711 u=issdm |  changed: [issdm-0]
+2016-05-17 19:33:50,755 p=19711 u=issdm |  changed: [issdm-1]
+2016-05-17 19:33:50,766 p=19711 u=issdm |  changed: [issdm-3]
+2016-05-17 19:33:50,769 p=19711 u=issdm |  TASK [delete ceph containers] **************************************************
+2016-05-17 19:33:50,815 p=19711 u=issdm |  TASK [decimate all containers] *************************************************
+2016-05-17 19:33:51,130 p=19711 u=issdm |  changed: [issdm-0]
+2016-05-17 19:33:51,140 p=19711 u=issdm |  changed: [issdm-3]
+2016-05-17 19:33:51,142 p=19711 u=issdm |  changed: [issdm-1]
+2016-05-17 19:33:51,145 p=19711 u=issdm |  TASK [delete ceph containers] **************************************************
+2016-05-17 19:33:51,190 p=19711 u=issdm |  TASK [purge ceph directories] **************************************************
+2016-05-17 19:33:51,478 p=19711 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/)
+2016-05-17 19:33:51,484 p=19711 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/)
+2016-05-17 19:33:51,496 p=19711 u=issdm |  ok: [issdm-3] => (item=/etc/ceph/)
+2016-05-17 19:33:51,735 p=19711 u=issdm |  ok: [issdm-0] => (item=/var/lib/ceph/)
+2016-05-17 19:33:51,739 p=19711 u=issdm |  ok: [issdm-1] => (item=/var/lib/ceph/)
+2016-05-17 19:33:51,747 p=19711 u=issdm |  ok: [issdm-3] => (item=/var/lib/ceph/)
+2016-05-17 19:33:51,761 p=19711 u=issdm |  PLAY [osds] ********************************************************************
+2016-05-17 19:33:51,774 p=19711 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:33:55,170 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:33:55,299 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:33:55,306 p=19711 u=issdm |  TASK [disk zap] ****************************************************************
+2016-05-17 19:33:58,045 p=19711 u=issdm |  changed: [issdm-1] => (item=/dev/sde)
+2016-05-17 19:33:58,053 p=19711 u=issdm |  changed: [issdm-0] => (item=/dev/sde)
+2016-05-17 19:33:58,059 p=19711 u=issdm |  TASK [disk zap again] **********************************************************
+2016-05-17 19:34:00,472 p=19711 u=issdm |  changed: [issdm-0] => (item=/dev/sde)
+2016-05-17 19:34:00,565 p=19711 u=issdm |  changed: [issdm-1] => (item=/dev/sde)
+2016-05-17 19:34:00,580 p=19711 u=issdm |  PLAY [mons] ********************************************************************
+2016-05-17 19:34:00,654 p=19711 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:34:04,060 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:34:04,080 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,134 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,139 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,192 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,197 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,250 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,255 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,308 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,313 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,367 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,371 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,425 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,430 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,483 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,488 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,548 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,552 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,608 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,613 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,667 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,671 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,725 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,730 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:04,784 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,789 p=19711 u=issdm |  TASK [ceph.ceph-common : get ceph version] *************************************
+2016-05-17 19:34:04,848 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,853 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:04,907 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,911 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:04,965 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:04,970 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,024 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,028 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,083 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,087 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,141 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,146 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,203 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,208 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,262 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,267 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,321 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,325 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,379 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,384 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,438 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,443 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,497 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,502 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,556 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,560 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,615 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,620 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:05,673 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,678 p=19711 u=issdm |  TASK [ceph.ceph-common : check for a ceph socket] ******************************
+2016-05-17 19:34:05,738 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,743 p=19711 u=issdm |  TASK [ceph.ceph-common : check for a rados gateway socket] *********************
+2016-05-17 19:34:05,803 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,810 p=19711 u=issdm |  TASK [ceph.ceph-common : create a local fetch directory if it does not exist] **
+2016-05-17 19:34:05,863 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,870 p=19711 u=issdm |  TASK [ceph.ceph-common : generate cluster uuid] ********************************
+2016-05-17 19:34:05,929 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:05,936 p=19711 u=issdm |  TASK [ceph.ceph-common : read cluster uuid if it already exists] ***************
+2016-05-17 19:34:05,996 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:06,000 p=19711 u=issdm |  TASK [ceph.ceph-common : create ceph conf directory] ***************************
+2016-05-17 19:34:06,055 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:06,061 p=19711 u=issdm |  TASK [ceph.ceph-common : generate ceph configuration file] *********************
+2016-05-17 19:34:06,117 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:06,122 p=19711 u=issdm |  TASK [ceph.ceph-common : create rbd client directory] **************************
+2016-05-17 19:34:06,236 p=19711 u=issdm |  skipping: [issdm-3] => (item=/var/run/ceph) 
+2016-05-17 19:34:06,295 p=19711 u=issdm |  skipping: [issdm-3] => (item=/var/log/ceph) 
+2016-05-17 19:34:06,311 p=19711 u=issdm |  TASK [ceph.ceph-common : configure cluster name] *******************************
+2016-05-17 19:34:06,365 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:06,370 p=19711 u=issdm |  TASK [ceph.ceph-common : configure cluster name] *******************************
+2016-05-17 19:34:06,428 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:06,433 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:06,561 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:06,565 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:06,619 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:06,624 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:06,676 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:06,681 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:06,736 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:06,741 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:06,795 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:06,800 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:06,910 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/./docker/main.yml for issdm-3
+2016-05-17 19:34:06,930 p=19711 u=issdm |  TASK [ceph-mon : check if a cluster is already running] ************************
+2016-05-17 19:34:07,322 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:34:07,327 p=19711 u=issdm |  TASK [ceph-mon : check if it is Atomic host] ***********************************
+2016-05-17 19:34:07,651 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:34:07,656 p=19711 u=issdm |  TASK [ceph-mon : set fact for using Atomic host] *******************************
+2016-05-17 19:34:07,770 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:34:07,775 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:07,935 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/checks.yml for issdm-3
+2016-05-17 19:34:07,995 p=19711 u=issdm |  TASK [ceph-mon : set config and keys paths] ************************************
+2016-05-17 19:34:08,186 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:34:08,192 p=19711 u=issdm |  TASK [ceph-mon : stat for ceph config and keys] ********************************
+2016-05-17 19:34:08,672 p=19711 u=issdm |  ok: [issdm-3] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:34:09,045 p=19711 u=issdm |  ok: [issdm-3] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:34:09,420 p=19711 u=issdm |  ok: [issdm-3] => (item=/etc/ceph/monmap)
+2016-05-17 19:34:09,791 p=19711 u=issdm |  ok: [issdm-3] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:34:10,168 p=19711 u=issdm |  ok: [issdm-3] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:34:10,539 p=19711 u=issdm |  ok: [issdm-3] => (item=/var/lib/ceph/bootstrap-rgw/ceph.keyring)
+2016-05-17 19:34:10,905 p=19711 u=issdm |  ok: [issdm-3] => (item=/var/lib/ceph/bootstrap-mds/ceph.keyring)
+2016-05-17 19:34:10,977 p=19711 u=issdm |  TASK [ceph-mon : fail if we find existing cluster files] ***********************
+2016-05-17 19:34:11,230 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.client.admin.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.client.admin.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.client.admin.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:11,362 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.conf', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.conf', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.conf', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:11,508 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/monmap', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/monmap', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/monmap', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:11,651 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.mon.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.mon.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.mon.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:11,787 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-osd/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:11,928 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:12,066 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-mds/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:12,117 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:12,311 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/pre_requisite.yml for issdm-3
+2016-05-17 19:34:12,394 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:12,544 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/create_configs.yml for issdm-3
+2016-05-17 19:34:12,622 p=19711 u=issdm |  TASK [ceph-mon : ensure conf dirs exist] ***************************************
+2016-05-17 19:34:13,103 p=19711 u=issdm |  changed: [issdm-3] => (item=/etc/ceph)
+2016-05-17 19:34:13,467 p=19711 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/)
+2016-05-17 19:34:13,842 p=19711 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-osd)
+2016-05-17 19:34:14,230 p=19711 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-rgw)
+2016-05-17 19:34:14,592 p=19711 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-mds)
+2016-05-17 19:34:14,640 p=19711 u=issdm |  TASK [ceph-mon : generate ceph configuration file] *****************************
+2016-05-17 19:34:15,241 p=19711 u=issdm |  changed: [issdm-3]
+2016-05-17 19:34:15,247 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:15,406 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/fetch_configs.yml for issdm-3
+2016-05-17 19:34:15,508 p=19711 u=issdm |  TASK [ceph-mon : set config and keys paths] ************************************
+2016-05-17 19:34:15,694 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:34:15,708 p=19711 u=issdm |  TASK [ceph-mon : stat for ceph config and keys] ********************************
+2016-05-17 19:34:16,096 p=19711 u=issdm |  ok: [issdm-3 -> localhost] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:34:16,368 p=19711 u=issdm |  ok: [issdm-3 -> localhost] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:34:16,638 p=19711 u=issdm |  ok: [issdm-3 -> localhost] => (item=/etc/ceph/monmap)
+2016-05-17 19:34:16,919 p=19711 u=issdm |  ok: [issdm-3 -> localhost] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:34:17,192 p=19711 u=issdm |  ok: [issdm-3 -> localhost] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:34:17,469 p=19711 u=issdm |  ok: [issdm-3 -> localhost] => (item=/var/lib/ceph/bootstrap-rgw/ceph.keyring)
+2016-05-17 19:34:17,737 p=19711 u=issdm |  ok: [issdm-3 -> localhost] => (item=/var/lib/ceph/bootstrap-mds/ceph.keyring)
+2016-05-17 19:34:17,809 p=19711 u=issdm |  TASK [ceph-mon : try to fetch ceph config and keys] ****************************
+2016-05-17 19:34:18,060 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.conf', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.conf', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.conf', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:18,190 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.client.admin.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.client.admin.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.client.admin.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:18,328 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/monmap', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/monmap', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/monmap', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:18,507 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/etc/ceph/ceph.mon.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.mon.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.mon.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:18,605 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-osd/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-osd/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:18,751 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-rgw/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:18,882 p=19711 u=issdm |  skipping: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-mds/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-mds/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:18,930 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:19,097 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/dirs_permissions.yml for issdm-3
+2016-05-17 19:34:19,223 p=19711 u=issdm |  TASK [ceph-mon : pull ceph daemon image] ***************************************
+2016-05-17 19:34:19,691 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:34:19,697 p=19711 u=issdm |  TASK [ceph-mon : inspect ceph version] *****************************************
+2016-05-17 19:34:20,139 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:34:20,145 p=19711 u=issdm |  TASK [ceph-mon : set_fact] *****************************************************
+2016-05-17 19:34:20,337 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:34:20,344 p=19711 u=issdm |  TASK [ceph-mon : create bootstrap directories (for or before hammer)] **********
+2016-05-17 19:34:20,591 p=19711 u=issdm |  skipping: [issdm-3] => (item=/etc/ceph/) 
+2016-05-17 19:34:20,737 p=19711 u=issdm |  skipping: [issdm-3] => (item=/var/lib/ceph/bootstrap-osd) 
+2016-05-17 19:34:20,878 p=19711 u=issdm |  skipping: [issdm-3] => (item=/var/lib/ceph/bootstrap-mds) 
+2016-05-17 19:34:21,024 p=19711 u=issdm |  skipping: [issdm-3] => (item=/var/lib/ceph/bootstrap-rgw) 
+2016-05-17 19:34:21,100 p=19711 u=issdm |  TASK [ceph-mon : create bootstrap directories (after hammer)] ******************
+2016-05-17 19:34:21,598 p=19711 u=issdm |  changed: [issdm-3] => (item=/etc/ceph/)
+2016-05-17 19:34:21,978 p=19711 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-osd)
+2016-05-17 19:34:22,367 p=19711 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-mds)
+2016-05-17 19:34:22,749 p=19711 u=issdm |  changed: [issdm-3] => (item=/var/lib/ceph/bootstrap-rgw)
+2016-05-17 19:34:22,797 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:22,871 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:22,877 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:23,085 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/start_docker_monitor.yml for issdm-3
+2016-05-17 19:34:23,247 p=19711 u=issdm |  TASK [ceph-mon : populate kv_store with default ceph.conf] *********************
+2016-05-17 19:34:23,381 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:23,387 p=19711 u=issdm |  TASK [ceph-mon : populate kv_store with custom ceph.conf] **********************
+2016-05-17 19:34:23,520 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:23,526 p=19711 u=issdm |  TASK [ceph-mon : delete populate-kv-store docker] ******************************
+2016-05-17 19:34:23,660 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:23,667 p=19711 u=issdm |  TASK [ceph-mon : generate systemd unit file] ***********************************
+2016-05-17 19:34:23,798 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:23,805 p=19711 u=issdm |  TASK [ceph-mon : link systemd unit file for mon instance] **********************
+2016-05-17 19:34:23,937 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:23,943 p=19711 u=issdm |  TASK [ceph-mon : enable systemd unit file for mon instance] ********************
+2016-05-17 19:34:24,073 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:24,079 p=19711 u=issdm |  TASK [ceph-mon : reload systemd unit files] ************************************
+2016-05-17 19:34:24,211 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:24,218 p=19711 u=issdm |  TASK [ceph-mon : systemd start mon container] **********************************
+2016-05-17 19:34:24,349 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:24,356 p=19711 u=issdm |  TASK [ceph-mon : wait for ceph.conf exists] ************************************
+2016-05-17 19:34:24,486 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:24,492 p=19711 u=issdm |  TASK [ceph-mon : run the ceph monitor docker image] ****************************
+2016-05-17 19:34:25,364 p=19711 u=issdm |  changed: [issdm-3]
+2016-05-17 19:34:25,371 p=19711 u=issdm |  TASK [ceph-mon : run the ceph monitor docker image with kv] ********************
+2016-05-17 19:34:25,503 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:25,509 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:25,651 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-mon/tasks/docker/copy_configs.yml for issdm-3
+2016-05-17 19:34:25,888 p=19711 u=issdm |  TASK [ceph-mon : push ceph files to the ansible server] ************************
+2016-05-17 19:34:26,370 p=19711 u=issdm |  changed: [issdm-3] => (item=[u'/etc/ceph/ceph.conf', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.conf', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.conf', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:34:26,731 p=19711 u=issdm |  changed: [issdm-3] => (item=[u'/etc/ceph/ceph.client.admin.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.client.admin.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.client.admin.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:34:27,094 p=19711 u=issdm |  changed: [issdm-3] => (item=[u'/etc/ceph/monmap', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/monmap', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/monmap', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:34:27,464 p=19711 u=issdm |  changed: [issdm-3] => (item=[u'/etc/ceph/ceph.mon.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/etc/ceph/ceph.mon.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//etc/ceph/ceph.mon.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:34:27,822 p=19711 u=issdm |  changed: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-osd/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-osd/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:34:28,184 p=19711 u=issdm |  changed: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-rgw/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:34:28,545 p=19711 u=issdm |  changed: [issdm-3] => (item=[u'/var/lib/ceph/bootstrap-mds/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, '_ansible_delegated_vars': {'ansible_host': u'localhost'}, u'changed': False, 'failed': False, 'item': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'fetch//docker_mon_files//var/lib/ceph/bootstrap-mds/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}])
+2016-05-17 19:34:28,594 p=19711 u=issdm |  TASK [ceph-mon : create ceph rest api keyring when mon is containerized] *******
+2016-05-17 19:34:28,673 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:28,678 p=19711 u=issdm |  TASK [ceph-mon : include] ******************************************************
+2016-05-17 19:34:28,730 p=19711 u=issdm |  skipping: [issdm-3]
+2016-05-17 19:34:28,786 p=19711 u=issdm |  PLAY [osds] ********************************************************************
+2016-05-17 19:34:28,863 p=19711 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:34:32,248 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:34:32,253 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:34:32,288 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:32,346 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:32,356 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:32,361 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:32,417 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:32,426 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:32,431 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:32,485 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:32,493 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:32,498 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:32,552 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:32,561 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:32,566 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:32,627 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:32,634 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:32,639 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:32,693 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:32,701 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:32,706 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:32,761 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:32,769 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:32,774 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:32,828 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:32,837 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:32,842 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:32,896 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:32,904 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:32,909 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:32,963 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:32,972 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:32,977 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:33,034 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,092 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,097 p=19711 u=issdm |  TASK [ceph.ceph-common : include] **********************************************
+2016-05-17 19:34:33,191 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,200 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,205 p=19711 u=issdm |  TASK [ceph.ceph-common : get ceph version] *************************************
+2016-05-17 19:34:33,266 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,278 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,283 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:33,340 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,348 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,353 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:33,407 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,416 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,421 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:33,476 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,487 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,492 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:33,546 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,555 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,560 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:33,614 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,622 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,627 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:33,682 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,691 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,696 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:33,751 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,761 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,766 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:33,821 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,829 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,834 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:33,890 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,900 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,905 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:33,958 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:33,967 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:33,972 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:34,027 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,035 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:34,040 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:34,094 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,102 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:34,107 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:34,162 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,171 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:34,176 p=19711 u=issdm |  TASK [ceph.ceph-common : set_fact] *********************************************
+2016-05-17 19:34:34,230 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,239 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:34,244 p=19711 u=issdm |  TASK [ceph.ceph-common : check for a ceph socket] ******************************
+2016-05-17 19:34:34,306 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,318 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:34,323 p=19711 u=issdm |  TASK [ceph.ceph-common : check for a rados gateway socket] *********************
+2016-05-17 19:34:34,383 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,396 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:34,403 p=19711 u=issdm |  TASK [ceph.ceph-common : create a local fetch directory if it does not exist] **
+2016-05-17 19:34:34,457 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,464 p=19711 u=issdm |  TASK [ceph.ceph-common : generate cluster uuid] ********************************
+2016-05-17 19:34:34,523 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,536 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:34,543 p=19711 u=issdm |  TASK [ceph.ceph-common : read cluster uuid if it already exists] ***************
+2016-05-17 19:34:34,603 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,615 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:34,620 p=19711 u=issdm |  TASK [ceph.ceph-common : create ceph conf directory] ***************************
+2016-05-17 19:34:34,675 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,684 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:34,689 p=19711 u=issdm |  TASK [ceph.ceph-common : generate ceph configuration file] *********************
+2016-05-17 19:34:34,744 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:34,753 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:34,758 p=19711 u=issdm |  TASK [ceph.ceph-common : create rbd client directory] **************************
+2016-05-17 19:34:34,871 p=19711 u=issdm |  skipping: [issdm-0] => (item=/var/run/ceph) 
+2016-05-17 19:34:34,879 p=19711 u=issdm |  skipping: [issdm-1] => (item=/var/run/ceph) 
+2016-05-17 19:34:34,930 p=19711 u=issdm |  skipping: [issdm-0] => (item=/var/log/ceph) 
+2016-05-17 19:34:34,954 p=19711 u=issdm |  skipping: [issdm-1] => (item=/var/log/ceph) 
+2016-05-17 19:34:34,969 p=19711 u=issdm |  TASK [ceph.ceph-common : configure cluster name] *******************************
+2016-05-17 19:34:35,023 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:35,032 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:35,037 p=19711 u=issdm |  TASK [ceph.ceph-common : configure cluster name] *******************************
+2016-05-17 19:34:35,091 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:35,100 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:35,105 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:35,159 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:35,168 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:35,173 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:35,230 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:35,236 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:35,242 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:35,297 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:35,306 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:35,311 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:35,367 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:35,376 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:35,381 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:35,436 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:35,445 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:35,450 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:35,558 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/./docker/main.yml for issdm-0, issdm-1
+2016-05-17 19:34:35,585 p=19711 u=issdm |  TASK [ceph-osd : check if a cluster is already running] ************************
+2016-05-17 19:34:35,975 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:34:36,002 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:34:36,007 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:36,179 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/docker/checks.yml for issdm-0, issdm-1
+2016-05-17 19:34:36,262 p=19711 u=issdm |  TASK [ceph-osd : set config and keys paths] ************************************
+2016-05-17 19:34:36,451 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:34:36,509 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:34:36,517 p=19711 u=issdm |  TASK [ceph-osd : stat for ceph config and keys] ********************************
+2016-05-17 19:34:37,016 p=19711 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:34:37,054 p=19711 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:34:37,381 p=19711 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:34:37,427 p=19711 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:34:37,759 p=19711 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/monmap)
+2016-05-17 19:34:37,804 p=19711 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/monmap)
+2016-05-17 19:34:38,135 p=19711 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:34:38,178 p=19711 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:34:38,510 p=19711 u=issdm |  ok: [issdm-0] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:34:38,553 p=19711 u=issdm |  ok: [issdm-1] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:34:38,887 p=19711 u=issdm |  ok: [issdm-0] => (item=/var/lib/ceph/bootstrap-rgw/ceph.keyring)
+2016-05-17 19:34:38,929 p=19711 u=issdm |  ok: [issdm-1] => (item=/var/lib/ceph/bootstrap-rgw/ceph.keyring)
+2016-05-17 19:34:39,260 p=19711 u=issdm |  ok: [issdm-0] => (item=/var/lib/ceph/bootstrap-mds/ceph.keyring)
+2016-05-17 19:34:39,301 p=19711 u=issdm |  ok: [issdm-1] => (item=/var/lib/ceph/bootstrap-mds/ceph.keyring)
+2016-05-17 19:34:39,436 p=19711 u=issdm |  TASK [ceph-osd : fail if we find existing cluster files] ***********************
+2016-05-17 19:34:39,749 p=19711 u=issdm |  skipping: [issdm-0] => (item=[u'/etc/ceph/ceph.client.admin.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.client.admin.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.client.admin.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:39,771 p=19711 u=issdm |  skipping: [issdm-1] => (item=[u'/etc/ceph/ceph.client.admin.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.client.admin.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.client.admin.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:39,848 p=19711 u=issdm |  skipping: [issdm-0] => (item=[u'/etc/ceph/ceph.conf', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.conf', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.conf', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:39,891 p=19711 u=issdm |  skipping: [issdm-1] => (item=[u'/etc/ceph/ceph.conf', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.conf', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.conf', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:39,974 p=19711 u=issdm |  skipping: [issdm-0] => (item=[u'/etc/ceph/monmap', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/monmap', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/monmap', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:40,018 p=19711 u=issdm |  skipping: [issdm-1] => (item=[u'/etc/ceph/monmap', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/monmap', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/monmap', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:40,105 p=19711 u=issdm |  skipping: [issdm-0] => (item=[u'/etc/ceph/ceph.mon.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.mon.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.mon.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:40,148 p=19711 u=issdm |  skipping: [issdm-1] => (item=[u'/etc/ceph/ceph.mon.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/etc/ceph/ceph.mon.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/etc/ceph/ceph.mon.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:40,234 p=19711 u=issdm |  skipping: [issdm-0] => (item=[u'/var/lib/ceph/bootstrap-osd/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:40,278 p=19711 u=issdm |  skipping: [issdm-1] => (item=[u'/var/lib/ceph/bootstrap-osd/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-osd/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:40,365 p=19711 u=issdm |  skipping: [issdm-0] => (item=[u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:40,409 p=19711 u=issdm |  skipping: [issdm-1] => (item=[u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-rgw/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:40,518 p=19711 u=issdm |  skipping: [issdm-0] => (item=[u'/var/lib/ceph/bootstrap-mds/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:40,560 p=19711 u=issdm |  skipping: [issdm-1] => (item=[u'/var/lib/ceph/bootstrap-mds/ceph.keyring', {u'stat': {u'exists': False}, '_ansible_item_result': True, '_ansible_no_log': False, 'failed': False, u'changed': False, 'item': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', 'invocation': {'module_name': u'stat', u'module_args': {u'checksum_algorithm': u'sha1', u'mime': False, u'get_checksum': True, u'path': u'/var/lib/ceph/bootstrap-mds/ceph.keyring', u'follow': False, u'get_md5': True}}, 'failed_when_result': False}]) 
+2016-05-17 19:34:40,650 p=19711 u=issdm |  TASK [ceph-osd : check if it is Atomic host] ***********************************
+2016-05-17 19:34:40,984 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:34:41,007 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:34:41,012 p=19711 u=issdm |  TASK [ceph-osd : set fact for using Atomic host] *******************************
+2016-05-17 19:34:41,121 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:34:41,143 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:34:41,149 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:41,345 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/docker/pre_requisite.yml for issdm-0, issdm-1
+2016-05-17 19:34:41,474 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:41,644 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/docker/fetch_configs.yml for issdm-0, issdm-1
+2016-05-17 19:34:41,771 p=19711 u=issdm |  TASK [ceph-osd : set config and keys paths] ************************************
+2016-05-17 19:34:41,957 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:34:42,016 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:34:42,030 p=19711 u=issdm |  TASK [ceph-osd : stat for ceph config and keys] ********************************
+2016-05-17 19:34:42,415 p=19711 u=issdm |  ok: [issdm-0 -> localhost] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:34:42,452 p=19711 u=issdm |  ok: [issdm-1 -> localhost] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:34:42,690 p=19711 u=issdm |  ok: [issdm-0 -> localhost] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:34:42,734 p=19711 u=issdm |  ok: [issdm-1 -> localhost] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:34:42,959 p=19711 u=issdm |  ok: [issdm-0 -> localhost] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:34:43,004 p=19711 u=issdm |  ok: [issdm-1 -> localhost] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:34:43,238 p=19711 u=issdm |  ok: [issdm-0 -> localhost] => (item=/etc/ceph/monmap)
+2016-05-17 19:34:43,282 p=19711 u=issdm |  ok: [issdm-1 -> localhost] => (item=/etc/ceph/monmap)
+2016-05-17 19:34:43,512 p=19711 u=issdm |  ok: [issdm-0 -> localhost] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:34:43,555 p=19711 u=issdm |  ok: [issdm-1 -> localhost] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:34:43,697 p=19711 u=issdm |  TASK [ceph-osd : ensure conf dirs exist] ***************************************
+2016-05-17 19:34:44,193 p=19711 u=issdm |  changed: [issdm-0] => (item=/etc/ceph)
+2016-05-17 19:34:44,232 p=19711 u=issdm |  changed: [issdm-1] => (item=/etc/ceph)
+2016-05-17 19:34:44,566 p=19711 u=issdm |  changed: [issdm-0] => (item=/var/lib/ceph/bootstrap-osd/)
+2016-05-17 19:34:44,610 p=19711 u=issdm |  changed: [issdm-1] => (item=/var/lib/ceph/bootstrap-osd/)
+2016-05-17 19:34:44,704 p=19711 u=issdm |  TASK [ceph-osd : try to copy ceph config and keys] *****************************
+2016-05-17 19:34:45,484 p=19711 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:34:45,526 p=19711 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.conf)
+2016-05-17 19:34:46,159 p=19711 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:34:46,203 p=19711 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.client.admin.keyring)
+2016-05-17 19:34:46,848 p=19711 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:34:46,890 p=19711 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/ceph.mon.keyring)
+2016-05-17 19:34:47,519 p=19711 u=issdm |  ok: [issdm-0] => (item=/etc/ceph/monmap)
+2016-05-17 19:34:47,564 p=19711 u=issdm |  ok: [issdm-1] => (item=/etc/ceph/monmap)
+2016-05-17 19:34:48,177 p=19711 u=issdm |  ok: [issdm-0] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:34:48,263 p=19711 u=issdm |  ok: [issdm-1] => (item=/var/lib/ceph/bootstrap-osd/ceph.keyring)
+2016-05-17 19:34:48,310 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:48,479 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/docker/dirs_permissions.yml for issdm-0, issdm-1
+2016-05-17 19:34:48,678 p=19711 u=issdm |  TASK [ceph-osd : pull ceph daemon image] ***************************************
+2016-05-17 19:34:49,165 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:34:49,205 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:34:49,212 p=19711 u=issdm |  TASK [ceph-osd : inspect ceph version] *****************************************
+2016-05-17 19:34:49,750 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:34:49,757 p=19711 u=issdm |  TASK [ceph-osd : set_fact] *****************************************************
+2016-05-17 19:34:49,944 p=19711 u=issdm |  ok: [issdm-0]
+2016-05-17 19:34:50,004 p=19711 u=issdm |  ok: [issdm-1]
+2016-05-17 19:34:50,012 p=19711 u=issdm |  TASK [ceph-osd : create bootstrap directories (for or before hammer)] **********
+2016-05-17 19:34:50,246 p=19711 u=issdm |  skipping: [issdm-0] => (item=/etc/ceph/) 
+2016-05-17 19:34:50,286 p=19711 u=issdm |  skipping: [issdm-1] => (item=/etc/ceph/) 
+2016-05-17 19:34:50,373 p=19711 u=issdm |  skipping: [issdm-0] => (item=/var/lib/ceph/bootstrap-osd) 
+2016-05-17 19:34:50,417 p=19711 u=issdm |  skipping: [issdm-1] => (item=/var/lib/ceph/bootstrap-osd) 
+2016-05-17 19:34:50,511 p=19711 u=issdm |  TASK [ceph-osd : create bootstrap directories (after hammer)] ******************
+2016-05-17 19:34:51,018 p=19711 u=issdm |  changed: [issdm-0] => (item=/etc/ceph/)
+2016-05-17 19:34:51,059 p=19711 u=issdm |  changed: [issdm-1] => (item=/etc/ceph/)
+2016-05-17 19:34:51,398 p=19711 u=issdm |  changed: [issdm-0] => (item=/var/lib/ceph/bootstrap-osd)
+2016-05-17 19:34:51,441 p=19711 u=issdm |  changed: [issdm-1] => (item=/var/lib/ceph/bootstrap-osd)
+2016-05-17 19:34:51,535 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:51,609 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:51,627 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:51,633 p=19711 u=issdm |  TASK [ceph-osd : include] ******************************************************
+2016-05-17 19:34:51,868 p=19711 u=issdm |  included: /home/issdm/zlog-popper/roles/ceph/roles/ceph-osd/tasks/docker/start_docker_osd.yml for issdm-0, issdm-1
+2016-05-17 19:34:52,136 p=19711 u=issdm |  TASK [ceph-osd : umount ceph disk (if on openstack)] ***************************
+2016-05-17 19:34:52,259 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:34:52,303 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:34:52,310 p=19711 u=issdm |  TASK [ceph-osd : verify if the disk was already prepared] **********************
+2016-05-17 19:34:52,870 p=19711 u=issdm |  ok: [issdm-0] => (item=/dev/sde)
+2016-05-17 19:34:52,910 p=19711 u=issdm |  ok: [issdm-1] => (item=/dev/sde)
+2016-05-17 19:34:53,071 p=19711 u=issdm |  TASK [ceph-osd : prepare ceph osd disk] ****************************************
+2016-05-17 19:35:08,186 p=19711 u=issdm |  changed: [issdm-0] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:34:52.753665', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005496', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:34:52.748169', u'warnings': [], 'failed': False}])
+2016-05-17 19:35:08,774 p=19711 u=issdm |  changed: [issdm-1] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:34:52.763440', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005357', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:34:52.758083', u'warnings': [], 'failed': False}])
+2016-05-17 19:35:08,822 p=19711 u=issdm |  TASK [ceph-osd : prepare ceph osd disk with kv_store] **************************
+2016-05-17 19:35:09,117 p=19711 u=issdm |  skipping: [issdm-0] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:34:52.753665', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005496', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:34:52.748169', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:35:09,157 p=19711 u=issdm |  skipping: [issdm-1] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:34:52.763440', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005357', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:34:52.758083', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:35:09,246 p=19711 u=issdm |  TASK [ceph-osd : prepare ceph osd disk for container operating systems] ********
+2016-05-17 19:35:09,539 p=19711 u=issdm |  skipping: [issdm-0] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:34:52.753665', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005496', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:34:52.748169', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:35:09,577 p=19711 u=issdm |  skipping: [issdm-1] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:34:52.763440', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005357', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:34:52.758083', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:35:09,669 p=19711 u=issdm |  TASK [ceph-osd : prepare ceph osd disk for container operating systems with kv_store] ***
+2016-05-17 19:35:09,961 p=19711 u=issdm |  skipping: [issdm-0] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:34:52.753665', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005496', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:34:52.748169', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:35:10,000 p=19711 u=issdm |  skipping: [issdm-1] => (item=[u'/dev/sde', {'_ansible_item_result': True, u'end': u'2016-05-17 19:34:52.763440', '_ansible_no_log': False, u'stdout': u'', u'changed': False, u'rc': 1, 'item': u'/dev/sde', u'cmd': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'stderr': u'lsblk: unknown column: PARTLABEL', u'delta': u'0:00:00.005357', 'invocation': {'module_name': u'command', u'module_args': {u'creates': None, u'executable': None, u'_uses_shell': True, u'_raw_params': u"lsblk -o PARTLABEL /dev/sde | grep -sq 'ceph'", u'removes': None, u'warn': True, u'chdir': None}}, 'stdout_lines': [], 'failed_when_result': False, u'start': u'2016-05-17 19:34:52.758083', u'warnings': [], 'failed': False}]) 
+2016-05-17 19:35:10,091 p=19711 u=issdm |  TASK [ceph-osd : generate systemd unit file] ***********************************
+2016-05-17 19:35:10,221 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:35:10,261 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:35:10,268 p=19711 u=issdm |  TASK [ceph-osd : link systemd unit file for osd instance] **********************
+2016-05-17 19:35:10,554 p=19711 u=issdm |  skipping: [issdm-0] => (item=/dev/sde) 
+2016-05-17 19:35:10,594 p=19711 u=issdm |  skipping: [issdm-1] => (item=/dev/sde) 
+2016-05-17 19:35:10,689 p=19711 u=issdm |  TASK [ceph-osd : enable systemd unit file for osd instance] ********************
+2016-05-17 19:35:10,979 p=19711 u=issdm |  skipping: [issdm-0] => (item=/dev/sde) 
+2016-05-17 19:35:11,019 p=19711 u=issdm |  skipping: [issdm-1] => (item=/dev/sde) 
+2016-05-17 19:35:11,109 p=19711 u=issdm |  TASK [ceph-osd : reload systemd unit files] ************************************
+2016-05-17 19:35:11,242 p=19711 u=issdm |  skipping: [issdm-0]
+2016-05-17 19:35:11,281 p=19711 u=issdm |  skipping: [issdm-1]
+2016-05-17 19:35:11,288 p=19711 u=issdm |  TASK [ceph-osd : systemd start osd container] **********************************
+2016-05-17 19:35:11,577 p=19711 u=issdm |  skipping: [issdm-0] => (item=/dev/sde) 
+2016-05-17 19:35:11,617 p=19711 u=issdm |  skipping: [issdm-1] => (item=/dev/sde) 
+2016-05-17 19:35:11,706 p=19711 u=issdm |  TASK [ceph-osd : run the ceph osd docker image] ********************************
+2016-05-17 19:35:12,726 p=19711 u=issdm |  changed: [issdm-0] => (item=/dev/sde)
+2016-05-17 19:35:12,928 p=19711 u=issdm |  changed: [issdm-1] => (item=/dev/sde)
+2016-05-17 19:35:13,037 p=19711 u=issdm |  TASK [ceph-osd : run the ceph osd docker image with kv] ************************
+2016-05-17 19:35:13,324 p=19711 u=issdm |  skipping: [issdm-0] => (item=/dev/sde) 
+2016-05-17 19:35:13,362 p=19711 u=issdm |  skipping: [issdm-1] => (item=/dev/sde) 
+2016-05-17 19:35:13,533 p=19711 u=issdm |  PLAY [wait for the cluster to come up] *****************************************
+2016-05-17 19:35:13,548 p=19711 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:35:17,895 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:35:17,900 p=19711 u=issdm |  TASK [command] *****************************************************************
+2016-05-17 19:35:18,580 p=19711 u=issdm |  changed: [issdm-3]
+2016-05-17 19:35:18,585 p=19711 u=issdm |  TASK [debug] *******************************************************************
+2016-05-17 19:35:18,643 p=19711 u=issdm |  ok: [issdm-3] => {
+    "result.stdout_lines": [
+        "    cluster e9570dd8-03ad-45f0-8a74-ec9b3bb7095f", 
+        "     health HEALTH_OK", 
+        "     monmap e1: 1 mons at {issdm-3=192.168.140.224:6789/0}", 
+        "            election epoch 3, quorum 0 issdm-3", 
+        "     osdmap e6: 2 osds: 1 up, 1 in", 
+        "            flags sortbitwise", 
+        "      pgmap v7: 64 pgs, 1 pools, 0 bytes data, 0 objects", 
+        "            0 kB used, 0 kB / 0 kB avail", 
+        "                  64 creating"
+    ]
+}
+2016-05-17 19:35:18,648 p=19711 u=issdm |  PLAY [graphite] ****************************************************************
+2016-05-17 19:35:18,649 p=19711 u=issdm |  skipping: no hosts matched
+2016-05-17 19:35:18,650 p=19711 u=issdm |  PLAY [mdss] ********************************************************************
+2016-05-17 19:35:18,650 p=19711 u=issdm |  skipping: no hosts matched
+2016-05-17 19:35:18,653 p=19711 u=issdm |  PLAY [clients] *****************************************************************
+2016-05-17 19:35:18,653 p=19711 u=issdm |  skipping: no hosts matched
+2016-05-17 19:35:18,655 p=19711 u=issdm |  PLAY [zlog-sequencer] **********************************************************
+2016-05-17 19:35:18,655 p=19711 u=issdm |  skipping: no hosts matched
+2016-05-17 19:35:18,657 p=19711 u=issdm |  PLAY [zlog-client] *************************************************************
+2016-05-17 19:35:18,658 p=19711 u=issdm |  skipping: no hosts matched
+2016-05-17 19:35:18,658 p=19711 u=issdm |  PLAY RECAP *********************************************************************
+2016-05-17 19:35:18,658 p=19711 u=issdm |  issdm-0                    : ok=35   changed=11   unreachable=0    failed=0   
+2016-05-17 19:35:18,658 p=19711 u=issdm |  issdm-1                    : ok=34   changed=11   unreachable=0    failed=0   
+2016-05-17 19:35:18,658 p=19711 u=issdm |  issdm-3                    : ok=36   changed=11   unreachable=0    failed=0   
+2016-05-17 19:35:18,659 p=19711 u=issdm |  localhost                  : ok=2    changed=1    unreachable=0    failed=0   
+2016-05-17 19:35:18,680 p=19711 u=issdm |  PLAY [mons] ********************************************************************
+2016-05-17 19:35:18,694 p=19711 u=issdm |  TASK [setup] *******************************************************************
+2016-05-17 19:35:22,020 p=19711 u=issdm |  ok: [issdm-3]
+2016-05-17 19:35:22,027 p=19711 u=issdm |  TASK [run el benchmark] ********************************************************
+2016-05-17 19:35:34,404 p=19711 u=issdm |  changed: [issdm-3]
+2016-05-17 19:35:34,410 p=19711 u=issdm |  TASK [spit results to a file] **************************************************
+2016-05-17 19:35:34,736 p=19711 u=issdm |  changed: [issdm-3 -> localhost]
+2016-05-17 19:35:34,739 p=19711 u=issdm |  PLAY RECAP *********************************************************************
+2016-05-17 19:35:34,739 p=19711 u=issdm |  issdm-0                    : ok=35   changed=11   unreachable=0    failed=0   
+2016-05-17 19:35:34,739 p=19711 u=issdm |  issdm-1                    : ok=34   changed=11   unreachable=0    failed=0   
+2016-05-17 19:35:34,739 p=19711 u=issdm |  issdm-3                    : ok=39   changed=13   unreachable=0    failed=0   
+2016-05-17 19:35:34,740 p=19711 u=issdm |  localhost                  : ok=2    changed=1    unreachable=0    failed=0   

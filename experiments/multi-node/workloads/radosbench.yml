@@ -1,0 +1,14 @@
+---
+- hosts: mons
+  tasks:
+  - name: run el benchmark
+    shell: >
+           docker run --rm \
+             --name=rados-bench \
+             --net=host \
+             -v /etc/ceph:/etc/ceph \
+             piha.soe.ucsc.edu:5000/zlog/client:jewel \
+             "rados -p rbd bench 120 write"
+    register: results
+  - name: spit results to a file
+    local_action: copy content={{ results.stdout }} dest=results/radosbench-{{ inventory_name }}
