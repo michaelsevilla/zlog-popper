@@ -8,20 +8,16 @@
              --net=host \
              -v /etc/ceph:/etc/ceph \
              piha.soe.ucsc.edu:5000/zlog/client:jewel \
-             "/src/zlog/src/zlog-bench-ng --pool cephfs_data --server issdm-45 --port 5678 --append true --width {{ item }} --runtime 120"
+             "/src/zlog/src/zlog-bench-ng --pool cephfs_data --server issdm-45 --port 5678 --iosize 512 --append true --qdepth {{ item }} --width 320 --runtime 120"
     register: results
     with_items:
-      - "64"
-      #- "128"
-      #- "256"
-      #- "512"
-      #- "1024"
-      #- "4096"
-      #- "8192"
-      #- "16384"
+      - 1
+      - 2
+      - 3
+      - 4
 
   - name: parse results
     connection: local
-    template: src=parse.j2 dest=results/bench-ng-width.csv
+    template: src=parse.j2 dest=results/bench-ng-depth.csv
     with_items:
       - "{{ results.results }}"
