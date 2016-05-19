@@ -570,14 +570,15 @@ as well as configuration options and software versions.
 
 To illustrate this we ran the same benchmark that measures expected append
 throughput shown in Figure~\ref{fig:vanilla_wr_jewel} on identical hardware
-but with a version of long-term support version of Ceph released two years
+but we used a long-term support version of Ceph released two years
 ago. The result of this benchmark is shown in Figure~\ref{fig:vanilla_wr_firefly}
 in which the bytestream interface outperforms the key-value interface by 12\%,
 compared to over 100\% in the newer versino of Ceph. Qualatatively, given the
 reduced overall throughput achieved in the older version, some developers may
 find that incurring the overhead of using the key-value interface is an easy
 decision given the reduced complexity of the design space for metadata
-management.
+management. If this choice had been made, then a future system upgrade could
+drop a significant number of iops on the floor.
 
 \section{Programming Model}
 
