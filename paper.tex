@@ -87,6 +87,8 @@ services. However, this trend is leading to the creation of a large number of
 software extensions that will be difficult to maintain as system software and
 hardware continue to evolve.
 
+%%% Anderson FAST 2016 IoT Time Series DB on Ceph
+
 % why is it interesting
 The standardization of the POSIX file I/O interface has been a major success,
 allowing application developers to avoid vendor lock-in. However, large-scale
@@ -363,7 +365,7 @@ of metadata stored as a header in the object could describe the state of the
 log entry.  However, as we will see in the next section this choice of a
 physical design can result in poor performance compared to other designs.
 
-\subsection{Physical Design}
+\section{Physical Design}
 
 As we have seen, Ceph provides a rich storage API and places few restrictions
 on the structure of applications. So how should we go about implementing CORFU
@@ -403,7 +405,8 @@ for storing log entry content, and implementing efficient metadata management.
 In the remainder of this section we will explore the full design space defined
 by the cross product of these design challenges to arrive at a final design.
 
-\paragraph*{Baseline Entry Storage Performance}
+\subsection{Baseline Performance}
+
 We begin the process of exploring the design space by exploiting the fact that
 metadata management is a complexity and performance overhead that a full
 implementation must incur beyond the costs of storing log entry data.
@@ -494,7 +497,7 @@ best performance.
   \caption{placeholder.}
 \end{figure}
 
-\paragraph*{Metadata Management}
+\subsection{Metadata Management}
 
 The previous results show that storing log entries in the bytestream has the
 potential to provide the best overall performance, but by design, those
@@ -559,7 +562,7 @@ write the updated per-entry metadata. The expected throughput from such a
 design is shown in Figure~\ref{fig:cls_wr_jewel} labeled as
 \emph{cls\_full\_hdr} and performs with roughly a 6\% overhead.
 
-\paragraph*{Hardware and Software}
+\subsection{Hardware and Software}
 
 In this section we have demonstrated that a design based on an N:1 addressing
 scheme that stores both log entries and metadata in the bytestream can provide
@@ -580,9 +583,31 @@ decision given the reduced complexity of the design space for metadata
 management. If this choice had been made, then a future system upgrade could
 drop a significant number of iops on the floor.
 
+\subsection{Optimization}
+
+explain that the state space is large, this is hard for humans.
+configuration, software versions, hardware versions, interface selections, and
+future features.
+
 \section{Programming Model}
 
-In this section we are going to be describing our way of creating interfaces.
+Describe big picture as if we are going to introduce something like bloom for
+describing everything.
+
+], Bloom is purely declarative: the syntax of a program contains the full
+spec- ification of its semantics, and there is no need for the programmer to
+understand or reason about the behavior of the evaluation engine. Bloom is
+based on a formal temporal logic called Dedalu
+
+We use a subset of bloom as a basis for defining interface.
+
+Although we have not chosen to use the most powerful parts of the bloom (eg
+task coordination and consistency)
+language we have chosen to start with a powerful abstraction because we plan
+to take this to 11 (see future work).
+
+
+
 
 \section{Other Interfaces}
 
@@ -593,7 +618,36 @@ Ceph today to demonstrate the generality of our interface.
 
 \section{Related Work}
 
-\section{Conclusion}
+{\bf Active storage.}
+There is a wide variety of work related \emph{active storage} that seeks to
+increase performance and reduce data movement by exploiting remote storage
+resources. This concept has been applied in the context of on-disk
+controllers and object-based storage
+(T10)~\cite{riedel:vldb98,du:nwesp05,xie:msst11}.  Solutions to safety
+concerns have examined using managed lanuages, sandbox technologies, as well
+as restricting extension installation to
+vendors~\cite{john:hiperio08,xie:msst11,runde:msst12}.
+
+Techniques for remote storage processing have been applied in
+application-specific domains for database and file system acceleration, as
+well as in remote data filtering in cloud-based storage
+environments~\cite{uysal:hpca00,chiu:iccs03,lim:msst08,gkantsidis:nsdi13}
+Others have collected and used statistics to optimize the location of
+computation in general workloads as well as database systems
+~\cite{chen:cluster12,chen:icpp12,qiao:icde08}.
+
+Most closely related to our work are efforts that consider specific
+programming models in the context of active storage such as a stream-based
+model~\cite{acharya:asplos98}, a model that assisted in optmiizing balancing
+computation~\cite{wickremesinghe:hpdc022}, and optimization that took
+advantage of read-only data to reorder operations~\cite{huston:fast04}.
+While our goals are similar to previous work, we start with a declarative
+language that will enable us to apply optimization techniques beyond
+the limited domain-specific optimizations found in previous work.
+
+\section{Conclusion and Future Work}
+
+Include performance management topic in related work.
 
 %In this section we examine the design space for implementing the CORFU
 %protocol in the RADOS storage system. Table \ref{t:init-ds} shows the entire
