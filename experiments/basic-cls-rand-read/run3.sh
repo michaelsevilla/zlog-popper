@@ -2,8 +2,10 @@
 
 reset=soft
 data_dev=sdb
+journal_dev=sdc
+noop_dev=sdc
 
-name=librados_jewel_hdd_large
+name=librados_jewel_ssd_hdd_large
 runtime=1800
 pg_nums="128"
 stripe_widths="128"
