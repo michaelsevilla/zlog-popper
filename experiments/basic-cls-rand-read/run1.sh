@@ -1,16 +1,15 @@
 #!/bin/bash
 
 reset=soft
-data_dev=nvme0n1
-journal_dev=nvme1n1
-noop_dev="nvme0n1 --noop nvme1n1"
+data_dev=sdc
+noop_dev=sdc
 
-name=librados_read_data_jrnl_nvme
+name=librados_jewel_ssd_small
 runtime=1800
 pg_nums="128"
 stripe_widths="128"
 queue_depths="32"
-entry_sizes="1024"
+entry_sizes="128"
 pool=zlog
 rest=120
 read_runtime=1800
