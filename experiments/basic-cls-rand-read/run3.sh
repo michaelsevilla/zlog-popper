@@ -1,10 +1,9 @@
 #!/bin/bash
 
 reset=soft
-data_dev=sdc
-noop_dev=sdc
+data_dev=sdb
 
-name=librados_jewel_ssd_large
+name=librados_jewel_hdd_large
 runtime=1800
 pg_nums="128"
 stripe_widths="128"
