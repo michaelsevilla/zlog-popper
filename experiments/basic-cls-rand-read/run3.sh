@@ -1,12 +1,11 @@
 #!/bin/bash
 
 reset=soft
-data_dev=sdb
-journal_dev=sdc
+data_dev=sdc
 noop_dev=sdc
 ceph_version=firefly
 
-name=librados_firefly_ssd_hdd_large
+name=librados_firefly_ssd_large
 runtime=1800
 pg_nums="128"
 stripe_widths="128"
