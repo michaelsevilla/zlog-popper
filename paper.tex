@@ -675,12 +675,30 @@ interface output, :ret, [:type, :pos, :epoch] => [:retval]
 end
 \end{lstlisting}
 
-\subsection{Optimzer}
+\subsection{Optimizer}
 
 \subsection{Other Interfaces}
 
-Here we show the derivation of two other interfaces that are in production in
-Ceph today to demonstrate the generality of our interface.
+The subset of the Bloom language we are using is powerful enough to express the
+CORFU language, as well as many of the object class interfaces that are already
+included in Ceph. We briefly sketch the Bloom imlementation of an object class
+that provides a locking service. This is an interesting example because Bloom
+implementations use mechanisms for introducing points of coordination in
+execution, which in the context of Ceph, may be written in Bloom itself. 
+
+\begin{lstlisting}[caption={Hello}, label=lab]
+bloom :take_lock do
+end
+
+bloom :break_lock do
+end
+
+bloom :list_locks do
+end
+
+bloom :lock_info do
+end
+\end{lstlisting}
 
 \section{Evaluation}
 
@@ -715,84 +733,7 @@ the limited domain-specific optimizations found in previous work.
 
 \section{Conclusion and Future Work}
 
-Include performance management topic in related work.
-
-%In this section we examine the design space for implementing the CORFU
-%protocol in the RADOS storage system. Table \ref{t:init-ds} shows the entire
-%design space. A description of each design parameter follows:
-%
-%{\bf Mapping strategy.} The method by which a log entry---identified by its
-%logical position---is addressed within RADOS is referred to as the mapping
-%strategy. A 1:1 strategy stores each log entry in a RADOS object with a
-%distinct name (e.g. ``mylog.pos443''), and an N:1 strategy stripes the log
-%positions across a set of objects (e.g.  round-robin). While we do consider
-%both strategies in this paper, a 1:1 strategy is attractive because it allows
-%a design in which clients can directly address log positions by constructing
-%the correct object name.
-%
-%{\bf Storage interface.} entry data may be small or large. its primary
-%storage location is important. kv, bs. we further sub-divide bs into
-%write and append. each strategy is compatible with fixed size entries
-%except for the write interface.
-%
-%{\bf Logical addressing.}
-
-%\subsection{Storage Interface Selection}
-%
-%Figure \ref{f:librados-sweep} shows the single-node write-only I/O throughput
-%for each of the points in the design space defined in Table \ref{t:init-ds}.
-%The results reveal poor relative performance using both the key-value storage
-%interface, as well as either of the 1:1 strategies---which incur overhead by
-%creating a new object for each log entry. Both of the N:1 strategies using the
-%bytestream I/O interface outperform all of the other approaches by over 2x
-%throughput, but otherwise have nearly identical performance.
-%
-%To examine the read performance of the points in the design space we generated
-%a dataset using each of the write workloads, and then issued random reads
-%across the entire dataset. Figure \ref{f:librados-rand-read} shows the read
-%throughput for each of the design strategies. The results show that an N:1
-%mapping using bytestream interface performs best. Interestingly, the 1:1
-%mapping strategy using the bytestream interface exhibits good read performance
-%in comparison to writes using the same strategy.
-
-%\begin{figure}[h]
-%  \centering
-%  \includegraphics[width=0.45\textwidth]{experiments/librados-sweep/output.soft.reset.2hr.png}
-%  \caption{
-%[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/librados-sweep/visualize.ipynb}{source}]
-%Throughput (IOPS) of 1K writes to a single OSD using the standard I/O
-%interfaces in various configurations. The best performance is achieved using
-%the byte stream interface and a N:1 mapping strategy.
-%}
-%\end{figure}
-%
-%\begin{figure}[h]
-%  \centering
-%  \includegraphics[width=0.45\textwidth]{experiments/basic-cls-rand-read/output.read.60min.png}
-%  \caption{
-%[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-rand-read/visualize.ipynb}{source}]
-%Throughput of 1K random reads to a single OSD using the standard I/O
-%interfaces in various configurations. The best performance is achieved using
-%the byte stream interface and a N:1 mapping strategy.
-%}
-%\end{figure}
-%
-%\begin{figure}[h]
-%  \centering
-%  \includegraphics[width=0.45\textwidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
-%  \caption{
-%[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-overhead/visualize.ipynb}{source}]
-%}
-%\end{figure}
-
-
-%As a first approximation these results show that when optimizing for log
-%append and random read throughput the design space should be refined by
-%limiting solutions to architectures based on a N:1 mapping strategy using the
-%bytestream I/O interface. But what these microbenchmarks explicitly omit are
-%the overheads associated with metadata management such as enforcing write-once
-%semantics or using an index to map a log position to a physical offset within
-%an object. In the next section we
+Include performance management topic in future work.
 
 \bibliography{paper}
 \bibliographystyle{plain}
