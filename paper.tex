@@ -6,8 +6,28 @@
 \usepackage{graphicx,grffile}
 \usepackage{pgf}
 \usepackage{tikz}
+\usepackage{listings}
+\usepackage{color}
 \usetikzlibrary{arrows,automata}
-\usepackage[latin1]{inputenc}
+%\usepackage[latin1]{inputenc}
+
+\lstset{frame=tb,
+  language=Ruby,
+  captionpos=b,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\scriptsize\ttfamily},
+  numbers=none,
+  %numberstyle=\tiny\color{gray},
+  %keywordstyle=\color{blue},
+  %commentstyle=\color{dkgreen},
+  %stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
 
 % do not change these values
 \baselineskip 12pt
@@ -562,14 +582,13 @@ write the updated per-entry metadata. The expected throughput from such a
 design is shown in Figure~\ref{fig:cls_wr_jewel} labeled as
 \emph{cls\_full\_hdr} and performs with roughly a 6\% overhead.
 
-\subsection{Hardware and Software}
+\subsection{Optimization}
 
 In this section we have demonstrated that a design based on an N:1 addressing
 scheme that stores both log entries and metadata in the bytestream can provide
 the best overall performance, and it does so by a large margin. However, this
 process of design we have outlined may not yield such clear cut results when
-applied in other contexts that may differ by network and hardware capabilities
-as well as configuration options and software versions.
+applied in a different context.
 
 To illustrate this we ran the same benchmark that measures expected append
 throughput shown in Figure~\ref{fig:vanilla_wr_jewel} on identical hardware
@@ -583,33 +602,82 @@ decision given the reduced complexity of the design space for metadata
 management. If this choice had been made, then a future system upgrade could
 drop a significant number of iops on the floor.
 
-\subsection{Optimization}
+In practice the real world state space is much larger than the one described
+in this section. Ceph alone has hundreds of configuration options, significant
+features becoming available with releases each year, and is designed to run on
+a wide variety of COTS hardware as well as new NVMe devices, all of which
+contribute to a large and dynamic state space. Application-level designs
+also contribute to an expanded design space. In the N:1 design of mapping
+CORFU onto Ceph the potential amount of I/O parallelism is controlled by 
+the value N, however if this value becomes too large there may be no benefit
+or performance could suffer from reduced data locality. Other aspects of
+application-level design are even more flexible. A wide variety of data
+structures could be serialized into the byte stream to handle metadata
+management tasks, but selecting a single external index that performs well
+across workloads and hardware may not be possible.
 
-explain that the state space is large, this is hard for humans.
-configuration, software versions, hardware versions, interface selections, and
-future features.
+Next we present a declarative programming model that seeks to solve the issue
+of selecting an optimal mapping between application requirements and object
+class implementation.
 
 \section{Programming Model}
 
-Describe big picture as if we are going to introduce something like bloom for
-describing everything.
+Ceph is turning into a target for building distrubted services, bringing
+distributed programming into the hands of many new people that may have
+worked on the periphery of ceph.
 
-], Bloom is purely declarative: the syntax of a program contains the full
-spec- ification of its semantics, and there is no need for the programmer to
-understand or reason about the behavior of the evaluation engine. Bloom is
-based on a formal temporal logic called Dedalu
+Getting consistency and coordination correct is a challenge And as we have seen
+optimization at a low-level given a simple set of semantics can yield a large
+state space from which to draw designs Difficulty and challenges of writing
+distributed software.  Programming distributed systems and applications.
 
-We use a subset of bloom as a basis for defining interface.
+We draw upon the recent work of Bloom a declarative lang thing
 
-Although we have not chosen to use the most powerful parts of the bloom (eg
-task coordination and consistency)
-language we have chosen to start with a powerful abstraction because we plan
-to take this to 11 (see future work).
+BLL (a.k.a. BRADOS) is a declarative language with relational (or tabular)
+semantics for RADOS objects, which corresponds to a subset of the BLOOM
+language (leaving out temporal logic). BLL borrows from BLOOM the table and
+interface collections, the instantaneous implication (‘<=’) operator, as well
+as all the collection operators.
 
+BRADOS models the storage system state uniformly as a collection of relations.
+The composition of a collection of existing interfaces is then expressed as a
+collection of high-level \emph{queries} that describe how a stream of requests
+(API calls) are filtered, transformed and combined with existing state to
+define streams of outputs (API call returns as well as updates to system
+state).  Separating the relational semantics of such compositions from details
+of their physical implementations introduces a number of degrees of freedom,
+similar to the ``data independence’’ offered by database query languages.  The
+choice of access methods (for example, whether to use a bytestream interface or
+a key/value store), storage decide classes(e.g., whether to use HDDs or SDDs),
+physical layout details (e.g. a 1:1 or 1:N mapping) and execution plans (e.g.
+operator ordering) can be postponed to execution time.  The optimal choices for
+these physical design details are likely to change much more often than the
+logical specification, freeing the interface designer from the need to rewrite
+systems and device and interface characteristics change.  
 
+\subsection{The CORFU Interface in Bloom}
 
+Listing~\ref{lab} shows code.
 
-\section{Other Interfaces}
+\begin{lstlisting}[caption={Hello}, label=lab]
+class Corfu
+include Bud
+
+state do
+table :epoch, [:epoch]
+table :log, [:pos] => [:state, :data]
+
+scratch :valid_op, [:type, :pos, :epoch] => [:data]
+scratch :invalid_op, [:type, :pos, :epoch] => [:data]
+
+interface input, :op, [:type, :pos, :epoch] => [:data]
+interface output, :ret, [:type, :pos, :epoch] => [:retval]
+end
+\end{lstlisting}
+
+\subsection{Optimzer}
+
+\subsection{Other Interfaces}
 
 Here we show the derivation of two other interfaces that are in production in
 Ceph today to demonstrate the generality of our interface.
