@@ -172,15 +172,13 @@ We propose the introduction of a declarative language for building object
 based interfaces that allows a storage system to meet the needs of an
 application throughout the development process without requiring rewrites.
 
-\section{Background}
+\section{Background and Motivation}
 
 In this section we highlight the salient components of Ceph, especially its
 \emph{object class} feature that offers users the ability to load and execute
 application-specific codes. We provide a description of our motivating
 example, a high-performance distributed shared-log built upon Ceph that makes
-extensive use of the object class facility, and then we present the challenges
-that application developers face when using this extensibility feature offered
-by the storage system.
+extensive use of the object class facility.
 
 \subsection{Ceph and Storage Programmability}
 \label{sec:objclass}
@@ -337,14 +335,17 @@ Section~\ref{sec:objclass} there are a variety of native object I/O interfaces
 available, and it is not always immediately clear how best to utilize these
 interfaces.
 
-\paragraph*{Towards a CORFU Object Interface}
-The state-machine diagram in Figure~\ref{fig:corfu-sm} shows the composition of
-actions for each component of the CORFU interface. For instance, all operations
-begin by applying an \emph{epoch guard} that ensures the request is tagged with
-an up-to-date epoch value. The \emph{read} (R) and \emph{write} (W) operations
-both proceed by (1) examining metadata associated with the target position, (2)
-performing I/O to read or write the log entry, and in the case of a write, (3)
-updates metadata for the target log position.
+\section{Physical Design}
+
+As we have seen, Ceph provides a rich storage API and places few restrictions
+on the structure of applications. Thus a primary concern when implementing an
+object interface in Ceph is deciding how native interfaces are composed into
+compound operations in order to implement the semantics of the target
+interface. These types of decisions are commonly referred to as
+physical design, and can affect performance and application flexibility.
+As we will see the design space that developers must operate in is often
+large, and its dynamic nature can lead to design decisions that become
+obsolete and non-optimal.
 
 \begin{figure}[t]
 \centering
@@ -374,26 +375,32 @@ write, and garbage collection ($GC$) marks entries for reclamation.}
 \label{fig:corfu-sm}
 \end{figure}
 
-The primary concern of an application developer when implementing an object
-interface in Ceph is deciding how native interfaces are composed into a
-compound operation. These types of decisions are commonly referred to as
-physical design, and can affect performance and application flexibility.  For
-instance, one valid design option is to store each log position in an object
-with a name using a one-to-one mapping with the log entry position.  This
-would simplify the design of the \emph{write} interface because a small amount
-of metadata stored as a header in the object could describe the state of the
-log entry.  However, as we will see in the next section this choice of a
-physical design can result in poor performance compared to other designs.
+To understand the developer process in the context of CORFU we have included the
+state-machine diagram in Figure~\ref{fig:corfu-sm} showing the composition of
+actions for each component of the CORFU interface which must be mapped onto
+Ceph object classes. For instance, all operations begin by applying an
+\emph{epoch guard} that ensures the request is tagged with an up-to-date epoch
+value. The \emph{read} (R) and \emph{write} (W) operations both proceed by (1)
+examining metadata associated with the target position, (2) performing I/O to
+read or write the log entry, and in the case of a write, (3) updates metadata
+for the target log position.
 
-\section{Physical Design}
+As an example, one valid design option is to store each log position in an
+object with a name using a one-to-one mapping with the log entry position.
+This would simplify the design of the \emph{write} interface because a small
+amount of metadata stored as a header in the object could describe the state
+of the log entry.  However, as we will see this choice of a physical design
+can result in poor performance compared to other designs. In the remainder of
+this section we will define the entire design space and use a set of targetted
+benchmarks to arrive at a final design. Finally we will show that these design
+decisions can lead to non-optimal decisions and suggest an automated approach
+is desirable.
 
-As we have seen, Ceph provides a rich storage API and places few restrictions
-on the structure of applications. So how should we go about implementing CORFU
-on Ceph? Our strategy is straightforward: first we will define the entire
-design space, and then winnow down this space using a set of targeted
-benchmarks. The design space can be divided into three challenges:
-selecting a strategy for log entry addressing, choosing a native I/O interface
-for storing log entry content, and implementing efficient metadata management.
+\subsection{Challenges}
+
+The design space can be divided into three challenges: selecting a strategy
+for log entry addressing, choosing a native I/O interface for storing log
+entry content, and implementing efficient metadata management.
 
 \begin{enumerate}
     \item {\bf Entry addressing.} We refer to the method by which a client
