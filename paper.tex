@@ -2,6 +2,7 @@
 \usepackage{times}
 \usepackage{multirow}
 \usepackage{tabularx}
+\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{graphicx,grffile}
 \usepackage{pgf}
@@ -589,39 +590,91 @@ write the updated per-entry metadata. The expected throughput from such a
 design is shown in Figure~\ref{fig:cls_wr_jewel} labeled as
 \emph{cls\_full\_hdr} and performs with roughly a 6\% overhead.
 
-\subsection{Optimization}
+Application-level designs also contribute to an expanded design space.  In the
+N:1 design of mapping CORFU onto Ceph the potential amount of I/O parallelism
+is controlled by the value N, however if this value becomes too large there may
+be no benefit or performance could suffer from reduced data locality. Other
+aspects of application-level design are even more flexible. A wide variety of
+data structures could be serialized into the byte stream to handle metadata
+management tasks, but selecting a single external index that performs well
+across workloads and hardware may not be possible.
+
+\subsection{Cluster-Specific Optimizations}
 
 In this section we have demonstrated that a design based on an N:1 addressing
 scheme that stores both log entries and metadata in the bytestream can provide
 the best overall performance, and it does so by a large margin. However, this
 process of design we have outlined may not yield such clear cut results when
-applied in a different context.
+applied in a different context. To illustrate the complexity and breadth of
+this design space, we describe the software, system tunables, and hardware
+parameters that affect the performance of ZLog. 
 
-To illustrate this we ran the same benchmark that measures expected append
-throughput shown in Figure~\ref{fig:vanilla_wr_jewel} on identical hardware
-but we used a long-term support version of Ceph released two years
-ago. The result of this benchmark is shown in Figure~\ref{fig:vanilla_wr_firefly}
-in which the bytestream interface outperforms the key-value interface by 12\%,
-compared to over 100\% in the newer versino of Ceph. Qualatatively, given the
-reduced overall throughput achieved in the older version, some developers may
-find that incurring the overhead of using the key-value interface is an easy
-decision given the reduced complexity of the design space for metadata
-management. If this choice had been made, then a future system upgrade could
-drop a significant number of iops on the floor.
+\subsubsection{Software Parameters}
 
-In practice the real world state space is much larger than the one described
-in this section. Ceph alone has hundreds of configuration options, significant
-features becoming available with releases each year, and is designed to run on
-a wide variety of COTS hardware as well as new NVMe devices, all of which
-contribute to a large and dynamic state space. Application-level designs
-also contribute to an expanded design space. In the N:1 design of mapping
-CORFU onto Ceph the potential amount of I/O parallelism is controlled by 
-the value N, however if this value becomes too large there may be no benefit
-or performance could suffer from reduced data locality. Other aspects of
-application-level design are even more flexible. A wide variety of data
-structures could be serialized into the byte stream to handle metadata
-management tasks, but selecting a single external index that performs well
-across workloads and hardware may not be possible.
+Ceph releases stable versions every year (Oct/Nov) and LTS versions every 3-4
+months~\cite{website:ceph-releases}. The head of the master branch moves
+quickly because there are over 400 contributors and an active mailing list.
+Over the calendar year, there were between  70 and 260 commits per
+week~\cite{website:ceph-github}. These releases contain performance fixes and
+new features that could directly ZLog. 
+
+\textbf{Ceph Versions}: to show the affect that this has on ZLog's design, we
+ran the same benchmark that measures expected append throughput shown in
+Figure~\ref{fig:vanilla_wr_jewel} on identical hardware but instead use a
+long-term support version of Ceph released two years ago. The result of this
+benchmark is shown in Figure~\ref{fig:vanilla_wr_firefly} in which the
+bytestream interface outperforms the key-value interface by 12\%, compared to
+over 100\% in the newer version of Ceph. Qualitatively, given the reduced
+overall throughput achieved in the older version, some developers may find that
+incurring the overhead of using the key-value interface is an easy decision
+given the reduced complexity of the design space for metadata management. If
+this choice had been made, then a future system upgrade could drop a
+significant number of iops on the floor.
+
+\textbf{Ceph Features}: to show the affect of cutting-edge Ceph features, we
+now show results for BlueStore~\cite{weil:vault2016-bluestore}. BlueStore is a
+replacement for the FileStore file system in the OSD (traditionally XFS).
+FileStore has performance problems with transactions and enumerations; namely
+the journal needed to assure atomicity incurs double writes and the file system
+metadata model makes object listings slow, respectively. BlueStore stores data
+directly on a block device and the metadata in RocksDB, which is provided by a
+minimalistic, non-POSIX C++ filesystem. This model adheres to the overall
+software defined storage strategy of Ceph because it gives the administrator
+the flexiblity to store the 3 componenets of BlueStore (e.g., data, RocksDB
+database, and RocksDB write-ahead log) on any partition on any device in the
+OSD. 
+
+\subsubsection{System Tunables}
+
+The most recent version of Ceph (v10.2.0-1281-g1f03205) has 994 tunable
+parameters\footnote{This number comes from \texttt{src/common/config\_opts.h}
+with debug options filtered out.}, where 195 of them pertain to the OSD itself
+and 95 of them focus on the OSD back end file system (i.e. its
+\texttt{filestore}). Ceph also has tunables for the subystems it uses, like
+LevelDB (10 tunables), RocksDB (5 tunables), its own key-value stores (5
+tunables), its object cache (6 tunables), its journals (24 tunables), and its
+other optional filestores like BlueStore (49 tunables).
+
+This many domain-specific tunables makes it almost impossible to come up with
+the best set of tunables, although auto-tuning like the work done
+in~\cite{behzad:sc2013-autotuning} could go a long way. Regardless of the
+technique that we use, it is clear the the number of tunables increases the
+physical design parameters to an unwieldy stae space size.
+
+\subsubsection{Hardware Parameters}
+
+Ceph is designed to run on a wide variety of commodity hardware as well as new
+NVMe devices, all of which their own set of characteristics and tunables (e.g.,
+the IO operation scheduler type). In our experiments, we tested SSD, HDDs, NVMe
+devices, and 
+
+\subsection{Discussion}
+
+This physical design process, of first thinking about the design trade-offs and
+then doing parameters sweeps, is insufficient when general-purpose systems. Had
+we built ZLog from the ground up (like CORFU) the story might be different but
+to deal wtih the large state space we need a way to automatically and
+autonomically decide which parameters to choose. 
 
 Next we present a declarative programming model that seeks to solve the issue
 of selecting an optimal mapping between application requirements and object
