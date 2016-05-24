@@ -65,11 +65,12 @@
 
 \begin{document}
 
-\title{outline!}
+\title{brados: declarative, programmable object storage}
 
 \author{
-%Noah Watkins, Neha Ojha\textsuperscript{*}, Carlos Maltzahn \\
-%\small {\em University of California, Santa Cruz} \\
+Noah Watkins, Michael Sevilla, Ivo Jimenez, \\Neha Ojha, Peter Alvaro, Carlos
+Maltzahn\\
+\small {\em University of California, Santa Cruz} \\
 %\small {\{jayhawk,carlosm\}@cs.ucsc.edu} \textsuperscript{*}nojha@ucsc.edu \\ [2mm]
 \small Submission Type: Research
 }
@@ -682,42 +683,35 @@ Next we present a declarative programming model that seeks to solve the issue
 of selecting an optimal mapping between application requirements and object
 class implementation.
 
-\section{Programming Model}
+\section{The Brados Programming Model}
 
-Ceph is turning into a target for building distrubted services, bringing
-distributed programming into the hands of many new people that may have
-worked on the periphery of ceph.
+As Ceph continues to develop into a target for building distributed services
+and application, it is important to not restrict use to developers seasonsed
+in distributed programming and those with knowledge of intracacies of the Ceph
+performance model.  To this end we present Brados, a declarative language with
+relational semantics for defining the behavior of RADOS object interfaces.
 
-Getting consistency and coordination correct is a challenge And as we have seen
-optimization at a low-level given a simple set of semantics can yield a large
-state space from which to draw designs Difficulty and challenges of writing
-distributed software.  Programming distributed systems and applications.
+The Brados model corresponds to a subset of the Bloom language, and models the
+storage system state uniformly as a collection of
+relations~\cite{alvaro:cidr11}. The composition of a collection of existing
+interfaces is then expressed as a collection of high-level \emph{queries} that
+describe how a stream of requests (API calls) are filtered, transformed and
+combined with existing state to define streams of outputs (API call returns as
+well as updates to system state).  Separating the relational semantics of such
+compositions from details of their physical implementations introduces a
+number of degrees of freedom, similar to the ``data independence’’ offered by
+database query languages.  The choice of access methods (for example, whether
+to use a bytestream interface or a key/value store), storage decide
+classes(e.g., whether to use HDDs or SDDs), physical layout details (e.g. a
+1:1 or 1:N mapping) and execution plans (e.g.  operator ordering) can be
+postponed to execution time.  The optimal choices for these physical design
+details are likely to change much more often than the logical specification,
+freeing the interface designer from the need to rewrite systems and device and
+interface characteristics change.  
 
-We draw upon the recent work of Bloom a declarative lang thing
+\subsection{Basics}
 
-BLL (a.k.a. BRADOS) is a declarative language with relational (or tabular)
-semantics for RADOS objects, which corresponds to a subset of the BLOOM
-language (leaving out temporal logic). BLL borrows from BLOOM the table and
-interface collections, the instantaneous implication (‘<=’) operator, as well
-as all the collection operators.
-
-BRADOS models the storage system state uniformly as a collection of relations.
-The composition of a collection of existing interfaces is then expressed as a
-collection of high-level \emph{queries} that describe how a stream of requests
-(API calls) are filtered, transformed and combined with existing state to
-define streams of outputs (API call returns as well as updates to system
-state).  Separating the relational semantics of such compositions from details
-of their physical implementations introduces a number of degrees of freedom,
-similar to the ``data independence’’ offered by database query languages.  The
-choice of access methods (for example, whether to use a bytestream interface or
-a key/value store), storage decide classes(e.g., whether to use HDDs or SDDs),
-physical layout details (e.g. a 1:1 or 1:N mapping) and execution plans (e.g.
-operator ordering) can be postponed to execution time.  The optimal choices for
-these physical design details are likely to change much more often than the
-logical specification, freeing the interface designer from the need to rewrite
-systems and device and interface characteristics change.  
-
-\subsection{The CORFU Interface in Bloom}
+\subsection{The CORFU Log Interface}
 
 \begin{lstlisting}[caption={Epoch Guard}, label=lst:eg]
 state do
