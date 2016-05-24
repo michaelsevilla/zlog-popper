@@ -152,27 +152,37 @@ development community has been receptive to outside contributions with the
 recent inclusion by CERN developers of an extension for performing limited
 numeric operations on object data~\cite{cls_numops}. And while Ceph has not
 yet reached the point of directly exposing these features to
-non-administrative users, the recent inclusion of a mechanism for dynamically
+non-administrative users, the under review inclusion of a mechanism for dynamically
 defining extensions using Lua~\cite{cls_lua} suggests that aspects of this
 feature may soon appear. What is needed is support for creating storage
 interfaces using a method that allows transparent optimization as the system,
 application, and supporting environment evolve.
 
 % why hasn't it been solved before / why have previous approaches failed
+Unfortunately the size of the design space for even simple interfaces can
+be very large, and it can be difficult to choose a design that future proofs an
+implementation against future hardware and software upgrades.
 Previous work related to storage interface design has largely been in the
-context of standardization efforts and active storage. While the later has
-been specifically concerned with the creation of application-specific
-interfaces and demonstrating short-term benefits, the standardization seeks to
-develop a last set of interfaces. In neither case have we seen efforts focused
-on extensible interfaces with portability and longevity a primary concern.
+context of standardization efforts and active storage. While the former is
+primarily concerned with fixed interfaces, application-specific interfaces
+built using active storage techniques have not to the best of our knoweldge
+addressed portability concerne that arise from defining interfaces
+imperatively. We address this gap by using a declarative language we call
+\emph{brados} to define application-specific storage interfaces in
+object-based storage systems, decoupling interface definition from
+implementation and allowing interfaces to adapt to system changes without
+modification.
 
-%This trend is also not limited to Ceph. AWS Lambda, Redis Lua, Redis Modules,
-%KV-Drives, and Rhea, are all recent examples of storage systems embracing the
-%power of including application-specific semantics.
-
-We propose the introduction of a declarative language for building object
-based interfaces that allows a storage system to meet the needs of an
-application throughout the development process without requiring rewrites.
+To demonstrate the use of the \emph{brados} language we will show how a
+high-performance shared-log based on the CORFU protocol can be built, as well
+as existing real-world interfaces used in the Ceph storage system. First we
+discuss the Ceph storage system which our prototype is built upon and the 
+motivating system, CORFU. We then present the challenges that programmers face
+when navigating the design space during the process of building an
+application-storage interface. The \emph{brados} language is then described
+using the CORFU system and an existing Ceph-specific interface as examples.
+We conclude by discussing the optimization opportunities that we can realize
+using analysis of interfaces. I hope you enjoy the show.
 
 \section{Background and Motivation}
 
@@ -339,7 +349,7 @@ Section~\ref{sec:objclass} there are a variety of native object I/O interfaces
 available, and it is not always immediately clear how best to utilize these
 interfaces.
 
-\section{Physical Design}
+\section{Physical Design Space}
 
 As we have seen, Ceph provides a rich storage API and places few restrictions
 on the structure of applications. Thus a primary concern when implementing an
@@ -688,10 +698,13 @@ class implementation.
 As Ceph continues to develop into a target for building distributed services
 and application, it is important to not restrict use to developers seasonsed
 in distributed programming and those with knowledge of intracacies of the Ceph
-performance model.  To this end we present Brados, a declarative language with
+performance model. To this end we present Brados, a declarative language with
 relational semantics for defining the behavior of RADOS object interfaces.
+Brados uses a simple declarative data model and can reduce the learning curve
+for new users, and allows existing developers to increase productivity by
+writing less code that is more portable.
 
-The Brados model corresponds to a subset of the Bloom language, and models the
+The Brados language corresponds to a subset of the Bloom language, and models the
 storage system state uniformly as a collection of
 relations~\cite{alvaro:cidr11}. The composition of a collection of existing
 interfaces is then expressed as a collection of high-level \emph{queries} that
