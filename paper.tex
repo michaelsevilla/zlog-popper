@@ -2,6 +2,7 @@
 \usepackage{times}
 \usepackage{multirow}
 \usepackage{tabularx}
+\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{graphicx,grffile}
 \usepackage{pgf}
@@ -17,14 +18,14 @@
   aboveskip=3mm,
   belowskip=3mm,
   showstringspaces=false,
-  columns=flexible,
+  %columns=flexible,
   basicstyle={\scriptsize\ttfamily},
   numbers=none,
   %numberstyle=\tiny\color{gray},
   %keywordstyle=\color{blue},
   %commentstyle=\color{dkgreen},
   %stringstyle=\color{mauve},
-  breaklines=true,
+  %breaklines=true,
   breakatwhitespace=true,
   tabsize=3
 }
@@ -589,39 +590,91 @@ write the updated per-entry metadata. The expected throughput from such a
 design is shown in Figure~\ref{fig:cls_wr_jewel} labeled as
 \emph{cls\_full\_hdr} and performs with roughly a 6\% overhead.
 
-\subsection{Optimization}
+Application-level designs also contribute to an expanded design space.  In the
+N:1 design of mapping CORFU onto Ceph the potential amount of I/O parallelism
+is controlled by the value N, however if this value becomes too large there may
+be no benefit or performance could suffer from reduced data locality. Other
+aspects of application-level design are even more flexible. A wide variety of
+data structures could be serialized into the byte stream to handle metadata
+management tasks, but selecting a single external index that performs well
+across workloads and hardware may not be possible.
+
+\subsection{Cluster-Specific Optimizations}
 
 In this section we have demonstrated that a design based on an N:1 addressing
 scheme that stores both log entries and metadata in the bytestream can provide
 the best overall performance, and it does so by a large margin. However, this
 process of design we have outlined may not yield such clear cut results when
-applied in a different context.
+applied in a different context. To illustrate the complexity and breadth of
+this design space, we describe the software, system tunables, and hardware
+parameters that affect the performance of ZLog. 
 
-To illustrate this we ran the same benchmark that measures expected append
-throughput shown in Figure~\ref{fig:vanilla_wr_jewel} on identical hardware
-but we used a long-term support version of Ceph released two years
-ago. The result of this benchmark is shown in Figure~\ref{fig:vanilla_wr_firefly}
-in which the bytestream interface outperforms the key-value interface by 12\%,
-compared to over 100\% in the newer versino of Ceph. Qualatatively, given the
-reduced overall throughput achieved in the older version, some developers may
-find that incurring the overhead of using the key-value interface is an easy
-decision given the reduced complexity of the design space for metadata
-management. If this choice had been made, then a future system upgrade could
-drop a significant number of iops on the floor.
+\subsubsection{Software Parameters}
 
-In practice the real world state space is much larger than the one described
-in this section. Ceph alone has hundreds of configuration options, significant
-features becoming available with releases each year, and is designed to run on
-a wide variety of COTS hardware as well as new NVMe devices, all of which
-contribute to a large and dynamic state space. Application-level designs
-also contribute to an expanded design space. In the N:1 design of mapping
-CORFU onto Ceph the potential amount of I/O parallelism is controlled by 
-the value N, however if this value becomes too large there may be no benefit
-or performance could suffer from reduced data locality. Other aspects of
-application-level design are even more flexible. A wide variety of data
-structures could be serialized into the byte stream to handle metadata
-management tasks, but selecting a single external index that performs well
-across workloads and hardware may not be possible.
+Ceph releases stable versions every year (Oct/Nov) and LTS versions every 3-4
+months~\cite{website:ceph-releases}. The head of the master branch moves
+quickly because there are over 400 contributors and an active mailing list.
+Over the calendar year, there were between  70 and 260 commits per
+week~\cite{website:ceph-github}. These releases contain performance fixes and
+new features that could directly ZLog. 
+
+\textbf{Ceph Versions}: to show the affect that this has on ZLog's design, we
+ran the same benchmark that measures expected append throughput shown in
+Figure~\ref{fig:vanilla_wr_jewel} on identical hardware but instead use a
+long-term support version of Ceph released two years ago. The result of this
+benchmark is shown in Figure~\ref{fig:vanilla_wr_firefly} in which the
+bytestream interface outperforms the key-value interface by 12\%, compared to
+over 100\% in the newer version of Ceph. Qualitatively, given the reduced
+overall throughput achieved in the older version, some developers may find that
+incurring the overhead of using the key-value interface is an easy decision
+given the reduced complexity of the design space for metadata management. If
+this choice had been made, then a future system upgrade could drop a
+significant number of iops on the floor.
+
+\textbf{Ceph Features}: to show the affect of cutting-edge Ceph features, we
+now show results for BlueStore~\cite{weil:vault2016-bluestore}. BlueStore is a
+replacement for the FileStore file system in the OSD (traditionally XFS).
+FileStore has performance problems with transactions and enumerations; namely
+the journal needed to assure atomicity incurs double writes and the file system
+metadata model makes object listings slow, respectively. BlueStore stores data
+directly on a block device and the metadata in RocksDB, which is provided by a
+minimalistic, non-POSIX C++ filesystem. This model adheres to the overall
+software defined storage strategy of Ceph because it gives the administrator
+the flexiblity to store the 3 componenets of BlueStore (e.g., data, RocksDB
+database, and RocksDB write-ahead log) on any partition on any device in the
+OSD. 
+
+\subsubsection{System Tunables}
+
+The most recent version of Ceph (v10.2.0-1281-g1f03205) has 994 tunable
+parameters\footnote{This number comes from \texttt{src/common/config\_opts.h}
+with debug options filtered out.}, where 195 of them pertain to the OSD itself
+and 95 of them focus on the OSD back end file system (i.e. its
+\texttt{filestore}). Ceph also has tunables for the subystems it uses, like
+LevelDB (10 tunables), RocksDB (5 tunables), its own key-value stores (5
+tunables), its object cache (6 tunables), its journals (24 tunables), and its
+other optional filestores like BlueStore (49 tunables).
+
+This many domain-specific tunables makes it almost impossible to come up with
+the best set of tunables, although auto-tuning like the work done
+in~\cite{behzad:sc2013-autotuning} could go a long way. Regardless of the
+technique that we use, it is clear the the number of tunables increases the
+physical design parameters to an unwieldy stae space size.
+
+\subsubsection{Hardware Parameters}
+
+Ceph is designed to run on a wide variety of commodity hardware as well as new
+NVMe devices, all of which their own set of characteristics and tunables (e.g.,
+the IO operation scheduler type). In our experiments, we tested SSD, HDDs, NVMe
+devices, and 
+
+\subsection{Discussion}
+
+This physical design process, of first thinking about the design trade-offs and
+then doing parameters sweeps, is insufficient when general-purpose systems. Had
+we built ZLog from the ground up (like CORFU) the story might be different but
+to deal wtih the large state space we need a way to automatically and
+autonomically decide which parameters to choose. 
 
 Next we present a declarative programming model that seeks to solve the issue
 of selecting an optimal mapping between application requirements and object
@@ -664,21 +717,136 @@ systems and device and interface characteristics change.
 
 \subsection{The CORFU Interface in Bloom}
 
-Listing~\ref{lab} shows code.
-
-\begin{lstlisting}[caption={Hello}, label=lab]
-class Corfu
-include Bud
-
+\begin{lstlisting}[caption={Epoch Guard}, label=lst:eg]
 state do
-table :epoch, [:epoch]
-table :log, [:pos] => [:state, :data]
+  table :epoch, [:epoch]
+  table :log, [:pos] => [:state, :data]
 
-scratch :valid_op, [:type, :pos, :epoch] => [:data]
-scratch :invalid_op, [:type, :pos, :epoch] => [:data]
+  interface input,  :op,   [:type, :pos, :epoch] => [:data]
+  interface output, :ret,  [:type, :pos, :epoch] => [:retval]
 
-interface input, :op, [:type, :pos, :epoch] => [:data]
-interface output, :ret, [:type, :pos, :epoch] => [:retval]
+  scratch :write_op, [:type, :pos, :epoch] => [:data]
+  scratch :read_op,  [:type, :pos, :epoch] => [:data]
+  scratch :trim_op,  [:type, :pos, :epoch] => [:data]
+  scratch :fill_op,  [:type, :pos, :epoch] => [:data]
+  scratch :seal_op,  [:type, :pos, :epoch] => [:data]
+
+  # op did or did not pass the epoch guard
+  scratch :valid_op,   [:type, :pos, :epoch] => [:data]
+  scratch :invalid_op, [:type, :pos, :epoch] => [:data]
+
+  # op's position was or was not found in the log
+  scratch :found_op,    [:type, :pos, :epoch] => [:data]
+  scratch :notfound_op, [:type, :pos, :epoch] => [:data]
+end
+
+bloom do
+  # op's position found in log
+  found_op <= (valid_op * log).lefts(pos => pos)
+  notfound_op <= valid_op.notin(found_op)
+
+  # demux on operation type
+  write_op <= valid_op { |o| o if o.type == 'write' }
+  read_op  <= valid_op { |o| o if o.type == 'read'  }
+  fill_op  <= valid_op { |o| o if o.type == 'fill'  }
+  trim_op  <= valid_op { |o| o if o.type == 'trim'  }
+  seal_op  <= valid_op { |o| o if o.type == 'seal'  }
+end
+\end{lstlisting}
+
+Listing~\ref{lst:eg} shows the epoch guard that is applied to all operations.
+The guard rejects requests that are tagged with old epoch values, ensuring that
+a client generating a request has an up-to-date view of the system.  First the
+\texttt{invalid\_op} collection is defined to include the current operation if
+its epoch value is no larger than the stored epoch value. Next the
+\texttt{valid\_op} collection is defined to be the inverse of
+\texttt{invalid\_op} and is a helper used to refine other operations later in
+the dataflow. Finally we handle the case for all operations tagged with an
+out-of-date epoch by merging the \texttt{invalid\_op} set into the output
+\texttt{ret} collection.
+
+\begin{lstlisting}[caption={Epoch Guard}, label=lst:eg]
+bloom :epoch_guard do
+  invalid_op <= (op * epoch).pairs{|o,e| o.epoch <= e.epoch}
+  valid_op <= op.notin(invalid_op)
+  ret <= invalid_op{|o| [o.type, o.pos, o.epoch, 'stale']}
+end
+\end{lstlisting}
+
+The process of sealing an object requires installing a new epoch value and
+returning the current maximum position written. Listing~\ref{lst:seal} 
+implements the seal interface by first removing the current epoch value and
+replacing it with the epoch value contained in the operation. Next an aggregate
+is computed over the log to find the maximum position written, and this value
+is returned.
+
+\begin{lstlisting}[caption={Seal}, label=lst:seal]
+bloom :seal do
+  epoch <- (seal_op * epoch).rights
+  epoch <+ seal_op { |o| [o.epoch] }
+  temp :maxpos <= log.group([], max(pos))
+  ret <= (seal_op * maxpos).pairs do |o, m|
+    [o.type, nil, o.epoch, m.content]
+  end
+end
+\end{lstlisting}
+
+Trimming a log entry always succeeds. In Listing~\ref{lst:trim} The
+\texttt{<+-} operator simulatenously removes the log entry with the given 
+position and replaces it with an entry with its state set to \emph{trimmed}.
+
+\begin{lstlisting}[caption={Trim}, label=lst:trim]
+bloom :trim do
+  log <+- trim_op{|op| [op.pos, 'trimmed']}
+  ret <=  trim_op{|op| [op.type, op.pos, op.epoch, 'ok']}
+end
+\end{lstlisting}
+
+The write and fill interfaces are implemented similarily, and are show in
+Listing~\ref{lst:write} and Listing~\ref{lst:fill}, respectively.  A valid
+write collection is created if the operation position is not found in the log.
+A valid write operation is then merged into log, otherwise a read only error is
+returend indicating that hte log position was already written to.
+The fill operation is identical except a the fill state is set on the log entry.
+
+\begin{lstlisting}[caption={Write}, label=lst:write]
+bloom :write do
+  temp :valid_write <= write_op.notin(found_op)
+  log <+ valid_write { |o| [o.pos, 'valid', o.data] }
+  ret <= valid_write { |o| [o.type, o.pos, o.epoch, 'ok'] }
+  ret <= write_op.notin(valid_write) { |o|
+    [o.type, o.pos, o.epoch, 'read-only']
+  }
+end
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Fill}, label=lst:fill]
+bloom :fill do
+  temp :valid_fill <= fill_op.notin(found_op)
+  log <+ valid_fill { |o| [o.pos, 'fill'] }
+  ret <= valid_fill { |o| [o.type, o.pos, o.epoch, 'ok'] }
+  ret <= fill_op.notin(valid_fill) { |o|
+    [o.type, o.pos, o.epoch, 'read-only']
+  }
+end
+\end{lstlisting}
+
+The read interface is shown in Listing~\ref{lst:read}, and structured similar
+to the write interface. First we create a collection containing a valid read
+operation that is in the log and does not have the filled or trimmed state set.
+The data is returend in the case of a valid read op, otherwise an error is
+returend through the output interface.
+
+\begin{lstlisting}[caption={Read}, label=lst:read]
+bloom :read do
+  temp :valid_read <= (read_op * log).pairs(pos => pos) { |o, l|
+    [o.type, o.pos, o.epoch, l.data] unless
+      ['filled', 'trimmed'].include?(l.state)
+  }
+  ret <= valid_read { |e| [e.type, e.pos, e.epoch, e.data] }
+  ret <= read_op.notin(valid_read, type => type) do |o|
+    [o.type, o.pos, o.epoch, 'invalid']
+  end
 end
 \end{lstlisting}
 
