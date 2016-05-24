@@ -1,12 +1,11 @@
 #!/bin/bash
 
 reset=soft
-data_dev=sdc
-noop_dev=sdc
+data_dev=sdb
 ceph_version=jewel
 bluestore=yes
 
-name=librados_jewel_bluestore_ssd_med
+name=librados_jewel_bluestore_hdd_med
 runtime=900
 pg_nums="128"
 stripe_widths="128"
