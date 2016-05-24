@@ -2,12 +2,33 @@
 \usepackage{times}
 \usepackage{multirow}
 \usepackage{tabularx}
+\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{graphicx,grffile}
 \usepackage{pgf}
 \usepackage{tikz}
+\usepackage{listings}
+\usepackage{color}
 \usetikzlibrary{arrows,automata}
-\usepackage[latin1]{inputenc}
+%\usepackage[latin1]{inputenc}
+
+\lstset{frame=tb,
+  language=Ruby,
+  captionpos=b,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  %columns=flexible,
+  basicstyle={\scriptsize\ttfamily},
+  numbers=none,
+  %numberstyle=\tiny\color{gray},
+  %keywordstyle=\color{blue},
+  %commentstyle=\color{dkgreen},
+  %stringstyle=\color{mauve},
+  %breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
 
 % do not change these values
 \baselineskip 12pt
@@ -152,15 +173,13 @@ We propose the introduction of a declarative language for building object
 based interfaces that allows a storage system to meet the needs of an
 application throughout the development process without requiring rewrites.
 
-\section{Background}
+\section{Background and Motivation}
 
 In this section we highlight the salient components of Ceph, especially its
 \emph{object class} feature that offers users the ability to load and execute
 application-specific codes. We provide a description of our motivating
 example, a high-performance distributed shared-log built upon Ceph that makes
-extensive use of the object class facility, and then we present the challenges
-that application developers face when using this extensibility feature offered
-by the storage system.
+extensive use of the object class facility.
 
 \subsection{Ceph and Storage Programmability}
 \label{sec:objclass}
@@ -317,14 +336,17 @@ Section~\ref{sec:objclass} there are a variety of native object I/O interfaces
 available, and it is not always immediately clear how best to utilize these
 interfaces.
 
-\paragraph*{Towards a CORFU Object Interface}
-The state-machine diagram in Figure~\ref{fig:corfu-sm} shows the composition of
-actions for each component of the CORFU interface. For instance, all operations
-begin by applying an \emph{epoch guard} that ensures the request is tagged with
-an up-to-date epoch value. The \emph{read} (R) and \emph{write} (W) operations
-both proceed by (1) examining metadata associated with the target position, (2)
-performing I/O to read or write the log entry, and in the case of a write, (3)
-updates metadata for the target log position.
+\section{Physical Design}
+
+As we have seen, Ceph provides a rich storage API and places few restrictions
+on the structure of applications. Thus a primary concern when implementing an
+object interface in Ceph is deciding how native interfaces are composed into
+compound operations in order to implement the semantics of the target
+interface. These types of decisions are commonly referred to as
+physical design, and can affect performance and application flexibility.
+As we will see the design space that developers must operate in is often
+large, and its dynamic nature can lead to design decisions that become
+obsolete and non-optimal.
 
 \begin{figure}[t]
 \centering
@@ -354,26 +376,32 @@ write, and garbage collection ($GC$) marks entries for reclamation.}
 \label{fig:corfu-sm}
 \end{figure}
 
-The primary concern of an application developer when implementing an object
-interface in Ceph is deciding how native interfaces are composed into a
-compound operation. These types of decisions are commonly referred to as
-physical design, and can affect performance and application flexibility.  For
-instance, one valid design option is to store each log position in an object
-with a name using a one-to-one mapping with the log entry position.  This
-would simplify the design of the \emph{write} interface because a small amount
-of metadata stored as a header in the object could describe the state of the
-log entry.  However, as we will see in the next section this choice of a
-physical design can result in poor performance compared to other designs.
+To understand the developer process in the context of CORFU we have included the
+state-machine diagram in Figure~\ref{fig:corfu-sm} showing the composition of
+actions for each component of the CORFU interface which must be mapped onto
+Ceph object classes. For instance, all operations begin by applying an
+\emph{epoch guard} that ensures the request is tagged with an up-to-date epoch
+value. The \emph{read} (R) and \emph{write} (W) operations both proceed by (1)
+examining metadata associated with the target position, (2) performing I/O to
+read or write the log entry, and in the case of a write, (3) updates metadata
+for the target log position.
 
-\section{Physical Design}
+As an example, one valid design option is to store each log position in an
+object with a name using a one-to-one mapping with the log entry position.
+This would simplify the design of the \emph{write} interface because a small
+amount of metadata stored as a header in the object could describe the state
+of the log entry.  However, as we will see this choice of a physical design
+can result in poor performance compared to other designs. In the remainder of
+this section we will define the entire design space and use a set of targetted
+benchmarks to arrive at a final design. Finally we will show that these design
+decisions can lead to non-optimal decisions and suggest an automated approach
+is desirable.
 
-As we have seen, Ceph provides a rich storage API and places few restrictions
-on the structure of applications. So how should we go about implementing CORFU
-on Ceph? Our strategy is straightforward: first we will define the entire
-design space, and then winnow down this space using a set of targeted
-benchmarks. The design space can be divided into three challenges:
-selecting a strategy for log entry addressing, choosing a native I/O interface
-for storing log entry content, and implementing efficient metadata management.
+\subsection{Challenges}
+
+The design space can be divided into three challenges: selecting a strategy
+for log entry addressing, choosing a native I/O interface for storing log
+entry content, and implementing efficient metadata management.
 
 \begin{enumerate}
     \item {\bf Entry addressing.} We refer to the method by which a client
@@ -562,57 +590,290 @@ write the updated per-entry metadata. The expected throughput from such a
 design is shown in Figure~\ref{fig:cls_wr_jewel} labeled as
 \emph{cls\_full\_hdr} and performs with roughly a 6\% overhead.
 
-\subsection{Hardware and Software}
+Application-level designs also contribute to an expanded design space.  In the
+N:1 design of mapping CORFU onto Ceph the potential amount of I/O parallelism
+is controlled by the value N, however if this value becomes too large there may
+be no benefit or performance could suffer from reduced data locality. Other
+aspects of application-level design are even more flexible. A wide variety of
+data structures could be serialized into the byte stream to handle metadata
+management tasks, but selecting a single external index that performs well
+across workloads and hardware may not be possible.
+
+\subsection{Cluster-Specific Optimizations}
 
 In this section we have demonstrated that a design based on an N:1 addressing
 scheme that stores both log entries and metadata in the bytestream can provide
 the best overall performance, and it does so by a large margin. However, this
 process of design we have outlined may not yield such clear cut results when
-applied in other contexts that may differ by network and hardware capabilities
-as well as configuration options and software versions.
+applied in a different context. To illustrate the complexity and breadth of
+this design space, we describe the software, system tunables, and hardware
+parameters that affect the performance of ZLog. 
 
-To illustrate this we ran the same benchmark that measures expected append
-throughput shown in Figure~\ref{fig:vanilla_wr_jewel} on identical hardware
-but we used a long-term support version of Ceph released two years
-ago. The result of this benchmark is shown in Figure~\ref{fig:vanilla_wr_firefly}
-in which the bytestream interface outperforms the key-value interface by 12\%,
-compared to over 100\% in the newer versino of Ceph. Qualatatively, given the
-reduced overall throughput achieved in the older version, some developers may
-find that incurring the overhead of using the key-value interface is an easy
-decision given the reduced complexity of the design space for metadata
-management. If this choice had been made, then a future system upgrade could
-drop a significant number of iops on the floor.
+\subsubsection{Software Parameters}
 
-\subsection{Optimization}
+Ceph releases stable versions every year (Oct/Nov) and LTS versions every 3-4
+months~\cite{website:ceph-releases}. The head of the master branch moves
+quickly because there are over 400 contributors and an active mailing list.
+Over the calendar year, there were between  70 and 260 commits per
+week~\cite{website:ceph-github}. These releases contain performance fixes and
+new features that could directly ZLog. 
 
-explain that the state space is large, this is hard for humans.
-configuration, software versions, hardware versions, interface selections, and
-future features.
+\textbf{Ceph Versions}: to show the affect that this has on ZLog's design, we
+ran the same benchmark that measures expected append throughput shown in
+Figure~\ref{fig:vanilla_wr_jewel} on identical hardware but instead use a
+long-term support version of Ceph released two years ago. The result of this
+benchmark is shown in Figure~\ref{fig:vanilla_wr_firefly} in which the
+bytestream interface outperforms the key-value interface by 12\%, compared to
+over 100\% in the newer version of Ceph. Qualitatively, given the reduced
+overall throughput achieved in the older version, some developers may find that
+incurring the overhead of using the key-value interface is an easy decision
+given the reduced complexity of the design space for metadata management. If
+this choice had been made, then a future system upgrade could drop a
+significant number of iops on the floor.
+
+\textbf{Ceph Features}: to show the affect of cutting-edge Ceph features, we
+now show results for BlueStore~\cite{weil:vault2016-bluestore}. BlueStore is a
+replacement for the FileStore file system in the OSD (traditionally XFS).
+FileStore has performance problems with transactions and enumerations; namely
+the journal needed to assure atomicity incurs double writes and the file system
+metadata model makes object listings slow, respectively. BlueStore stores data
+directly on a block device and the metadata in RocksDB, which is provided by a
+minimalistic, non-POSIX C++ filesystem. This model adheres to the overall
+software defined storage strategy of Ceph because it gives the administrator
+the flexiblity to store the 3 componenets of BlueStore (e.g., data, RocksDB
+database, and RocksDB write-ahead log) on any partition on any device in the
+OSD. 
+
+\subsubsection{System Tunables}
+
+The most recent version of Ceph (v10.2.0-1281-g1f03205) has 994 tunable
+parameters\footnote{This number comes from \texttt{src/common/config\_opts.h}
+with debug options filtered out.}, where 195 of them pertain to the OSD itself
+and 95 of them focus on the OSD back end file system (i.e. its
+\texttt{filestore}). Ceph also has tunables for the subystems it uses, like
+LevelDB (10 tunables), RocksDB (5 tunables), its own key-value stores (5
+tunables), its object cache (6 tunables), its journals (24 tunables), and its
+other optional filestores like BlueStore (49 tunables).
+
+This many domain-specific tunables makes it almost impossible to come up with
+the best set of tunables, although auto-tuning like the work done
+in~\cite{behzad:sc2013-autotuning} could go a long way. Regardless of the
+technique that we use, it is clear the the number of tunables increases the
+physical design parameters to an unwieldy stae space size.
+
+\subsubsection{Hardware Parameters}
+
+Ceph is designed to run on a wide variety of commodity hardware as well as new
+NVMe devices, all of which their own set of characteristics and tunables (e.g.,
+the IO operation scheduler type). In our experiments, we tested SSD, HDDs, NVMe
+devices, and 
+
+\subsection{Discussion}
+
+This physical design process, of first thinking about the design trade-offs and
+then doing parameters sweeps, is insufficient when general-purpose systems. Had
+we built ZLog from the ground up (like CORFU) the story might be different but
+to deal wtih the large state space we need a way to automatically and
+autonomically decide which parameters to choose. 
+
+Next we present a declarative programming model that seeks to solve the issue
+of selecting an optimal mapping between application requirements and object
+class implementation.
 
 \section{Programming Model}
 
-Describe big picture as if we are going to introduce something like bloom for
-describing everything.
+Ceph is turning into a target for building distrubted services, bringing
+distributed programming into the hands of many new people that may have
+worked on the periphery of ceph.
 
-], Bloom is purely declarative: the syntax of a program contains the full
-spec- ification of its semantics, and there is no need for the programmer to
-understand or reason about the behavior of the evaluation engine. Bloom is
-based on a formal temporal logic called Dedalu
+Getting consistency and coordination correct is a challenge And as we have seen
+optimization at a low-level given a simple set of semantics can yield a large
+state space from which to draw designs Difficulty and challenges of writing
+distributed software.  Programming distributed systems and applications.
 
-We use a subset of bloom as a basis for defining interface.
+We draw upon the recent work of Bloom a declarative lang thing
 
-Although we have not chosen to use the most powerful parts of the bloom (eg
-task coordination and consistency)
-language we have chosen to start with a powerful abstraction because we plan
-to take this to 11 (see future work).
+BLL (a.k.a. BRADOS) is a declarative language with relational (or tabular)
+semantics for RADOS objects, which corresponds to a subset of the BLOOM
+language (leaving out temporal logic). BLL borrows from BLOOM the table and
+interface collections, the instantaneous implication (‘<=’) operator, as well
+as all the collection operators.
 
+BRADOS models the storage system state uniformly as a collection of relations.
+The composition of a collection of existing interfaces is then expressed as a
+collection of high-level \emph{queries} that describe how a stream of requests
+(API calls) are filtered, transformed and combined with existing state to
+define streams of outputs (API call returns as well as updates to system
+state).  Separating the relational semantics of such compositions from details
+of their physical implementations introduces a number of degrees of freedom,
+similar to the ``data independence’’ offered by database query languages.  The
+choice of access methods (for example, whether to use a bytestream interface or
+a key/value store), storage decide classes(e.g., whether to use HDDs or SDDs),
+physical layout details (e.g. a 1:1 or 1:N mapping) and execution plans (e.g.
+operator ordering) can be postponed to execution time.  The optimal choices for
+these physical design details are likely to change much more often than the
+logical specification, freeing the interface designer from the need to rewrite
+systems and device and interface characteristics change.  
 
+\subsection{The CORFU Interface in Bloom}
 
+\begin{lstlisting}[caption={Epoch Guard}, label=lst:eg]
+state do
+  table :epoch, [:epoch]
+  table :log, [:pos] => [:state, :data]
 
-\section{Other Interfaces}
+  interface input,  :op,   [:type, :pos, :epoch] => [:data]
+  interface output, :ret,  [:type, :pos, :epoch] => [:retval]
 
-Here we show the derivation of two other interfaces that are in production in
-Ceph today to demonstrate the generality of our interface.
+  scratch :write_op, [:type, :pos, :epoch] => [:data]
+  scratch :read_op,  [:type, :pos, :epoch] => [:data]
+  scratch :trim_op,  [:type, :pos, :epoch] => [:data]
+  scratch :fill_op,  [:type, :pos, :epoch] => [:data]
+  scratch :seal_op,  [:type, :pos, :epoch] => [:data]
+
+  # op did or did not pass the epoch guard
+  scratch :valid_op,   [:type, :pos, :epoch] => [:data]
+  scratch :invalid_op, [:type, :pos, :epoch] => [:data]
+
+  # op's position was or was not found in the log
+  scratch :found_op,    [:type, :pos, :epoch] => [:data]
+  scratch :notfound_op, [:type, :pos, :epoch] => [:data]
+end
+
+bloom do
+  # op's position found in log
+  found_op <= (valid_op * log).lefts(pos => pos)
+  notfound_op <= valid_op.notin(found_op)
+
+  # demux on operation type
+  write_op <= valid_op { |o| o if o.type == 'write' }
+  read_op  <= valid_op { |o| o if o.type == 'read'  }
+  fill_op  <= valid_op { |o| o if o.type == 'fill'  }
+  trim_op  <= valid_op { |o| o if o.type == 'trim'  }
+  seal_op  <= valid_op { |o| o if o.type == 'seal'  }
+end
+\end{lstlisting}
+
+Listing~\ref{lst:eg} shows the epoch guard that is applied to all operations.
+The guard rejects requests that are tagged with old epoch values, ensuring that
+a client generating a request has an up-to-date view of the system.  First the
+\texttt{invalid\_op} collection is defined to include the current operation if
+its epoch value is no larger than the stored epoch value. Next the
+\texttt{valid\_op} collection is defined to be the inverse of
+\texttt{invalid\_op} and is a helper used to refine other operations later in
+the dataflow. Finally we handle the case for all operations tagged with an
+out-of-date epoch by merging the \texttt{invalid\_op} set into the output
+\texttt{ret} collection.
+
+\begin{lstlisting}[caption={Epoch Guard}, label=lst:eg]
+bloom :epoch_guard do
+  invalid_op <= (op * epoch).pairs{|o,e| o.epoch <= e.epoch}
+  valid_op <= op.notin(invalid_op)
+  ret <= invalid_op{|o| [o.type, o.pos, o.epoch, 'stale']}
+end
+\end{lstlisting}
+
+The process of sealing an object requires installing a new epoch value and
+returning the current maximum position written. Listing~\ref{lst:seal} 
+implements the seal interface by first removing the current epoch value and
+replacing it with the epoch value contained in the operation. Next an aggregate
+is computed over the log to find the maximum position written, and this value
+is returned.
+
+\begin{lstlisting}[caption={Seal}, label=lst:seal]
+bloom :seal do
+  epoch <- (seal_op * epoch).rights
+  epoch <+ seal_op { |o| [o.epoch] }
+  temp :maxpos <= log.group([], max(pos))
+  ret <= (seal_op * maxpos).pairs do |o, m|
+    [o.type, nil, o.epoch, m.content]
+  end
+end
+\end{lstlisting}
+
+Trimming a log entry always succeeds. In Listing~\ref{lst:trim} The
+\texttt{<+-} operator simulatenously removes the log entry with the given 
+position and replaces it with an entry with its state set to \emph{trimmed}.
+
+\begin{lstlisting}[caption={Trim}, label=lst:trim]
+bloom :trim do
+  log <+- trim_op{|op| [op.pos, 'trimmed']}
+  ret <=  trim_op{|op| [op.type, op.pos, op.epoch, 'ok']}
+end
+\end{lstlisting}
+
+The write and fill interfaces are implemented similarily, and are show in
+Listing~\ref{lst:write} and Listing~\ref{lst:fill}, respectively.  A valid
+write collection is created if the operation position is not found in the log.
+A valid write operation is then merged into log, otherwise a read only error is
+returend indicating that hte log position was already written to.
+The fill operation is identical except a the fill state is set on the log entry.
+
+\begin{lstlisting}[caption={Write}, label=lst:write]
+bloom :write do
+  temp :valid_write <= write_op.notin(found_op)
+  log <+ valid_write { |o| [o.pos, 'valid', o.data] }
+  ret <= valid_write { |o| [o.type, o.pos, o.epoch, 'ok'] }
+  ret <= write_op.notin(valid_write) { |o|
+    [o.type, o.pos, o.epoch, 'read-only']
+  }
+end
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Fill}, label=lst:fill]
+bloom :fill do
+  temp :valid_fill <= fill_op.notin(found_op)
+  log <+ valid_fill { |o| [o.pos, 'fill'] }
+  ret <= valid_fill { |o| [o.type, o.pos, o.epoch, 'ok'] }
+  ret <= fill_op.notin(valid_fill) { |o|
+    [o.type, o.pos, o.epoch, 'read-only']
+  }
+end
+\end{lstlisting}
+
+The read interface is shown in Listing~\ref{lst:read}, and structured similar
+to the write interface. First we create a collection containing a valid read
+operation that is in the log and does not have the filled or trimmed state set.
+The data is returend in the case of a valid read op, otherwise an error is
+returend through the output interface.
+
+\begin{lstlisting}[caption={Read}, label=lst:read]
+bloom :read do
+  temp :valid_read <= (read_op * log).pairs(pos => pos) { |o, l|
+    [o.type, o.pos, o.epoch, l.data] unless
+      ['filled', 'trimmed'].include?(l.state)
+  }
+  ret <= valid_read { |e| [e.type, e.pos, e.epoch, e.data] }
+  ret <= read_op.notin(valid_read, type => type) do |o|
+    [o.type, o.pos, o.epoch, 'invalid']
+  end
+end
+\end{lstlisting}
+
+\subsection{Optimizer}
+
+\subsection{Other Interfaces}
+
+The subset of the Bloom language we are using is powerful enough to express the
+CORFU language, as well as many of the object class interfaces that are already
+included in Ceph. We briefly sketch the Bloom imlementation of an object class
+that provides a locking service. This is an interesting example because Bloom
+implementations use mechanisms for introducing points of coordination in
+execution, which in the context of Ceph, may be written in Bloom itself. 
+
+\begin{lstlisting}[caption={Hello}, label=lab]
+bloom :take_lock do
+end
+
+bloom :break_lock do
+end
+
+bloom :list_locks do
+end
+
+bloom :lock_info do
+end
+\end{lstlisting}
 
 \section{Evaluation}
 
@@ -647,84 +908,7 @@ the limited domain-specific optimizations found in previous work.
 
 \section{Conclusion and Future Work}
 
-Include performance management topic in related work.
-
-%In this section we examine the design space for implementing the CORFU
-%protocol in the RADOS storage system. Table \ref{t:init-ds} shows the entire
-%design space. A description of each design parameter follows:
-%
-%{\bf Mapping strategy.} The method by which a log entry---identified by its
-%logical position---is addressed within RADOS is referred to as the mapping
-%strategy. A 1:1 strategy stores each log entry in a RADOS object with a
-%distinct name (e.g. ``mylog.pos443''), and an N:1 strategy stripes the log
-%positions across a set of objects (e.g.  round-robin). While we do consider
-%both strategies in this paper, a 1:1 strategy is attractive because it allows
-%a design in which clients can directly address log positions by constructing
-%the correct object name.
-%
-%{\bf Storage interface.} entry data may be small or large. its primary
-%storage location is important. kv, bs. we further sub-divide bs into
-%write and append. each strategy is compatible with fixed size entries
-%except for the write interface.
-%
-%{\bf Logical addressing.}
-
-%\subsection{Storage Interface Selection}
-%
-%Figure \ref{f:librados-sweep} shows the single-node write-only I/O throughput
-%for each of the points in the design space defined in Table \ref{t:init-ds}.
-%The results reveal poor relative performance using both the key-value storage
-%interface, as well as either of the 1:1 strategies---which incur overhead by
-%creating a new object for each log entry. Both of the N:1 strategies using the
-%bytestream I/O interface outperform all of the other approaches by over 2x
-%throughput, but otherwise have nearly identical performance.
-%
-%To examine the read performance of the points in the design space we generated
-%a dataset using each of the write workloads, and then issued random reads
-%across the entire dataset. Figure \ref{f:librados-rand-read} shows the read
-%throughput for each of the design strategies. The results show that an N:1
-%mapping using bytestream interface performs best. Interestingly, the 1:1
-%mapping strategy using the bytestream interface exhibits good read performance
-%in comparison to writes using the same strategy.
-
-%\begin{figure}[h]
-%  \centering
-%  \includegraphics[width=0.45\textwidth]{experiments/librados-sweep/output.soft.reset.2hr.png}
-%  \caption{
-%[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/librados-sweep/visualize.ipynb}{source}]
-%Throughput (IOPS) of 1K writes to a single OSD using the standard I/O
-%interfaces in various configurations. The best performance is achieved using
-%the byte stream interface and a N:1 mapping strategy.
-%}
-%\end{figure}
-%
-%\begin{figure}[h]
-%  \centering
-%  \includegraphics[width=0.45\textwidth]{experiments/basic-cls-rand-read/output.read.60min.png}
-%  \caption{
-%[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-rand-read/visualize.ipynb}{source}]
-%Throughput of 1K random reads to a single OSD using the standard I/O
-%interfaces in various configurations. The best performance is achieved using
-%the byte stream interface and a N:1 mapping strategy.
-%}
-%\end{figure}
-%
-%\begin{figure}[h]
-%  \centering
-%  \includegraphics[width=0.45\textwidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
-%  \caption{
-%[\href{https://github.com/noahdesu/zlog-popper/tree/master/experiments/basic-cls-overhead/visualize.ipynb}{source}]
-%}
-%\end{figure}
-
-
-%As a first approximation these results show that when optimizing for log
-%append and random read throughput the design space should be refined by
-%limiting solutions to architectures based on a N:1 mapping strategy using the
-%bytestream I/O interface. But what these microbenchmarks explicitly omit are
-%the overheads associated with metadata management such as enforcing write-once
-%semantics or using an index to map a log position to a physical offset within
-%an object. In the next section we
+Include performance management topic in future work.
 
 \bibliography{paper}
 \bibliographystyle{plain}

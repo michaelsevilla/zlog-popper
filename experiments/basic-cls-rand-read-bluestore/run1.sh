@@ -1,9 +1,8 @@
 #!/bin/bash
 
 reset=soft
-data_dev=nvme0n1
-journal_dev=nvme1n1
-noop_dev="nvme0n1 --noop nvme1n1"
+data_dev=sdc
+noop_dev="sdb --noop sdc"
 osd_create="--bluestore"
 
 name=librados_read_data_jrnl_nvme_bluestore
