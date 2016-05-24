@@ -18,14 +18,14 @@
   aboveskip=3mm,
   belowskip=3mm,
   showstringspaces=false,
-  columns=flexible,
+  %columns=flexible,
   basicstyle={\scriptsize\ttfamily},
   numbers=none,
   %numberstyle=\tiny\color{gray},
   %keywordstyle=\color{blue},
   %commentstyle=\color{dkgreen},
   %stringstyle=\color{mauve},
-  breaklines=true,
+  %breaklines=true,
   breakatwhitespace=true,
   tabsize=3
 }
@@ -719,19 +719,11 @@ systems and device and interface characteristics change.
 
 Listing~\ref{lab} shows code.
 
-\begin{lstlisting}[caption={Hello}, label=lab]
-class Corfu
-include Bud
-
-state do
-table :epoch, [:epoch]
-table :log, [:pos] => [:state, :data]
-
-scratch :valid_op, [:type, :pos, :epoch] => [:data]
-scratch :invalid_op, [:type, :pos, :epoch] => [:data]
-
-interface input, :op, [:type, :pos, :epoch] => [:data]
-interface output, :ret, [:type, :pos, :epoch] => [:retval]
+\begin{lstlisting}[caption={Epoch Guard}, label=lst:eg]
+bloom :epoch_guard do
+  invalid <= (op * epoch).pairs{|o,e| o.epoch <= e.epoch}
+  ret <= invalid{|o| [o.type, o.pos, o.epoch, 'stale']}
+  valid <= op.notin(invalid)
 end
 \end{lstlisting}
 
