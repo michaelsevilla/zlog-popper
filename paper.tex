@@ -132,6 +132,9 @@ reliant upon these extensions. Figure~\ref{fig:objclass-dev} shows
 a marked increase in the number of object operations that are packaged as part
 of the Ceph distribution and widely used by internal Ceph subsystems and by
 applications such as OpenStack Swift and Cinder~\cite{openstack}.
+Unfortunately, the code composing these interfaces
+is written assuming a performance profile defined by the combination of the
+hardware and software versions available at the time of development.
 
 \begin{figure}[t]
   \centering
@@ -148,9 +151,8 @@ corresponding to applications or utilities, such as reference counting}
 %%% why is it hard / why do naive approaches fail
 In addition to the growth in the quantity of operations in use throughout Ceph
 installations, Figure~\ref{fig:objclass-dev} also depicts the amount of
-low-level C++ written to implement these operations. Unfortunately, this code
-is written assuming a performance profile defined by the combination of the
-hardware and software versions available at the time of development.  While
+low-level C++ written to implement these operations.
+While
 the bulk of these interfaces are created by core Ceph developers with a
 complete view of the performance model, this may be changing. The
 development community has been receptive to outside contributions with the
