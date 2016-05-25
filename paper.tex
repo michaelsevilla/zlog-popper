@@ -973,22 +973,24 @@ S3-compatible RADOS-Gateway service to perform object reference counting.
 
 The reference count implementation that we describe does not use a typical
 counter, but rather uses a tag-based interface in which each \emph{reference}
-to an object is identified by a application-level tag. Each tag represents
-one or more references allowing an idempotent property useful for application
+to an object is identified by a application-level tag. Each tag represents one
+or more references supporting an idempotent property useful for applications
 that may replay reference count operations out of order. Otherwise the
-semantics are straightforward: clients record references to an object, and
-when the number of references drop to zero the object is removed.
+semantics are straightforward: clients record references to an object by
+inserting a tag, and remove a reference by removing a tag. When the number of
+references (i.e., tags) drop to zero the object is garbage collected.
 
 The reference implementation in Ceph is 300 LOC written in C++. The version
-written in Brados is shown in Listing~\ref{lst:rc}.
-
- Unlike the CORFU interface
-that took advantage of a mapping between backend storage and collections, the
+written in Brados is shown in Listing~\ref{lst:rc}. Line 10 shows the
+implementation of requesting a reference which is an idempotent merge of the
+tag into the persistent \texttt{refs} collection.  Unlike the CORFU interface
+that took highlighted how collections are unified with persistent storage, the
 reference counting interface requires access to RADOS runtime facilities that
 allow objects to be removed. This is modeled in Brados using the Bloom
 \emph{channel} abstraction that is used to transmit facts between entities in
 the system; we effectively send a message to the runtime with our removal
-request.
+request. The \texttt{remove\_chn} channel may be populated with messages and
+the RADOS runtime will processes these asynchronously.
 
 \begin{lstlisting}[caption={Reference counting interface}, label=lst:rc]
 state do
