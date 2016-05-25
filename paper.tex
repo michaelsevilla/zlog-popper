@@ -531,41 +531,6 @@ shows the expected random read performance from a log containing 1K entries in
 which an addressing strategy that stores log entries in the bytestream has the
 best performance.
 
-\begin{figure}[t]
-	\centering
-	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/jewel-hdd-128b.png}
-	\caption{shows that with a HDD, it don't matter if you choose omap!!!!!}
-	\label{fig:cls_wr_jewel}
-\end{figure}
-%\begin{figure}[t]
-%  \centering
-%  \begin{subfigure}[b]{.47\linewidth}
-%      \centering
-%      \includegraphics[width=1.0\linewidth]{experiments/librados-sweep/jewel_ssd.png}
-%      \caption{1hr,1k,wr,jewel}
-%      \label{fig:vanilla_wr_jewel}
-%  \end{subfigure}
-%  \begin{subfigure}[b]{.47\linewidth}
-%      \centering
-%      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
-%      \caption{1hr,1k,rd,jewel}
-%      \label{fig:vanilla_rd_jewel}
-%  \end{subfigure}
-%  \begin{subfigure}[b]{.47\linewidth}
-%      \centering
-%      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
-%      \caption{1hr,1k,cls\_wr,jewel}
-%      \label{fig:cls_wr_jewel}
-%  \end{subfigure}
-%  \begin{subfigure}[b]{.47\linewidth}
-%      \centering
-%      \includegraphics[width=1.0\linewidth]{experiments/librados-sweep/firefly_ssd.png}
-%      \caption{1hr,1k,wr,firefly}
-%      \label{fig:vanilla_wr_firefly}
-%  \end{subfigure}
-%  \caption{placeholder.}
-%\end{figure}
-
 \subsection{Metadata Management}
 
 The previous results show that storing log entries in the bytestream has the
@@ -653,9 +618,10 @@ In this section we have demonstrated that a design based on an N:1 addressing
 scheme that stores both log entries and metadata in the bytestream can provide
 the best overall performance, and it does so by a large margin. However, this
 process of design we have outlined may not yield such clear cut results when
-applied in a different context. To illustrate these contexts, we describe the 
-software, system tunables, and hardware parameters that affect the performance 
-of ZLog. 
+applied in a different context. To illustrate these contexts, we describe the
+software, system tunable, and hardware parameters that affect the performance
+of our CORFU implementation. The complexity and breadth of our parameter sweep,
+and the fact that our state space grew so large, motivates brados in section 4.
 
 \subsubsection{Software Parameters}
 
@@ -668,16 +634,16 @@ week~\cite{website:ceph-github}.
 \textbf{Ceph Versions}: to show the evolution of Ceph's performance and
 behavior, we ran the same benchmark, which measures append throughput, with the
 same configurations, hardware, and tunables on 2 versions of Ceph: Jewel (April
-2016) - the newest stable release and Firefly (May 2014)- long term support
-version that introduced cache tiering and erasure coding.
-Figure~\ref{fig:jewel_v_firefly_v_es} shows the behavior and performance of the
-benchmark for 128b, 1KB, and 4KB objects.
+2016) - the newest stable release and Firefly (May 2014) - a long term support
+version that introduced cache tiering and erasure coding. The Jewel row of 
+Figure~\ref{fig:jewel_v_firefly_v_es} shows that the size of the log entries
+has a clear impact on performance but the Firefly release shows no such trend.
+The fact that the appends per second are an order of magnitude slower on
+Firefly indicates that the the benchmark is bottlenecked by the Ceph software
+instead of the external log implementation. 
 
-For all graphs,
-
-That figure demonstrates that the 
-bytestream interface outperforms the key-value interface by 12\%, compared to
-over 100\% in the newer version of Ceph. Qualitatively, given the reduced
+The bytestream interface outperforms the key-value interface by 12\%, compared
+to over 100\% in the newer version of Ceph. Qualitatively, given the reduced
 overall throughput achieved in the older version, some developers may find that
 incurring the overhead of using the key-value interface is an easy decision
 given the reduced complexity of the design space for metadata management. If
@@ -697,6 +663,13 @@ the flexiblity to store the 3 componenets of BlueStore (e.g., data, RocksDB
 database, and RocksDB write-ahead log) on any partition on any device in the
 OSD. 
 
+\textbf{Takeway}: choosing the best implementations is dependent on both the
+timing of the developemnt (Ceph Version) and the expertise of the administrator
+(Ceph Features). Different versions and features of Ceph may lead the
+administrator to choose a suboptimal implementation for the system's next
+upgrade. The software parameters must be accounted for and benchmarked when
+making design decisions.
+
 \subsubsection{System Tunables}
 
 The most recent version of Ceph (v10.2.0-1281-g1f03205) has 994 tunable
@@ -714,12 +687,36 @@ in~\cite{behzad:sc2013-autotuning} could go a long way. Regardless of the
 technique that we use, it is clear the the number of tunables increases the
 physical design parameters to an unwieldy stae space size.
 
+\textbf{Takeaway}: the number and complexity of Ceph's tunables make
+brute-force parameter selection impossible.
+
 \subsubsection{Hardware Parameters}
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/jewel-hdd-128b.png}
+	\caption{shows that with a HDD, it don't matter if you choose omap!!!!!}
+	\label{fig:jewel-hdd-128b}
+\end{figure}
 
 Ceph is designed to run on a wide variety of commodity hardware as well as new
 NVMe devices, all of which their own set of characteristics and tunables (e.g.,
 the IO operation scheduler type). In our experiments, we tested SSD, HDDs, NVMe
-devices, and 
+devices and discovered a wide range of behaviors and performance profiles.
+Figure~\ref{fig:jewel-hdd-128b}, which shows the write performance of 128 by
+log entries using Jewel and a single HDD, shows an especially tricky situation
+for a developer. 
+
+In that figure, the performance is 10\(\times\) slower than its SSD counterpart
+but performance of the N:1 bystestream implementation is almost identical to
+the N:1 KV implementation (within 1\% mean throughput). Regardless of the true
+bottleneck, it is clear that choosing the N:1 KV implementation is the better
+choice because of the simple implementation and the minimal performance
+degradation.
+
+\textbf{Takeaway}: choosing the best implementations is dependent on hardware.
+Something as common as an upgrade from HDD to SSD may nullify the benefits of a
+certain implementation. 
 
 \subsection{Discussion}
 
