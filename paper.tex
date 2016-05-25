@@ -306,6 +306,7 @@ advantage to store this metadata as a header within the bytestream. In the remai
 of this section we will explore the challenges associated with these design questions.
 
 \subsection{Motivating Application: CORFU}
+\label{sec:corfu}
 
 The primary motivating example we will use in this paper is the CORFU
 distributed shared-log designed to provide high-performance serialization
@@ -364,6 +365,7 @@ available, and it is not always immediately clear how best to utilize these
 interfaces.
 
 \section{Physical Design Space}
+\label{sec:pd}
 
 As we have seen, Ceph provides a rich storage API and places few requirements
 on the structure of applications. Thus a primary concern when implementing an
@@ -1072,7 +1074,7 @@ cloud resource orchestration~\cite{liu_declarative_2011}.
 
 Much work remains to be done.  While we demonstrated some of the immediate
 benefits of separating logical and physical specifications of component
-compositions, the ``dream’’ of data independence is to take the physical
+compositions, the ``dream'' of data independence is to take the physical
 design question completely off the table for programmers.  We are currently
 exploring both cost-based optimizers and autotuners to automate the selection
 of a high performance physical design consistent with a given logical
@@ -1080,8 +1082,8 @@ specification.
 
 The database literature on materialized view maintenance and selection can be
 brought to bear in the context of programmable storage as well.  Recall the
-sequencer logic of Corfu described in Section XX.  The Bloom specification
-(Figure YY) simply states that the current value of the sequencer is the
+sequencer logic of Corfu described in Section~\ref{sec:corfu}.  The Bloom specification
+(Listing~\ref{lst:write}) simply states that the current value of the sequencer is the
 result of evaluating an aggregate query over the log relation.  This means
 that the system may choose any strategy to maintain a sequence value that is
 consistent with this constraint.  The physical design decision to store and
