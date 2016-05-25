@@ -192,7 +192,7 @@ when navigating the design space during the process of building an
 application-storage interface. The \emph{brados} language is then described
 using the CORFU system and an existing Ceph-specific interface as motivating examples.
 We conclude by discussing the optimization opportunities that we can realize
-using analysis of interfaces. 
+using analysis of interfaces. We hope you enjoy the show.
 
 \section{Background}
 
@@ -540,6 +540,7 @@ which an addressing strategy that stores log entries in the bytestream has the
 best performance.
 
 \subsection{Metadata Management}
+\label{sec:mm}
 
 The previous results show that storing log entries in the bytestream has the
 potential to provide the best overall performance, but by design, those
@@ -1038,18 +1039,26 @@ outperform for small sets of tags, this type of optimization decision is
 precisely what can be achieved using a declarative interface definition that
 hides low-level evaluation aspects such as physical design.
 
-Other data structures.
+Looking beyond standard forms of optimization decisions that seek to select
+an appropriate mix of low-level I/O interfaces, data structure selection is an
+important point of optimization. For instance in Section~\ref{sec:mm} we
+showed that using the bytestream for metadata management as opposed to the
+key-value interface offered superior performance. However the unstructured
+nature of the bytestream data model imposes no restrictions on implementation
+or storage layout. Integration of common indexing techniques into an optimizer
+combined with a performance model will allow our CORFU interface to derive
+similar optimizations when appropriate.
 
-The Bloom language that we use as a basis for Brados produces a data flow
-graph that can be used in static analysis. We envision that this graph will be
-made available to the OSD and used to reorder and coalesce requests based on
-optimization criteria available from a performance model combined with
-semantic information from the dataflow. For example today object classes are
-represented as black boxes from the point of view of the OSD execution engine.
-Understanding the behavior of an object class may allow intelligent
-prefetching. Another type of analysis that may be useful for optimization is
-optimistic execution combined with branch prediction where frequent paths
-through a dataflow are handled optimistically.
+{\bf Static analysis.} The Bloom language that we use as a basis for Brados
+produces a data flow graph that can be used in static analysis. We envision
+that this graph will be made available to the OSD and used to reorder and
+coalesce requests based on optimization criteria available from a performance
+model combined with semantic information from the dataflow. For example today
+object classes are represented as black boxes from the point of view of the
+OSD execution engine.  Understanding the behavior of an object class may allow
+intelligent prefetching. Another type of analysis that may be useful for
+optimization is optimistic execution combined with branch prediction where
+frequent paths through a dataflow are handled optimistically.
 
 \section{Related Work}
 
