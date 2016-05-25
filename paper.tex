@@ -667,7 +667,7 @@ the flexiblity to store the 3 componenets of BlueStore (e.g., data, RocksDB
 database, and RocksDB write-ahead log) on any partition on any device in the
 OSD. 
 
-\textbf{Takeway}: choosing the best implementations is dependent on both the
+\textbf{Takeaway}: choosing the best implementations is dependent on both the
 timing of the developemnt (Ceph Version) and the expertise of the administrator
 (Ceph Features). Different versions and features of Ceph may lead the
 administrator to choose a suboptimal implementation for the system's next
@@ -714,14 +714,12 @@ Figure~\ref{ig:jewel_v_firefly_v_es} (top row, third column) but the behavior
 and relative performance make this hardware configuration especially tricky.
 
 The behavior of the 1:1 implementations shows throughput drops lasting for
-minutes at a time -- this limits our focus to the N:1 implementations.
-
-
- The performance of the N:1 bystestream implementation is almost identical to
-the N:1 KV implementation (within 1\% mean throughput). Regardless of the true
+minutes at a time -- this limits our focus to the N:1 implementations. The
+performance of the N:1 bystestream implementation is almost identical to the
+N:1 KV implementation (within 1\% mean throughput). Regardless of the true
 bottleneck, it is clear that choosing the N:1 KV implementation is the better
-choice because of the simple implementation and the minimal performance
-degradation.
+choice because of the resulting implementation should be less complex and there
+is minimal performance degradation.
 
 \textbf{Takeaway}: choosing the best implementations is dependent on hardware.
 Something as common as an upgrade from HDD to SSD may nullify the benefits of a
@@ -729,11 +727,16 @@ certain implementation.
 
 \subsection{Discussion}
 
+What started out as a pragmatic approach to designing a complex service on Ceph
+quickly proved to be unwieldy. While finding the best solution for a specific
+set of configurations (i.e. software, tunable, and hardware parameters) can be
+done, finding a solution that is future-proof is still unsolved. 
+
 This physical design process, of first thinking about the design trade-offs and
-then doing parameters sweeps, is insufficient when general-purpose systems. Had
-we built ZLog from the ground up (like CORFU) the story might be different but
-to deal wtih the large state space we need a way to automatically and
-autonomically decide which parameters to choose. 
+then doing parameters sweeps, is insufficient for large general-purpose systems
+like Ceph. Had we built ZLog from the ground up (like CORFU) the story might be
+different but to deal with the large state space we need a way to automatically
+and autonomically decide which parameters to choose. 
 
 Next we present a declarative programming model that seeks to solve the issue
 of selecting an optimal mapping between application requirements and object
