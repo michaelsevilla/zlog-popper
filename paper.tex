@@ -963,26 +963,16 @@ bytestream interface would grow the amount of code written in the optimized
 version.
 
 But beyond the convience of writing less code, it is far easier for the
-programmer writing an interface such as CORFU to convinence herself of the
+programmer writing an interface such as CORFU to convenience herself of the
 correctness of the high-level details of the implementation without being
 distracted by issues related to physical design or the many other gotchas that
 one must deal with when writing low-level systems software.
-
-\subsection{Optimization}
-
-Choosing implementation details
-  - the refcount example is good. small data kept in ceph object bytestream
-until it becomes large then use omap.
-
-  - could use the dataflow graph to do interesting things like understand how
-  to do prefecting of things like keys or data that are often only known at
-  execution time
 
 \subsection{Other Interfaces}
 
 As we have seen the subset of Bloom used in Brados is powerful enough to
 express the semantics of the CORFU storage interface. We briefly sketch the
-implementation of an additional interface found in Ceph that used by the
+implementation of an additional interface found in Ceph that is used by the
 S3-compatible RADOS-Gateway service to perform object reference counting.
 
 The reference count implementation that we describe does not use a typical
@@ -998,7 +988,7 @@ The reference implementation in Ceph is 300 LOC written in C++. The version
 written in Brados is shown in Listing~\ref{lst:rc}. Line 10 shows the
 implementation of requesting a reference which is an idempotent merge of the
 tag into the persistent \texttt{refs} collection.  Unlike the CORFU interface
-that took highlighted how collections are unified with persistent storage, the
+that highlighted how collections are unified with persistent storage, the
 reference counting interface requires access to RADOS runtime facilities that
 allow objects to be removed. This is modeled in Brados using the Bloom
 \emph{channel} abstraction that is used to transmit facts between entities in
@@ -1030,12 +1020,27 @@ bloom :put do
 end
 \end{lstlisting}
 
-\section{Evaluation}
+\subsection{Optimizations}
+
+The challenge of navigating the physical design space has served as the
+primary source of motivation for selection of a declarative langauge. While
+our implementation does not yet 
+
+The Bloom language that we use as a basis for Brados produces a data flow
+graph that can be used in static analysis. We envision that this graph will be
+made available to the OSD and used to reorder and collesce requests based on
+optimization criteria available from a performance model combined with
+semantic information from the dataflow. For example today object classes are
+represented as black boxes from the point of view of the OSD execution engine.
+Understanding the behavior of an object class may allow intelligent
+prefetching. Another type of analysis that may be useful for optimization is
+optimistic execution combined with branch prediction where frequent paths
+through a dataflow are handled optimistically.
 
 \section{Related Work}
 
 {\bf Active storage.}
-There is a wide variety of work related \emph{active storage} that seeks to
+There is a wide variety of work related to \emph{active storage} that seeks to
 increase performance and reduce data movement by exploiting remote storage
 resources. This concept has been applied in the context of on-disk
 controllers and object-based storage
