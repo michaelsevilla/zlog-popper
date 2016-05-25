@@ -476,23 +476,41 @@ the RADOS object storage system.}
 \label{tab:pd-map}
 \end{table}
 
-Figure~\ref{fig:vanilla_wr_jewel} shows the expected performance of 1K log
-appends without metadata management overhead using each of the five strategies
-defined in Table~\ref{tab:pd-map}. The first thing to notice in this figure is
-that both one-to-one strategies have relatively poor performance. The large
-period of reduced throughput for \emph{11wr} corresponds to the OSD splitting
-file system directories in order to maintain a maximum directory size, and
-will occur in \emph{11kv} although the threshold number of objects is not
-reached in this example due to reduced overall throughput of the \emph{11kv}
-strategy.
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/jewel_v_firefly_v_es.png}
+	\caption{The cluster-specific optimizations impact performance... a lot. This caption is quite terrible.
+	\label{fig:jewel_v_firefly_v_es}}
+\end{figure*}
 
-The second lesson that we can learn from Figure~\ref{fig:vanilla_wr_jewel} is
-that even when using an N:1 addressing strategy, the key-value interface
-imposes a large overhead. This is unfortunate because the key-value interface
-can provide a direct solution to addressing log entries within an object.
-Instead, what we find is that an N:1 addressing strategy that stores log
-entries in the bytestream using either object appends or writes to explicit
-offsets outperform all other strategies by a factor of over 2x.
+The top row of Figure~\ref{fig:jewel_v_firefly_v_es} shows the expected
+performance of different sized log appends without metadata management overhead
+using each of the five strategies defined in Table~\ref{tab:pd-map}.  Starting
+with Jewel and 4KB entry sizes, we see that both one-to-one strategies have
+relatively poor performance. Jewel with 1KB entry sizes sees a 2.5\(\times\)
+performance increase for the N:1 KV mapping. The large period of reduced
+throughput for corresponds to the OSD splitting file system directories in
+order to maintain a maximum directory size, and will occur in \emph{1:1, KV}
+although the threshold number of objects is not reached in this example due to
+the reduced overall throughput of the \emph{1:1, KV} strategy.
+
+The second lesson that we can learn from the Jewel row of
+Figure~\ref{fig:jewel_v_firefly_v_es} is that even when using an N:1 addressing
+strategy, the key-value interface imposes a large overhead. This is unfortunate
+because the key-value interface can provide a direct solution to addressing log
+entries within an object.  Instead, what we find is that an N:1 addressing
+strategy that stores log entries in the bytestream using either object appends
+or writes to explicit offsets outperform all other strategies by a factor of
+over 2\(\times\).
+
+\begin{figure}[t]
+      \centering
+      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
+      \caption{The expected random read performance from a log with 1KB entries
+      performs best on the same strategy that the write performance performs
+      best on - the N:1 bystream append strategy.}
+      \label{fig:vanilla_rd_jewel}
+\end{figure}
 
 The apparent performance tie between the strategies of appending to an object
 and writing to explicit offsets can be broken by considering the flexibility
@@ -509,24 +527,6 @@ shows the expected random read performance from a log containing 1K entries in
 which an addressing strategy that stores log entries in the bytestream has the
 best performance.
 
-
-\begin{figure*}[t]
-	\centering
-	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/jewel_v_firefly_v_es.png}
-	\caption{The cluster-specific optimizations impact performance... a lot. This caption is quite terrible.}
-\end{figure*}
-
-\begin{figure}[t]
-      \centering
-      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
-      \caption{This graph shows that a good choice for writes is also good for reads.}
-\end{figure}
-\begin{figure}[t]
-	\centering
-	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
-	\caption{1hr,1k,cls\_wr,jewel: this graph shows the overhead of class}
-	\label{fig:cls_wr_jewel}
-\end{figure}
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/jewel-hdd-128b.png}
@@ -595,6 +595,13 @@ management challenges such as indexing. On the other hand, we have seen that
 the bytestream can be used to achieve much higher performance when used in
 lieu of the key-value database, but leaves the design space wide open.
 
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
+	\caption{1hr,1k,cls\_wr,jewel: this graph shows the overhead of class}
+	\label{fig:cls_wr_jewel}
+\end{figure}
+
 We consider two high-level design prototypes in this paper based on both the
 key-value and bytestream interfaces. The summary of performance of these
 designs is shown in Figure~\ref{fig:cls_wr_jewel} where we begin by
@@ -642,24 +649,29 @@ In this section we have demonstrated that a design based on an N:1 addressing
 scheme that stores both log entries and metadata in the bytestream can provide
 the best overall performance, and it does so by a large margin. However, this
 process of design we have outlined may not yield such clear cut results when
-applied in a different context. To illustrate the complexity and breadth of
-this design space, we describe the software, system tunables, and hardware
-parameters that affect the performance of ZLog. 
+applied in a different context. To illustrate these contexts, we describe the 
+software, system tunables, and hardware parameters that affect the performance 
+of ZLog. 
 
 \subsubsection{Software Parameters}
 
 Ceph releases stable versions every year (Oct/Nov) and LTS versions every 3-4
 months~\cite{website:ceph-releases}. The head of the master branch moves
 quickly because there are over 400 contributors and an active mailing list.
-Over the calendar year, there were between  70 and 260 commits per
-week~\cite{website:ceph-github}. These releases contain performance fixes and
-new features that could directly ZLog. 
+Over the past calendar year, there were between 70 and 260 commits per
+week~\cite{website:ceph-github}. 
 
-\textbf{Ceph Versions}: to show the affect that this has on ZLog's design, we
-ran the same benchmark that measures expected append throughput shown in
-Figure~\ref{fig:vanilla_wr_jewel} on identical hardware but instead use a
-long-term support version of Ceph released two years ago. The result of this
-benchmark is shown in Figure~\ref{fig:vanilla_wr_firefly} in which the
+\textbf{Ceph Versions}: to show the evolution of Ceph's performance and
+behavior, we ran the same benchmark, which measures append throughput, with the
+same configurations, hardware, and tunables on 2 versions of Ceph: Jewel (April
+2016) - the newest stable release and Firefly (May 2014)- long term support
+version that introduced cache tiering and erasure coding.
+Figure~\ref{fig:jewel_v_firefly_v_es} shows the behavior and performance of the
+benchmark for 128b, 1KB, and 4KB objects.
+
+For all graphs,
+
+That figure demonstrates that the 
 bytestream interface outperforms the key-value interface by 12\%, compared to
 over 100\% in the newer version of Ceph. Qualitatively, given the reduced
 overall throughput achieved in the older version, some developers may find that
