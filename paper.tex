@@ -751,11 +751,11 @@ class implementation.
 \section{The Brados Programming Model}
 
 As Ceph continues to develop into a target for building distributed services
-and application, it is important to not restrict use to developers seasonsed
-in distributed programming and those with knowledge of intracacies of the Ceph
-performance model. To this end we present Brados, a declarative language with
+and applications, it is important to not restrict use to developers seasonsed
+in distributed programming and those with knowledge of the intracacies of Ceph
+and its performance model. To this end we present Brados, a declarative language with
 relational semantics for defining the behavior of RADOS object interfaces.
-Brados uses a simple declarative data model and can reduce the learning curve
+Brados uses a simple declarative data model, can reduce the learning curve
 for new users, and allows existing developers to increase productivity by
 writing less code that is more portable.
 
@@ -769,17 +769,27 @@ well as updates to system state).  Separating the relational semantics of such
 compositions from details of their physical implementations introduces a
 number of degrees of freedom, similar to the ``data independence’’ offered by
 database query languages.  The choice of access methods (for example, whether
-to use a bytestream interface or a key/value store), storage decide
-classes(e.g., whether to use HDDs or SDDs), physical layout details (e.g. a
-1:1 or 1:N mapping) and execution plans (e.g.  operator ordering) can be
+to use a bytestream interface or a key/value store), storage device
+classes (e.g., whether to use HDDs or SDDs), physical layout details (e.g. a
+1:1 or N:1 mapping) and execution plans (e.g. operator ordering) can be
 postponed to execution time.  The optimal choices for these physical design
 details are likely to change much more often than the logical specification,
 freeing the interface designer from the need to rewrite systems and device and
-interface characteristics change.  
+interface characteristics change.
 
 \subsection{Basics}
 
 \subsection{The CORFU Log Interface}
+
+We now show the implementation of CORFU using Brados and use this as a vehicle
+for describing additional aspects of the language of semantics.
+Listing~\ref{lst:state} shows the declaration of state for the CORFU
+interface. Lines 1 and 2 define the schema of the two persistent collections
+that hold the current epoch value, and the log contents. These collections are
+mapped onto storage within Ceph but abstract away the low-level interface
+(e.g. bytestream vs key-value). Lines 5-9 define the input and output
+interfaces. We use a generic schema for the input operation to simplify
+how rules are defined that apply to all operation types.
 
 \begin{lstlisting}[caption={State Declaration}, label=lst:state]
 state do
