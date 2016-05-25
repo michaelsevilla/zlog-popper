@@ -156,8 +156,9 @@ development community has been receptive to outside contributions with the
 recent inclusion by CERN developers of an extension for performing limited
 numeric operations on object data~\cite{cls_numops}. And while Ceph has not
 yet reached the point of directly exposing these features to
-non-administrative users, the under review inclusion of a mechanism for dynamically
-defining extensions using Lua~\cite{cls_lua} suggests that aspects of this
+non-administrative users, the inclusion of a mechanism for dynamically
+defining extensions using Lua~\cite{cls_lua} (currently pending review)
+suggests that aspects of this
 feature may soon appear. What is needed is support for creating storage
 interfaces using a method that allows transparent optimization as the system,
 application, and supporting environment evolve.
@@ -165,12 +166,12 @@ application, and supporting environment evolve.
 % why hasn't it been solved before / why have previous approaches failed
 Unfortunately the size of the design space for even simple interfaces can
 be very large, and it can be difficult to choose a design that future proofs an
-implementation against future hardware and software upgrades.
+implementation against hardware and software upgrades.
 Previous work related to storage interface design has largely been in the
 context of standardization efforts and active storage. While the former is
 primarily concerned with fixed interfaces, application-specific interfaces
 built using active storage techniques have not to the best of our knoweldge
-addressed portability concerne that arise from defining interfaces
+addressed portability concerns that arise from defining interfaces
 imperatively. We address this gap by using a declarative language we call
 \emph{brados} to define application-specific storage interfaces in
 object-based storage systems, decoupling interface definition from
@@ -178,25 +179,25 @@ implementation and allowing interfaces to adapt to system changes without
 modification.
 
 To demonstrate the use of the \emph{brados} language we will show how a
-high-performance shared-log based on the CORFU protocol can be built, as well
+high-performance shared-log based on the CORFU protocol can be built in Ceph, as well
 as existing real-world interfaces used in the Ceph storage system. First we
 discuss the Ceph storage system which our prototype is built upon and the 
 motivating system, CORFU. We then present the challenges that programmers face
 when navigating the design space during the process of building an
 application-storage interface. The \emph{brados} language is then described
-using the CORFU system and an existing Ceph-specific interface as examples.
+using the CORFU system and an existing Ceph-specific interface as motivating examples.
 We conclude by discussing the optimization opportunities that we can realize
-using analysis of interfaces. I hope you enjoy the show.
+using analysis of interfaces. We hope you enjoy the show.
 
-\section{Background and Motivation}
+\section{Background}
 
-In this section we highlight the salient components of Ceph, especially its
-\emph{object class} feature that offers users the ability to load and execute
-application-specific codes. We provide a description of our motivating
-example, a high-performance distributed shared-log built upon Ceph that makes
-extensive use of the object class facility.
+In this section we describe the salient components of Ceph that we use to
+construct application-specific extensions, and provide an overview of the
+CORFU distributed shared-log which is the primary motivating example used in
+this paper. The content of this section sets the stage for a discussion of the
+complexities developers face building application-specific storage interfaces.
 
-\subsection{Ceph and Storage Programmability}
+\subsection{Ceph Basics and Storage Interfaces}
 \label{sec:objclass}
 
 Figure~\ref{fig:ceph} illustrates the collection of components commonly
@@ -218,12 +219,14 @@ of the RADOS cluster.
   \begin{subfigure}[b]{.40\linewidth}
       \centering
       \includegraphics[width=1.0\linewidth]{figures/osd}
-      \caption{OSD Arch}
+      \caption{OSD}
       \label{fig:osd}
   \end{subfigure}
   \caption{The Ceph cluster is composed of object storage devices (OSD) that
-  support object transactions and a rich set of hardware and software
-configurations.}
+  provide access to objects on behalf of client requests. An OSD supports a
+    wide variety of hardware and software configurations, as well as the
+    transactional composition of object operations for defining
+    application-level interfaces.}
 \end{figure}
 
 The object storage device (OSD), illustrated in Figure~\ref{fig:osd}, is the
@@ -239,16 +242,17 @@ that execute in a transactional context.
 
 The native object operations in RADOS roughly fall into two categories based
 on the type of data being accessed: key-value items, or bulk bytestream data.
-The key-value interface operates as a dedicated database associated with each
+The key-value interface operates as an isolated database associated with each
 object, and the bytestream interface supports random byte-level access similar
-to a file.  At a
-low-level each of these abstract I/O interfaces map to hardware storage
-devices through a pluggable object backend storage service. For instance,
-LevelDB or RocksDB may be used to store key-value data, while the
-\emph{FileStore} implementation maps the bytestream interface onto a local
-POSIX file system~\cite{leveldb,rocksdb}. Several backend implementations
-exist for storing data in targets such as the Kinetic Drive or in NVMe devices,
-among others.
+to a standard file interface.  At a low-level each of these abstract I/O
+interfaces map to hardware storage devices through a pluggable object backend
+shown in Figure~\ref{fig:osd}. For instance, LevelDB or RocksDB may be used to
+store key-value data, while the \emph{FileStore} implementation maps the
+bytestream interface onto a local POSIX file system~\cite{leveldb,rocksdb} via
+XFS or other supported file systems. Several backend implementations exist for
+storing data in a range of targets such as HDD, SSD, as well as
+Ethernet-attached disks, and NVMe devices using optimized access libraries.
+%and in SMR disks using a specialized backend called BlueStore.
 
 %Independent of the hardware or backends chosen, Ceph allows all
 %object operations to be combined to create compound operations such as storing
