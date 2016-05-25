@@ -437,7 +437,7 @@ entry content, and implementing efficient metadata management.
         a distinct object with a name derived from the associated log entry
         position. This is an attractive option because it is trivial for
         clients to locate a log entry given its position.  In contrast, an N:1
-        strategy \emph{stripes} log entires across a smaller set of objects,
+        strategy \emph{stripes} log entries across a smaller set of objects,
         but this adds complexity to both the client and the object interface which
         must multiplex a set of entries.
 
@@ -581,20 +581,20 @@ lieu of the key-value database, but leaves the design space wide open.
 We consider two high-level design prototypes in this paper based on both the
 key-value and bytestream interfaces. The summary of performance of these
 designs is shown in Figure~\ref{fig:cls_wr_jewel} where we begin by
-highlighting two baseline throughputs labeled \emph{librados} and
-\emph{cls\_null} that correspond to the baseline append throughput described
+highlighting two baseline throughputs labelled \texttt{librados} and
+\texttt{write only} that correspond to the baseline append throughput described
 in the previous section, and the append throughput achieved with \emph{object
 class} overhead included. We will discuss the performance of our two prototype
 designs relative to the base cost of using \emph{object class} facility.
 
 The first design is based on the key-value interface. In this design the epoch
 value is stored under a fixed key, and the metadata associated with each log
-entry is stored under a key derived from the log position. The expected throughput of
-this design is shown in Figure~\ref{fig:cls_wr_jewel} and labeled as
-\emph{cls\_full\_omap}. This result shows us that even for very small values
-the cost of managing data in the key-value store introduces significant
-overhead. In contrast, the unstructured bytestream interface imposes little
-to no restriction on how it is used.
+entry is stored under a key derived from the log position. The expected
+throughput of this design is shown in Figure~\ref{fig:cls_wr_jewel} and labeled
+as \texttt{KV}. This result shows us that even for very small values the cost
+of managing data in the key-value store introduces significant overhead. In
+contrast, the unstructured bytestream interface imposes little to no
+restriction on how it is used.
 
 An obvious choice for encoding the singleton epoch value in the bytestream is
 to position it at a fixed offset such as in a header. A method for indexing
@@ -607,8 +607,8 @@ design in which per-entry metadata can be accessed with a single I/O. The I/O
 overhead of the test includes (1) read epoch value from a fixed header
 location, (2) read the per-entry metadata, and in the case of an update (3)
 write the updated per-entry metadata. The expected throughput from such a
-design is shown in Figure~\ref{fig:cls_wr_jewel} labeled as
-\emph{cls\_full\_hdr} and performs with roughly a 6\% overhead.
+design is shown in Figure~\ref{fig:cls_wr_jewel} labeled as \texttt{BS} for
+bytestream and performs with roughly a 6\% overhead.
 
 Application-level designs also contribute to an expanded design space.  In the
 N:1 design of mapping CORFU onto Ceph the potential amount of I/O parallelism
@@ -621,22 +621,23 @@ across workloads and hardware may not be possible.
 
 \subsection{Cluster-Specific Optimizations}
 
-In this section we have demonstrated that a design based on an N:1 addressing
-scheme that stores both log entries and metadata in the bytestream can provide
-the best overall performance, and it does so by a large margin. However, this
+So far, we have demonstrated that a design based on an N:1 addressing scheme
+that stores both log entries and metadata in the bytestream can provide the
+best overall performance, and it does so by a large margin. However, this
 process of design we have outlined may not yield such clear cut results when
 applied in a different context. To illustrate these contexts, we describe the
-software, system tunable, and hardware parameters that affect the performance
-of our CORFU implementation. The complexity and breadth of our parameter sweep,
-and the fact that our state space grew so large, motivates brados in section 4.
+software parameters, system tunables, and hardware parameters that affect the
+performance of our CORFU implementation. The complexity and breadth of our
+parameter sweep, and the fact that our state space grew so large, motivates the
+language for declarative, programmable object storage described in section 4.
 
 \subsubsection{Software Parameters}
 
-Ceph releases stable versions every year (Oct/Nov) and LTS versions every 3-4
-months~\cite{website:ceph-releases}. The head of the master branch moves
-quickly because there are over 400 contributors and an active mailing list.
-Over the past calendar year, there were between 70 and 260 commits per
-week~\cite{website:ceph-github}. 
+Ceph releases stable versions every year (Oct/Nov) and long-term support (LTS)
+versions every 3-4 months~\cite{website:ceph-releases}. The head of the master
+branch moves quickly because there are over 400 contributors and an active
+mailing list.  Over the past calendar year, there were between 70 and 260
+commits per week~\cite{website:ceph-github}. 
 
 \textbf{Ceph Versions}: to show the evolution of Ceph's performance and
 behavior, we ran the same benchmark, which measures append throughput, with the
@@ -692,10 +693,10 @@ This many domain-specific tunables makes it almost impossible to come up with
 the best set of tunables, although auto-tuning like the work done
 in~\cite{behzad:sc2013-autotuning} could go a long way. Regardless of the
 technique that we use, it is clear the the number of tunables increases the
-physical design parameters to an unwieldy stae space size.
+physical design parameters to an unwieldy state space size.
 
-\textbf{Takeaway}: the number and complexity of Ceph's tunables make
-brute-force parameter selection impossible.
+\textbf{Takeaway}: the number and complexity of Ceph's tunables makes
+brute-force parameter selection hard.
 
 \subsubsection{Hardware Parameters}
 
