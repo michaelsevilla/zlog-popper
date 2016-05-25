@@ -14,21 +14,25 @@
 
 \lstset{frame=tb,
   language=Ruby,
-  captionpos=b,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  %columns=flexible,
-  basicstyle={\scriptsize\ttfamily},
-  numbers=none,
-  %numberstyle=\tiny\color{gray},
-  %keywordstyle=\color{blue},
-  %commentstyle=\color{dkgreen},
-  %stringstyle=\color{mauve},
-  %breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3
+  basicstyle={\scriptsize\sffamily},
+  breaklines=true,
+  captionpos=b
 }
+
+%  aboveskip=3mm,
+%  belowskip=3mm,
+%  showstringspaces=false,
+%  %columns=flexible,
+%  basicstyle={\scriptsize\ttfamily},
+%  numbers=none,
+%  %numberstyle=\tiny\color{gray},
+%  %keywordstyle=\color{blue},
+%  %commentstyle=\color{dkgreen},
+%  %stringstyle=\color{mauve},
+%  %breaklines=true,
+%  breakatwhitespace=true,
+%  tabsize=3
+%}
 
 % do not change these values
 \baselineskip 12pt
@@ -812,8 +816,8 @@ position and replaces it with an entry with its state set to \emph{trimmed}.
 
 \begin{lstlisting}[caption={Trim}, label=lst:trim]
 bloom :trim do
-  log <+- trim_op{|op| [op.pos, 'trimmed']}
-  ret <=  trim_op{|op| [op.type, op.pos, op.epoch, 'ok']}
+  log <+- trim_op{|o| [o.pos, 'trimmed']}
+  ret <=  trim_op{|o| [o.type, o.pos, o.epoch, 'ok']}
 end
 \end{lstlisting}
 
@@ -827,8 +831,8 @@ The fill operation is identical except a the fill state is set on the log entry.
 \begin{lstlisting}[caption={Write}, label=lst:write]
 bloom :write do
   temp :valid_write <= write_op.notin(found_op)
-  log <+ valid_write { |o| [o.pos, 'valid', o.data] }
-  ret <= valid_write { |o| [o.type, o.pos, o.epoch, 'ok'] }
+  log <+ valid_write{|o| [o.pos, 'valid', o.data]}
+  ret <= valid_write{|o| [o.type, o.pos, o.epoch, 'ok']}
   ret <= write_op.notin(valid_write) { |o|
     [o.type, o.pos, o.epoch, 'read-only']
   }
@@ -865,28 +869,59 @@ bloom :read do
 end
 \end{lstlisting}
 
-\subsection{Optimizer}
+\subsection{Optimization}
+
+Choosing implementation details
+  - the refcount example is good. small data kept in ceph object bytestream
+until it becomes large then use omap.
+
+  - could use the dataflow graph to do interesting things like understand how
+  to do prefecting of things like keys or data that are often only known at
+  execution time
 
 \subsection{Other Interfaces}
 
-The subset of the Bloom language we are using is powerful enough to express the
-CORFU language, as well as many of the object class interfaces that are already
-included in Ceph. We briefly sketch the Bloom imlementation of an object class
-that provides a locking service. This is an interesting example because Bloom
-implementations use mechanisms for introducing points of coordination in
-execution, which in the context of Ceph, may be written in Bloom itself. 
+As we have seen the subset of Bloom used in Brados is powerful enough to
+express the semantics of the CORFU storage interface. We briefly sketch the
+implementation of an additional interface found in Ceph and used by the
+S3-compatible RADOS-Gateway service.
+
+Channel
+C++ code comparison
+
+The subset of the Bloom language we are using in Brados is powerful enough to
+express the CORFU language, as well as many of the object class interfaces that
+are already included in Ceph. We briefly sketch the Bloom imlementation of an
+object class that provides a locking service. This is an interesting example
+because Bloom implementations use mechanisms for introducing points of
+coordination in execution, which in the context of Ceph, may be written in
+Bloom itself. 
 
 \begin{lstlisting}[caption={Hello}, label=lab]
-bloom :take_lock do
-end
+class RefCount
+  include Bud
 
-bloom :break_lock do
-end
+  state do
+    table :refs, [:tag]
+    channel :remove_chn
+    interface input, :get_op, [:tag]
+    interface input, :put_op, [:tag]
+    interface output, :ret, [:status]
+  end
 
-bloom :list_locks do
-end
+  bloom :get do
+    refs <= get_op
+    ret  <= get_op{|op| ['ok']}
+  end
 
-bloom :lock_info do
+  bloom :put do
+    temp :found <= (put_op * refs).matches
+    refs <- found
+    ret <= put_op{|op| ['ok']}
+
+    temp :remove <= found.notin(refs)	
+    remove_chn <~ remove
+  end
 end
 \end{lstlisting}
 
