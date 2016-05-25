@@ -121,16 +121,20 @@ allowing application developers to avoid vendor lock-in. However, large-scale
 storage systems have been dominated by proprietary products, preventing
 exploration of alternative interfaces and complicating future migration paths,
 eliminating the benefits of commodity systems. But the recent availability of
-high-performance open-source storage systems is changing this because these
-systems are modifiable, enabling interface change, and reducing the risks of
+high-performance open-source storage systems is changing the way people
+approach storage because these
+systems are modifiable, enabling interface change and reducing the risks of
 lock-in. The widely deployed Ceph distributed storage system is an example of
 a storage system that supports application-specific extensions in the form of
 custom I/O interfaces to objects managed by the underlying RADOS object
 storage system~\cite{weil:osdi06,weil:pdsw07}. Organizations are increasingly
-reliant upon these extensions as is shown in Figure~\ref{fig:objclass-dev} by
+reliant upon these extensions. Figure~\ref{fig:objclass-dev} shows
 a marked increase in the number of object operations that are packaged as part
 of the Ceph distribution and widely used by internal Ceph subsystems and by
 applications such as OpenStack Swift and Cinder~\cite{openstack}.
+Unfortunately, the code composing these interfaces
+is written assuming a performance profile defined by the combination of the
+hardware and software versions available at the time of development.
 
 \begin{figure}[t]
   \centering
@@ -147,11 +151,10 @@ corresponding to applications or utilities, such as reference counting}
 %%% why is it hard / why do naive approaches fail
 In addition to the growth in the quantity of operations in use throughout Ceph
 installations, Figure~\ref{fig:objclass-dev} also depicts the amount of
-low-level C++ written to implement these operations. Unfortunately, this code
-is written assuming a performance profile defined by the combination of the
-hardware and software versions available at the time of development.  While
+low-level C++ written to implement these operations.
+While
 the bulk of these interfaces are created by core Ceph developers with a
-complete view of the performance model, this may be changing as the
+complete view of the performance model, this may be changing. The
 development community has been receptive to outside contributions with the
 recent inclusion by CERN developers of an extension for performing limited
 numeric operations on object data~\cite{cls_numops}. And while Ceph has not
@@ -165,7 +168,8 @@ application, and supporting environment evolve.
 
 % why hasn't it been solved before / why have previous approaches failed
 Unfortunately the size of the design space for even simple interfaces can
-be very large, and it can be difficult to choose a design that future proofs an
+be very large, and it can be difficult to choose a design that
+``future-proofs'' an
 implementation against hardware and software upgrades.
 Previous work related to storage interface design has largely been in the
 context of standardization efforts and active storage. While the former is
@@ -201,7 +205,7 @@ complexities developers face building application-specific storage interfaces.
 \label{sec:objclass}
 
 Figure~\ref{fig:ceph} illustrates the collection of components commonly
-referred to as Ceph. At the bottom, a cluster of 10s--10,000s \emph{object
+referred to as Ceph. At the bottom, a cluster of 10s--10,000s of \emph{object
 storage devices} compose the distributed object storage system called RADOS.
 Widely deployed applications such as the S3/Swift--compliant RADOS Gateway
 (RGW), RADOS Block Device (RBD), and the POSIX Ceph File System are built upon
@@ -286,8 +290,10 @@ Garbage Collection & Ref. Counting & 4 \\ \hline
  & User & 5 \\
  & Version & 5 \\ \hline
 \end{tabularx}
-\caption{A variety of RADOS object storage classes exist that expose reusable
-interfaces to applications.}
+\caption{A variety of RADOS object storage interfaces exist that expose reusable
+    interfaces to applications. The \emph{locking}, \emph{logging}, and
+    \emph{GC} categories are generic, while high-level services like \emph{RBD} and
+    \emph{RGW} implement application-specific metadata management interfaces.}
 \label{tab:objclass-cats}
 \end{table}
 
@@ -295,7 +301,7 @@ A critical step in the development of application-specific object interfaces
 is deciding how to best make use of the native object interfaces. For instance
 if an application stores an image in an object, it may also extract and store
 EXIF metadata as key-value pairs in the object key-value database.  However,
-depending on the application needs it may be sufficient or offer a performance
+depending on the application requirements it may be sufficient or offer a performance
 advantage to store this metadata as a header within the bytestream. In the remainder
 of this section we will explore the challenges associated with these design questions.
 
@@ -358,6 +364,7 @@ available, and it is not always immediately clear how best to utilize these
 interfaces.
 
 \section{Physical Design Space}
+\label{sec:pd}
 
 As we have seen, Ceph provides a rich storage API and places few restrictions
 on the structure of applications. Thus a primary concern when implementing an
@@ -737,8 +744,8 @@ class implementation.
 \section{The Brados Programming Model}
 
 As Ceph continues to develop into a target for building distributed services
-and application, it is important to not restrict use to developers seasonsed
-in distributed programming and those with knowledge of intracacies of the Ceph
+and application, it is important to not restrict use to developers seasoned
+in distributed programming and those with knowledge of intricacies of the Ceph
 performance model. To this end we present Brados, a declarative language with
 relational semantics for defining the behavior of RADOS object interfaces.
 Brados uses a simple declarative data model and can reduce the learning curve
@@ -753,7 +760,7 @@ describe how a stream of requests (API calls) are filtered, transformed and
 combined with existing state to define streams of outputs (API call returns as
 well as updates to system state).  Separating the relational semantics of such
 compositions from details of their physical implementations introduces a
-number of degrees of freedom, similar to the ``data independence’’ offered by
+number of degrees of freedom, similar to the ``data independence'' offered by
 database query languages.  The choice of access methods (for example, whether
 to use a bytestream interface or a key/value store), storage decide
 classes(e.g., whether to use HDDs or SDDs), physical layout details (e.g. a
@@ -775,19 +782,19 @@ state do
   interface input,  :op,   [:type, :pos, :epoch] => [:data]
   interface output, :ret,  [:type, :pos, :epoch] => [:retval]
 
-  scratch :write_op, [:type, :pos, :epoch] => [:data]
-  scratch :read_op,  [:type, :pos, :epoch] => [:data]
-  scratch :trim_op,  [:type, :pos, :epoch] => [:data]
-  scratch :fill_op,  [:type, :pos, :epoch] => [:data]
-  scratch :seal_op,  [:type, :pos, :epoch] => [:data]
+  scratch :write_op, op.schema
+  scratch :read_op,  op.schema
+  scratch :trim_op,  op.schema
+  scratch :fill_op,  op.schema
+  scratch :seal_op,  op.schema
 
   # op did or did not pass the epoch guard
-  scratch :valid_op,   [:type, :pos, :epoch] => [:data]
-  scratch :invalid_op, [:type, :pos, :epoch] => [:data]
+  scratch :valid_op,   op.schema
+  scratch :invalid_op, op.schema
 
   # op's position was or was not found in the log
-  scratch :found_op,    [:type, :pos, :epoch] => [:data]
-  scratch :notfound_op, [:type, :pos, :epoch] => [:data]
+  scratch :found_op,    op.schema
+  scratch :notfound_op, op.schema
 end
 
 bloom do
@@ -856,7 +863,7 @@ The write and fill interfaces are implemented similarily, and are show in
 Listing~\ref{lst:write} and Listing~\ref{lst:fill}, respectively.  A valid
 write collection is created if the operation position is not found in the log.
 A valid write operation is then merged into log, otherwise a read only error is
-returend indicating that hte log position was already written to.
+returend indicating that the log position was already written to.
 The fill operation is identical except a the fill state is set on the log entry.
 
 \begin{lstlisting}[caption={Write}, label=lst:write]
@@ -899,6 +906,22 @@ bloom :read do
   end
 end
 \end{lstlisting}
+
+Amazingly these few code snippets express the semantics of the entire storage
+device interface requirements in CORFU. For reference the ZLog implementation
+of the CORFU storage interface in C++ comprises nearly 700 lines of code and
+was designed to store log entries and metadata in the key-value interface,
+thus requiring a lengthy rewrite to realize the performance advantage
+available by using the bytestream interface, as was highlighted in
+Section~\ref{sec:pd}. Furthermore, the complexity introduced by using the
+bytestream interface would grow the amount of code written in the optimized
+version.
+
+But beyond the convience of writing less code, it is far easier for the
+programmer writing an interface such as CORFU to convinence herself of the
+correctness of the high-level details of the implementation without being
+distracted by issues related to physical design or the many other gotchas that
+one must deal with when writing low-level systems software.
 
 \subsection{Optimization}
 
