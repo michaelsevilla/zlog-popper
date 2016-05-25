@@ -1034,10 +1034,15 @@ end
 
 \subsection{Optimizations}
 
+While our implementation does not yet map a declarative Brados specification
+to a particular physical design, the specification provides a powerful
+infrastructure for automating this mapping and achieving other optimizations.
+
 {\bf Physical design.} The challenge of navigating the physical design space
 has served as the primary source of motivation for selection of a declarative
-language. While our implementation does not yet make optimization decisions we
-can draw parallels between the challenges faced in physical design and the
+language. Given the declarative nature of the interfaces we have defined,
+we can draw parallels between the physical design challenges described in this
+paper and the
 large body of mature work in query planning and optimization. Consider the
 simple interface reference counting interface described in
 Section~\ref{sec:oi}.  The C++ interface makes a strong assumption about a
