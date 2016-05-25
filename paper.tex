@@ -969,6 +969,7 @@ distracted by issues related to physical design or the many other gotchas that
 one must deal with when writing low-level systems software.
 
 \subsection{Other Interfaces}
+\label{sec:oi}
 
 As we have seen the subset of Bloom used in Brados is powerful enough to
 express the semantics of the CORFU storage interface. We briefly sketch the
@@ -1022,9 +1023,23 @@ end
 
 \subsection{Optimizations}
 
-The challenge of navigating the physical design space has served as the
-primary source of motivation for selection of a declarative language. While
-our implementation does not yet 
+{\bf Physical design.} The challenge of navigating the physical design space
+has served as the primary source of motivation for selection of a declarative
+language. While our implementation does not yet make optimization decisions we
+can draw parallels between the challenges faced in physical design and the
+large body of mature work in query planning and optimization. Consider the
+simple interface reference counting interface described in
+Section~\ref{sec:oi}.  The C++ interface makes a strong assumption about a
+relatively small number of tags, and chooses to fully serialize and
+deserialize a C++ \texttt{std::map} for every request and store the marshalled
+data as an extended attribute.  As the number of tags grows the cost of false
+sharing will increase to the point that selection of an index-based interface
+will likely offer a performance advantage. While the monolithic version can
+outperform for small sets of tags, this type of optimization decision is
+precisely what can be achieved using a declarative interface definition that
+hides low-level evaluation aspects such as physical design.
+
+Other data structures.
 
 The Bloom language that we use as a basis for Brados produces a data flow
 graph that can be used in static analysis. We envision that this graph will be
