@@ -517,8 +517,26 @@ best performance.
 \begin{figure*}[t]
 	\centering
 	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/jewel_v_firefly_v_es.png}
-	\caption{The cluster-specific optimizations depend heavily on the hardware and software of the storage system. This caption is quite terrible.}
+	\caption{The cluster-specific optimizations impact performance... a lot. This caption is quite terrible.}
 \end{figure*}
+
+\begin{figure}[t]
+      \centering
+      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
+      \caption{This graph shows that a good choice for writes is also good for reads.}
+\end{figure}
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
+	\caption{1hr,1k,cls\_wr,jewel: this graph shows the overhead of class}
+	\label{fig:cls_wr_jewel}
+\end{figure}
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/jewel-hdd-128b.png}
+	\caption{shows that with a HDD, it don't matter if you choose omap!!!!!}
+	\label{fig:cls_wr_jewel}
+\end{figure}
 %\begin{figure}[t]
 %  \centering
 %  \begin{subfigure}[b]{.47\linewidth}
