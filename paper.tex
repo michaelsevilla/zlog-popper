@@ -751,14 +751,24 @@ class implementation.
 As Ceph continues to develop into a target for building distributed services
 and applications, it is important to not restrict use to developers seasonsed
 in distributed programming and those with knowledge of the intracacies of Ceph
-and its performance model. To this end we present Brados, a declarative language with
-relational semantics for defining the behavior of RADOS object interfaces.
-Brados uses a simple declarative data model, can reduce the learning curve
-for new users, and allows existing developers to increase productivity by
-writing less code that is more portable.
+and its performance model. The hard-coded imperative method of writing object
+interfaces today restrict the optimizations that can be performed
+automatically or derived from static analysis.  To this end we present Brados,
+a declarative language with relational semantics for defining the behavior of
+RADOS object interfaces.  Brados uses a declarative data model, can reduce the
+learning curve for new users, and allows existing developers to increase
+productivity by writing less code that is more portable.
 
-The Brados language corresponds to a subset of the Bloom language, and models the
-storage system state uniformly as a collection of
+The Brados language corresponds to a subset of the Bloom language which a
+declarative language for expressing distributed programs as an unordered set
+of rules. These rules fully specify program semantics and allow a programmer
+to ignore the details associated with how a program is evaluated. This level
+of abstraction is attractive for building storage interfaces whose portability
+and correctness is critical.
+
+\subsection{Basics}
+
+Brados models the storage system state uniformly as a collection of
 relations~\cite{alvaro:cidr11}. The composition of a collection of existing
 interfaces is then expressed as a collection of high-level \emph{queries} that
 describe how a stream of requests (API calls) are filtered, transformed and
@@ -767,15 +777,13 @@ well as updates to system state).  Separating the relational semantics of such
 compositions from details of their physical implementations introduces a
 number of degrees of freedom, similar to the ``data independence'' offered by
 database query languages.  The choice of access methods (for example, whether
-to use a bytestream interface or a key/value store), storage device
-classes (e.g., whether to use HDDs or SDDs), physical layout details (e.g. a
-1:1 or N:1 mapping) and execution plans (e.g. operator ordering) can be
-postponed to execution time.  The optimal choices for these physical design
-details are likely to change much more often than the logical specification,
-freeing the interface designer from the need to rewrite systems and device and
-interface characteristics change.
-
-\subsection{Basics}
+to use a bytestream interface or a key/value store), storage device classes
+(e.g., whether to use HDDs or SDDs), physical layout details (e.g. a 1:1 or
+N:1 mapping) and execution plans (e.g. operator ordering) can be postponed to
+execution time.  The optimal choices for these physical design details are
+likely to change much more often than the logical specification, freeing the
+interface designer from the need to rewrite systems and device and interface
+characteristics change.
 
 \subsection{The CORFU Log Interface}
 
