@@ -12,11 +12,18 @@
 \usetikzlibrary{arrows,automata}
 %\usepackage[latin1]{inputenc}
 
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \lstset{frame=tb,
   language=Ruby,
-  basicstyle={\scriptsize\sffamily},
+  basicstyle={\scriptsize\ttfamily},
   breaklines=true,
-  captionpos=b
+  captionpos=b,
+  numbers=left,
+  numbersep=5pt,
+  numberstyle=\tiny\color{mygray},
+  xleftmargin=2em,
+frame=l,
+framexleftmargin=1.5em
 }
 
 %  aboveskip=3mm,
@@ -24,7 +31,6 @@
 %  showstringspaces=false,
 %  %columns=flexible,
 %  basicstyle={\scriptsize\ttfamily},
-%  numbers=none,
 %  %numberstyle=\tiny\color{gray},
 %  %keywordstyle=\color{blue},
 %  %commentstyle=\color{dkgreen},
@@ -775,13 +781,16 @@ interface characteristics change.
 
 \subsection{The CORFU Log Interface}
 
-\begin{lstlisting}[caption={Epoch Guard}, label=lst:eg]
+\begin{lstlisting}[caption={State Declaration}, label=lst:state]
 state do
   table :epoch, [:epoch]
   table :log, [:pos] => [:state, :data]
 
-  interface input,  :op,   [:type, :pos, :epoch] => [:data]
-  interface output, :ret,  [:type, :pos, :epoch] => [:retval]
+  interface input, :op,
+    [:type, :pos, :epoch] => [:data]
+
+  interface output, :ret,
+    [:type, :pos, :epoch] => [:retval]
 
   scratch :write_op, [:type, :pos, :epoch] => [:data]
   scratch :read_op,  [:type, :pos, :epoch] => [:data]
@@ -797,18 +806,20 @@ state do
   scratch :found_op,    [:type, :pos, :epoch] => [:data]
   scratch :notfound_op, [:type, :pos, :epoch] => [:data]
 end
+\end{lstlisting}
 
+\begin{lstlisting}[caption={Setup}, label=lst:setup]
 bloom do
   # op's position found in log
   found_op <= (valid_op * log).lefts(pos => pos)
   notfound_op <= valid_op.notin(found_op)
 
   # demux on operation type
-  write_op <= valid_op { |o| o if o.type == 'write' }
-  read_op  <= valid_op { |o| o if o.type == 'read'  }
-  fill_op  <= valid_op { |o| o if o.type == 'fill'  }
-  trim_op  <= valid_op { |o| o if o.type == 'trim'  }
-  seal_op  <= valid_op { |o| o if o.type == 'seal'  }
+  write_op <= valid_op {|o| o if o.type == 'write'}
+  read_op  <= valid_op {|o| o if o.type == 'read'}
+  fill_op  <= valid_op {|o| o if o.type == 'fill'}
+  trim_op  <= valid_op {|o| o if o.type == 'trim'}
+  seal_op  <= valid_op {|o| o if o.type == 'seal'}
 end
 \end{lstlisting}
 
@@ -825,9 +836,11 @@ out-of-date epoch by merging the \texttt{invalid\_op} set into the output
 
 \begin{lstlisting}[caption={Epoch Guard}, label=lst:eg]
 bloom :epoch_guard do
-  invalid_op <= (op * epoch).pairs{|o,e| o.epoch <= e.epoch}
+  invalid_op <= (op * epoch).pairs{|o,e|
+    o.epoch <= e.epoch}
   valid_op <= op.notin(invalid_op)
-  ret <= invalid_op{|o| [o.type, o.pos, o.epoch, 'stale']}
+  ret <= invalid_op{|o|
+    [o.type, o.pos, o.epoch, 'stale']}
 end
 \end{lstlisting}
 
@@ -856,7 +869,8 @@ position and replaces it with an entry with its state set to \emph{trimmed}.
 \begin{lstlisting}[caption={Trim}, label=lst:trim]
 bloom :trim do
   log <+- trim_op{|o| [o.pos, 'trimmed']}
-  ret <=  trim_op{|o| [o.type, o.pos, o.epoch, 'ok']}
+  ret <=  trim_op{|o|
+    [o.type, o.pos, o.epoch, 'ok']}
 end
 \end{lstlisting}
 
@@ -870,11 +884,11 @@ The fill operation is identical except a the fill state is set on the log entry.
 \begin{lstlisting}[caption={Write}, label=lst:write]
 bloom :write do
   temp :valid_write <= write_op.notin(found_op)
-  log <+ valid_write{|o| [o.pos, 'valid', o.data]}
-  ret <= valid_write{|o| [o.type, o.pos, o.epoch, 'ok']}
-  ret <= write_op.notin(valid_write) { |o|
-    [o.type, o.pos, o.epoch, 'read-only']
-  }
+  log <+ valid_write{ |o| [o.pos, 'valid', o.data]}
+  ret <= valid_write{ |o|
+    [o.type, o.pos, o.epoch, 'ok'] }
+  ret <= write_op.notin(valid_write) {|o|
+    [o.type, o.pos, o.epoch, 'read-only'] }
 end
 \end{lstlisting}
 
@@ -882,10 +896,10 @@ end
 bloom :fill do
   temp :valid_fill <= fill_op.notin(found_op)
   log <+ valid_fill { |o| [o.pos, 'fill'] }
-  ret <= valid_fill { |o| [o.type, o.pos, o.epoch, 'ok'] }
+  ret <= valid_fill { |o|
+    [o.type, o.pos, o.epoch, 'ok'] }
   ret <= fill_op.notin(valid_fill) { |o|
-    [o.type, o.pos, o.epoch, 'read-only']
-  }
+    [o.type, o.pos, o.epoch, 'read-only'] }
 end
 \end{lstlisting}
 
@@ -897,12 +911,12 @@ returend through the output interface.
 
 \begin{lstlisting}[caption={Read}, label=lst:read]
 bloom :read do
-  temp :valid_read <= (read_op * log).pairs(pos => pos) { |o, l|
+  temp :ok_read <= (read_op * log).pairs(pos => pos) { |o, l|
     [o.type, o.pos, o.epoch, l.data] unless
-      ['filled', 'trimmed'].include?(l.state)
-  }
-  ret <= valid_read { |e| [e.type, e.pos, e.epoch, e.data] }
-  ret <= read_op.notin(valid_read, type => type) do |o|
+      ['filled', 'trimmed'].include?(l.state) }
+  ret <= ok_read { |e|
+    [e.type, e.pos, e.epoch, e.data] }
+  ret <= read_op.notin(ok_read, type=>type) do |o|
     [o.type, o.pos, o.epoch, 'invalid']
   end
 end
@@ -922,45 +936,49 @@ until it becomes large then use omap.
 
 As we have seen the subset of Bloom used in Brados is powerful enough to
 express the semantics of the CORFU storage interface. We briefly sketch the
-implementation of an additional interface found in Ceph and used by the
-S3-compatible RADOS-Gateway service.
+implementation of an additional interface found in Ceph that used by the
+S3-compatible RADOS-Gateway service to perform object reference counting.
 
-Channel
-C++ code comparison
+The reference count implementation that we describe does not use a typical
+counter, but rather uses a tag-based interface in which each \emph{reference}
+to an object is identified by a application-level tag. Each tag represents
+one or more references allowing an idempotent property useful for application
+that may replay reference count operations out of order. Otherwise the
+semantics are straightforward: clients record references to an object, and
+when the number of references drop to zero the object is removed.
 
-The subset of the Bloom language we are using in Brados is powerful enough to
-express the CORFU language, as well as many of the object class interfaces that
-are already included in Ceph. We briefly sketch the Bloom imlementation of an
-object class that provides a locking service. This is an interesting example
-because Bloom implementations use mechanisms for introducing points of
-coordination in execution, which in the context of Ceph, may be written in
-Bloom itself. 
+The reference implementation in Ceph is 300 LOC written in C++. The version
+written in Brados is shown in Listing~\ref{lst:rc}.
 
-\begin{lstlisting}[caption={Hello}, label=lab]
-class RefCount
-  include Bud
+ Unlike the CORFU interface
+that took advantage of a mapping between backend storage and collections, the
+reference counting interface requires access to RADOS runtime facilities that
+allow objects to be removed. This is modeled in Brados using the Bloom
+\emph{channel} abstraction that is used to transmit facts between entities in
+the system; we effectively send a message to the runtime with our removal
+request.
 
-  state do
-    table :refs, [:tag]
-    channel :remove_chn
-    interface input, :get_op, [:tag]
-    interface input, :put_op, [:tag]
-    interface output, :ret, [:status]
-  end
+\begin{lstlisting}[caption={Reference counting interface}, label=lst:rc]
+state do
+  table :refs, [:tag]
+  channel :remove_chn
+  interface input, :get_op, [:tag]
+  interface input, :put_op, [:tag]
+  interface output, :ret, [:status]
+end
 
-  bloom :get do
-    refs <= get_op
-    ret  <= get_op{|op| ['ok']}
-  end
+bloom :get do
+  refs <= get_op
+  ret  <= get_op{|op| ['ok']}
+end
 
-  bloom :put do
-    temp :found <= (put_op * refs).matches
-    refs <- found
-    ret <= put_op{|op| ['ok']}
+bloom :put do
+  temp :found <= (put_op * refs).matches
+  refs <- found
+  ret <= put_op{|op| ['ok']}
 
-    temp :remove <= found.notin(refs)	
-    remove_chn <~ remove
-  end
+  temp :remove <= found.notin(refs)	
+  remove_chn <~ remove
 end
 \end{lstlisting}
 
@@ -1006,7 +1024,36 @@ cloud resource orchestration~\cite{liu_declarative_2011}.
 
 \section{Conclusion and Future Work}
 
-Include performance management topic in future work.
+Much work remains to be done.  While we demonstrated some of the immediate
+benefits of separating logical and physical specifications of component
+compositions, the ``dream’’ of data independence is to take the physical
+design question completely off the table for programmers.  We are currently
+exploring both cost-based optimizers and autotuners to automate the selection
+of a high performance physical design consistent with a given logical
+specification.  
+
+The database literature on materialized view maintenance and selection can be
+brought to bear in the context of programmable storage as well.  Recall the
+sequencer logic of Corfu described in Section XX.  The Bloom specification
+(Figure YY) simply states that the current value of the sequencer is the
+result of evaluating an aggregate query over the log relation.  This means
+that the system may choose any strategy to maintain a sequence value that is
+consistent with this constraint.  The physical design decision to store and
+update a memory-resident sequence value rather re-computing the maximal value
+at each request is a view materialization decision that could similarly be
+made by a compile-time optimizer.
+
+The future of programmable storage is likely to witness a further
+decomposition of services to allow greater flexibility in customizing
+deployments.  More than likely, not all of these services will assume or
+provide strongly-consistent operations by default.  Instead, programmers will
+have the flexibility (and burden!) of trading off between performance (offered
+by weakly consistent subsystems) and programmability.  Languages such as
+Bloom---which provide static analyses to determine when loosely-ordered
+operations nevertheless produce consistent outcomes---will become increasingly
+relevant in this domain.
+
+%Include performance management topic in future work.
 
 \bibliography{paper}
 \bibliographystyle{plain}
