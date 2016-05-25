@@ -761,7 +761,7 @@ productivity by writing less code that is more portable.
 
 The Brados language corresponds to a subset of the Bloom language which a
 declarative language for expressing distributed programs as an unordered set
-of rules. These rules fully specify program semantics and allow a programmer
+of rules~\cite{alvaro:cidr11}. These rules fully specify program semantics and allow a programmer
 to ignore the details associated with how a program is evaluated. This level
 of abstraction is attractive for building storage interfaces whose portability
 and correctness is critical.
@@ -769,7 +769,7 @@ and correctness is critical.
 \subsection{Basics}
 
 Brados models the storage system state uniformly as a collection of
-relations~\cite{alvaro:cidr11}. The composition of a collection of existing
+relations. The composition of a collection of existing
 interfaces is then expressed as a collection of high-level \emph{queries} that
 describe how a stream of requests (API calls) are filtered, transformed and
 combined with existing state to define streams of outputs (API call returns as
@@ -948,8 +948,11 @@ end
 \end{lstlisting}
 
 Amazingly these few code snippets express the semantics of the entire storage
-device interface requirements in CORFU. For reference the ZLog implementation
-of the CORFU storage interface in C++ comprises nearly 700 lines of code and
+device interface requirements in CORFU. For reference our prototype
+implementation of CORFU in Ceph (called
+ZLog\footnote{https://github.com/noahdesu/zlog})
+is written in C++ and the storage interface component comprises nearly 700
+lines of code. This version
 was designed to store log entries and metadata in the key-value interface,
 thus requiring a lengthy rewrite to realize the performance advantage
 available by using the bytestream interface, as was highlighted in
