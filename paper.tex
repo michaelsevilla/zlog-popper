@@ -65,11 +65,12 @@
 
 \begin{document}
 
-\title{outline!}
+\title{brados: declarative, programmable object storage}
 
 \author{
-%Noah Watkins, Neha Ojha\textsuperscript{*}, Carlos Maltzahn \\
-%\small {\em University of California, Santa Cruz} \\
+Noah Watkins, Michael Sevilla, Ivo Jimenez, \\Neha Ojha, Peter Alvaro, Carlos
+Maltzahn\\
+\small {\em University of California, Santa Cruz} \\
 %\small {\{jayhawk,carlosm\}@cs.ucsc.edu} \textsuperscript{*}nojha@ucsc.edu \\ [2mm]
 \small Submission Type: Research
 }
@@ -151,27 +152,37 @@ development community has been receptive to outside contributions with the
 recent inclusion by CERN developers of an extension for performing limited
 numeric operations on object data~\cite{cls_numops}. And while Ceph has not
 yet reached the point of directly exposing these features to
-non-administrative users, the recent inclusion of a mechanism for dynamically
+non-administrative users, the under review inclusion of a mechanism for dynamically
 defining extensions using Lua~\cite{cls_lua} suggests that aspects of this
 feature may soon appear. What is needed is support for creating storage
 interfaces using a method that allows transparent optimization as the system,
 application, and supporting environment evolve.
 
 % why hasn't it been solved before / why have previous approaches failed
+Unfortunately the size of the design space for even simple interfaces can
+be very large, and it can be difficult to choose a design that future proofs an
+implementation against future hardware and software upgrades.
 Previous work related to storage interface design has largely been in the
-context of standardization efforts and active storage. While the later has
-been specifically concerned with the creation of application-specific
-interfaces and demonstrating short-term benefits, the standardization seeks to
-develop a last set of interfaces. In neither case have we seen efforts focused
-on extensible interfaces with portability and longevity a primary concern.
+context of standardization efforts and active storage. While the former is
+primarily concerned with fixed interfaces, application-specific interfaces
+built using active storage techniques have not to the best of our knoweldge
+addressed portability concerne that arise from defining interfaces
+imperatively. We address this gap by using a declarative language we call
+\emph{brados} to define application-specific storage interfaces in
+object-based storage systems, decoupling interface definition from
+implementation and allowing interfaces to adapt to system changes without
+modification.
 
-%This trend is also not limited to Ceph. AWS Lambda, Redis Lua, Redis Modules,
-%KV-Drives, and Rhea, are all recent examples of storage systems embracing the
-%power of including application-specific semantics.
-
-We propose the introduction of a declarative language for building object
-based interfaces that allows a storage system to meet the needs of an
-application throughout the development process without requiring rewrites.
+To demonstrate the use of the \emph{brados} language we will show how a
+high-performance shared-log based on the CORFU protocol can be built, as well
+as existing real-world interfaces used in the Ceph storage system. First we
+discuss the Ceph storage system which our prototype is built upon and the 
+motivating system, CORFU. We then present the challenges that programmers face
+when navigating the design space during the process of building an
+application-storage interface. The \emph{brados} language is then described
+using the CORFU system and an existing Ceph-specific interface as examples.
+We conclude by discussing the optimization opportunities that we can realize
+using analysis of interfaces. I hope you enjoy the show.
 
 \section{Background and Motivation}
 
@@ -197,16 +208,18 @@ of the RADOS cluster.
   \begin{subfigure}[b]{.48\linewidth}
       \centering
       \includegraphics[width=1.0\linewidth]{figures/ceph}
-      \caption{Ceph}
+      \caption{Ceph Cluster}
       \label{fig:ceph}
   \end{subfigure}\quad
   \begin{subfigure}[b]{.40\linewidth}
       \centering
       \includegraphics[width=1.0\linewidth]{figures/osd}
-      \caption{OSD}
+      \caption{OSD Arch}
       \label{fig:osd}
   \end{subfigure}
-  \caption{Ceph and OSD... gotta cram more stuff in here...}
+  \caption{The Ceph cluster is composed of object storage devices (OSD) that
+  support object transactions and a rich set of hardware and software
+configurations.}
 \end{figure}
 
 The object storage device (OSD), illustrated in Figure~\ref{fig:osd}, is the
@@ -336,7 +349,7 @@ Section~\ref{sec:objclass} there are a variety of native object I/O interfaces
 available, and it is not always immediately clear how best to utilize these
 interfaces.
 
-\section{Physical Design}
+\section{Physical Design Space}
 
 As we have seen, Ceph provides a rich storage API and places few restrictions
 on the structure of applications. Thus a primary concern when implementing an
@@ -686,42 +699,38 @@ Next we present a declarative programming model that seeks to solve the issue
 of selecting an optimal mapping between application requirements and object
 class implementation.
 
-\section{Programming Model}
+\section{The Brados Programming Model}
 
-Ceph is turning into a target for building distrubted services, bringing
-distributed programming into the hands of many new people that may have
-worked on the periphery of ceph.
+As Ceph continues to develop into a target for building distributed services
+and application, it is important to not restrict use to developers seasonsed
+in distributed programming and those with knowledge of intracacies of the Ceph
+performance model. To this end we present Brados, a declarative language with
+relational semantics for defining the behavior of RADOS object interfaces.
+Brados uses a simple declarative data model and can reduce the learning curve
+for new users, and allows existing developers to increase productivity by
+writing less code that is more portable.
 
-Getting consistency and coordination correct is a challenge And as we have seen
-optimization at a low-level given a simple set of semantics can yield a large
-state space from which to draw designs Difficulty and challenges of writing
-distributed software.  Programming distributed systems and applications.
+The Brados language corresponds to a subset of the Bloom language, and models the
+storage system state uniformly as a collection of
+relations~\cite{alvaro:cidr11}. The composition of a collection of existing
+interfaces is then expressed as a collection of high-level \emph{queries} that
+describe how a stream of requests (API calls) are filtered, transformed and
+combined with existing state to define streams of outputs (API call returns as
+well as updates to system state).  Separating the relational semantics of such
+compositions from details of their physical implementations introduces a
+number of degrees of freedom, similar to the ``data independence’’ offered by
+database query languages.  The choice of access methods (for example, whether
+to use a bytestream interface or a key/value store), storage decide
+classes(e.g., whether to use HDDs or SDDs), physical layout details (e.g. a
+1:1 or 1:N mapping) and execution plans (e.g.  operator ordering) can be
+postponed to execution time.  The optimal choices for these physical design
+details are likely to change much more often than the logical specification,
+freeing the interface designer from the need to rewrite systems and device and
+interface characteristics change.  
 
-We draw upon the recent work of Bloom a declarative lang thing
+\subsection{Basics}
 
-BLL (a.k.a. BRADOS) is a declarative language with relational (or tabular)
-semantics for RADOS objects, which corresponds to a subset of the BLOOM
-language (leaving out temporal logic). BLL borrows from BLOOM the table and
-interface collections, the instantaneous implication (‘<=’) operator, as well
-as all the collection operators.
-
-BRADOS models the storage system state uniformly as a collection of relations.
-The composition of a collection of existing interfaces is then expressed as a
-collection of high-level \emph{queries} that describe how a stream of requests
-(API calls) are filtered, transformed and combined with existing state to
-define streams of outputs (API call returns as well as updates to system
-state).  Separating the relational semantics of such compositions from details
-of their physical implementations introduces a number of degrees of freedom,
-similar to the ``data independence’’ offered by database query languages.  The
-choice of access methods (for example, whether to use a bytestream interface or
-a key/value store), storage decide classes(e.g., whether to use HDDs or SDDs),
-physical layout details (e.g. a 1:1 or 1:N mapping) and execution plans (e.g.
-operator ordering) can be postponed to execution time.  The optimal choices for
-these physical design details are likely to change much more often than the
-logical specification, freeing the interface designer from the need to rewrite
-systems and device and interface characteristics change.  
-
-\subsection{The CORFU Interface in Bloom}
+\subsection{The CORFU Log Interface}
 
 \begin{lstlisting}[caption={Epoch Guard}, label=lst:eg]
 state do
@@ -911,6 +920,15 @@ advantage of read-only data to reorder operations~\cite{huston:fast04}.
 While our goals are similar to previous work, we start with a declarative
 language that will enable us to apply optimization techniques beyond
 the limited domain-specific optimizations found in previous work.
+
+{\bf Declarative Specifications.}
+Declarative interfaces have been used for specifying distributed analytic 
+tasks~\cite{olston_pig_2008,thusoo_hive_2010}, information 
+extraction~\cite{shen_declarative_2007} and distributed 
+systems~\cite{conway_logic_2012,bauer_legion_2014}. The use of declarative 
+specifications has also been explored in other contexts such as cloud recovery 
+testing~\cite{gunawi_fate_2011}, bug reproduction~\cite{li_reprolite_2014} and 
+cloud resource orchestration~\cite{liu_declarative_2011}.
 
 \section{Conclusion and Future Work}
 
