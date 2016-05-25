@@ -286,8 +286,10 @@ Garbage Collection & Ref. Counting & 4 \\ \hline
  & User & 5 \\
  & Version & 5 \\ \hline
 \end{tabularx}
-\caption{A variety of RADOS object storage classes exist that expose reusable
-interfaces to applications.}
+\caption{A variety of RADOS object storage interfaces exist that expose reusable
+    interfaces to applications. The \emph{locking}, \emph{logging}, and
+    \emph{GC} categories are generic, while high-level services like \emph{RBD} and
+    \emph{RGW} implement application-specific metadata management interfaces.}
 \label{tab:objclass-cats}
 \end{table}
 
@@ -295,7 +297,7 @@ A critical step in the development of application-specific object interfaces
 is deciding how to best make use of the native object interfaces. For instance
 if an application stores an image in an object, it may also extract and store
 EXIF metadata as key-value pairs in the object key-value database.  However,
-depending on the application needs it may be sufficient or offer a performance
+depending on the application requirements it may be sufficient or offer a performance
 advantage to store this metadata as a header within the bytestream. In the remainder
 of this section we will explore the challenges associated with these design questions.
 
