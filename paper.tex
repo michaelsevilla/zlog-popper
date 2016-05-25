@@ -101,12 +101,14 @@ components typically requires thousands of lines of carefully-written C++
 code, an effort that must be repeated whenever device or subsystem
 characteristics change.
 
-In this paper, we propose a declarative approach to subservice composition
-that allows programmers to focus on the high-level functional properties that
-are required by applications.  Choosing an implementation that is consistent
-with the declarative functional specification then can be posed as a search
-problem over the space of parameters such as block sizes, storage interfaces
-(e.g. key/value or block storage) and concurrency control mechanisms. We base our observations and conclusions on data mining the git repository of the Ceph storage system and performance evaluating our own prototype implementations.  
+In this paper, we propose a declarative approach to subservice composition that
+allows programmers to focus on the high-level functional properties that are
+required by applications.  Choosing an implementation that is consistent with
+the declarative functional specification then can be posed as a search problem
+over the space of parameters such as block sizes, storage interfaces (e.g.
+key/value or block storage) and concurrency control mechanisms. We base our
+observations and conclusions on data mining the git repository of the Ceph
+storage system and performance evaluating our own prototype implementations.
 \end{abstract}
 
 \section{Introduction}
@@ -500,11 +502,13 @@ performance of different sized log appends without metadata management overhead
 using each of the five strategies defined in Table~\ref{tab:pd-map}.  Starting
 with Jewel and 4KB entry sizes, we see that both one-to-one strategies have
 relatively poor performance. Jewel with 1KB entry sizes sees a 2.5\(\times\)
-performance increase for the \texttt{(N:1,KV)} mapping. The large period of reduced
-throughput for corresponds to the OSD splitting file system directories in
-order to maintain a maximum directory size, and will occur in \texttt{(1:1,KV)}
-although the threshold number of objects is not reached in this example due to
-the reduced overall throughput of the \texttt{(1:1,KV)} strategy.
+performance increase for the \texttt{(N:1,KV)} mapping. This particular graph
+was extended to show an extra 30 minutes to demonstrate another disadvantage of
+\texttt{(1:1,BS)} - the large period of reduced throughput corresponds to
+the OSD splitting file system directories in order to maintain a maximum
+directory size, and will occur in \texttt{(1:1,KV)} although the threshold
+number of objects is not reached in this example due to the reduced overall
+throughput of the \texttt{(1:1,KV)} strategy.
 
 The second lesson that we can learn from the Jewel row of
 Figure~\ref{fig:jewel_v_firefly_v_es} is that even when using an N:1 addressing
@@ -660,8 +664,9 @@ given the reduced complexity of the design space for metadata management. If
 this choice had been made, then a future system upgrade could drop a
 significant number of IOPS on the floor.
 
-\textbf{Ceph Features}: to show the affect of cutting-edge Ceph features, we
-now show results for BlueStore~\cite{weil:vault2016-bluestore}. BlueStore is a
+\textbf{Ceph Features}: Ceph constantly adds new features and one particular
+feature that has the potential to greatly improve the performance of log
+appends is BlueStore~\cite{weil:vault2016-bluestore}. BlueStore is a
 replacement for the FileStore file system in the OSD (traditionally XFS).
 FileStore has performance problems with transactions and enumerations; namely
 the journal needed to assure atomicity incurs double writes and the file system
@@ -672,6 +677,12 @@ software defined storage strategy of Ceph because it gives the administrator
 the flexibility to store the 3 components of BlueStore (e.g., data, RocksDB
 database, and RocksDB write-ahead log) on any partition on any device in the
 OSD. 
+
+Unfortunately, due to space constraints, we do not show results for BlueStore.
+Anecdotally, performance for reads was a couple thousand IOPs better while
+writes are significantly worse. This is an example of a software feature that
+has a good architecture for a CORFU application on Ceph but is not
+production-ready yet. 
 
 \textbf{Takeaway}: choosing the best implementations is dependent on both the
 timing of the development (Ceph Version) and the expertise of the administrator
