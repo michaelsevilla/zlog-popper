@@ -509,34 +509,40 @@ shows the expected random read performance from a log containing 1K entries in
 which an addressing strategy that stores log entries in the bytestream has the
 best performance.
 
-\begin{figure}[t]
-  \centering
-  \begin{subfigure}[b]{.47\linewidth}
-      \centering
-      \includegraphics[width=1.0\linewidth]{experiments/librados-sweep/jewel_ssd.png}
-      \caption{1hr,1k,wr,jewel}
-      \label{fig:vanilla_wr_jewel}
-  \end{subfigure}
-  \begin{subfigure}[b]{.47\linewidth}
-      \centering
-      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
-      \caption{1hr,1k,rd,jewel}
-      \label{fig:vanilla_rd_jewel}
-  \end{subfigure}
-  \begin{subfigure}[b]{.47\linewidth}
-      \centering
-      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
-      \caption{1hr,1k,cls\_wr,jewel}
-      \label{fig:cls_wr_jewel}
-  \end{subfigure}
-  \begin{subfigure}[b]{.47\linewidth}
-      \centering
-      \includegraphics[width=1.0\linewidth]{experiments/librados-sweep/firefly_ssd.png}
-      \caption{1hr,1k,wr,firefly}
-      \label{fig:vanilla_wr_firefly}
-  \end{subfigure}
-  \caption{placeholder.}
-\end{figure}
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/jewel_v_firefly_v_es.png}
+	\caption{The cluster-specific optimizations depend heavily on the hardware and software of the storage system. This caption is quite terrible.}
+\end{figure*}
+%\begin{figure}[t]
+%  \centering
+%  \begin{subfigure}[b]{.47\linewidth}
+%      \centering
+%      \includegraphics[width=1.0\linewidth]{experiments/librados-sweep/jewel_ssd.png}
+%      \caption{1hr,1k,wr,jewel}
+%      \label{fig:vanilla_wr_jewel}
+%  \end{subfigure}
+%  \begin{subfigure}[b]{.47\linewidth}
+%      \centering
+%      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
+%      \caption{1hr,1k,rd,jewel}
+%      \label{fig:vanilla_rd_jewel}
+%  \end{subfigure}
+%  \begin{subfigure}[b]{.47\linewidth}
+%      \centering
+%      \includegraphics[width=1.0\linewidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}
+%      \caption{1hr,1k,cls\_wr,jewel}
+%      \label{fig:cls_wr_jewel}
+%  \end{subfigure}
+%  \begin{subfigure}[b]{.47\linewidth}
+%      \centering
+%      \includegraphics[width=1.0\linewidth]{experiments/librados-sweep/firefly_ssd.png}
+%      \caption{1hr,1k,wr,firefly}
+%      \label{fig:vanilla_wr_firefly}
+%  \end{subfigure}
+%  \caption{placeholder.}
+%\end{figure}
 
 \subsection{Metadata Management}
 
