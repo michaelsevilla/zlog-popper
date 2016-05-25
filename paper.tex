@@ -193,7 +193,7 @@ when navigating the design space during the process of building an
 application-storage interface. The \emph{brados} language is then described
 using the CORFU system and an existing Ceph-specific interface as motivating examples.
 We conclude by discussing the optimization opportunities that we can realize
-using analysis of interfaces. We hope you enjoy the show.
+using analysis of interfaces. 
 
 \section{Background}
 
@@ -333,7 +333,6 @@ of existing and future data management features such as tiering,
 allowing users to freely choose between media types such as SSD, spinning
 disks for archival storage, or emerging NVRAM technologies.
 
-\paragraph*{CORFU and Storage Programmability}
 The second property of CORFU relevant in the context of Ceph is the dependency
 CORFU places on custom storage device interfaces used to guarantee
 serialization during failure and reconfiguration. Each flash device in a CORFU
@@ -349,12 +348,13 @@ epoch and returns the maximum position written to that device. The seal
 interface is used following the failure of a sequencer to calculate the tail of
 the log that the sequencer should use to repopulate its in-memory state.
 
+\paragraph*{Storage Programmability}
 While the authors of the CORFU paper describe prototype device interfaces
 implemented as both host-based and FPGA-based solutions, RADOS \emph{directly} supports
 the creation of logical storage devices through its object class feature
-described previously in Section~\ref{sec:objclass}. Thus, by using
+described in Section~\ref{sec:objclass}. Thus, by using
 software-based object interfaces offered by RADOS flash devices in CORFU can be
-replaced by software-defined storage offering significant flexibility and a
+replaced by software-defined interfaces offering significant flexibility and a
 simplified design.
 
 The implementation of a custom object class that satisfies the needs of an
@@ -365,7 +365,7 @@ interfaces.
 
 \section{Physical Design Space}
 
-As we have seen, Ceph provides a rich storage API and places few restrictions
+As we have seen, Ceph provides a rich storage API and places few requirements
 on the structure of applications. Thus a primary concern when implementing an
 object interface in Ceph is deciding how native interfaces are composed into
 compound operations in order to implement the semantics of the target
@@ -385,7 +385,7 @@ obsolete and non-optimal.
   \node[state]         (D) [right of=B]       {$IO$};
   \node[state]         (C) [above right of=A] {$GC$};
   \node[state]         (E) [right of=C]       {$US$};
-  \node[state]         (F) [below right of=E] {$Fi$};
+  \node[state]         (F) [below right of=E] {$Out$};
 
   \path (A) edge        node [left] {R,W,F} (B)
             edge        node {T}     (C)
@@ -462,17 +462,14 @@ by the cross product of these design challenges to arrive at a final design.
 
 \subsection{Baseline Performance}
 
-We begin the process of exploring the design space by exploiting the fact that
-metadata management is a complexity and performance overhead that a full
-implementation must incur beyond the costs of storing log entry data.
-Therefore we first explore the design space by restricting the
-space to log entry addressing and log entry storage (the \emph{I/O} action
-shown in Figure~\ref{fig:corfu-sm}).  These two dimensions are
-represented by the first two columns of Table~\ref{tab:pd-map} which describes
-the entire design space. In the I/O column \emph{KV} corresponds to the
-key-value interface, and the bytestream interface is represented by \emph{AP}
-for an append strategy, and \emph{EX} for a strategy that writes to an
-explicit bytestream offset (both described shortly).
+We begin the process of exploring the design space by focusing on log entry
+addressing and log entry storage (the \emph{I/O} action shown in
+Figure~\ref{fig:corfu-sm}).  These two dimensions are represented by the first
+two columns of Table~\ref{tab:pd-map} which describes the entire design space.
+In the I/O column \emph{KV} corresponds to the key-value interface, and the
+bytestream interface is represented by \emph{AP} for an append strategy, and
+\emph{EX} for a strategy that writes to an explicit bytestream offset (both
+described shortly).
 
 \begin{table}[h]
 \begin{tabular}{ | l | l | l | l | l |}
@@ -502,11 +499,11 @@ performance of different sized log appends without metadata management overhead
 using each of the five strategies defined in Table~\ref{tab:pd-map}.  Starting
 with Jewel and 4KB entry sizes, we see that both one-to-one strategies have
 relatively poor performance. Jewel with 1KB entry sizes sees a 2.5\(\times\)
-performance increase for the N:1 KV mapping. The large period of reduced
+performance increase for the \texttt{(N:1,KV)} mapping. The large period of reduced
 throughput for corresponds to the OSD splitting file system directories in
-order to maintain a maximum directory size, and will occur in \emph{1:1, KV}
+order to maintain a maximum directory size, and will occur in \texttt{(1:1, KV)}
 although the threshold number of objects is not reached in this example due to
-the reduced overall throughput of the \emph{1:1, KV} strategy.
+the reduced overall throughput of the \texttt{(1:1, KV)} strategy.
 
 The second lesson that we can learn from the Jewel row of
 Figure~\ref{fig:jewel_v_firefly_v_es} is that even when using an N:1 addressing
@@ -521,8 +518,8 @@ over 2\(\times\).
       \centering
       \includegraphics[width=0.85\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
       \caption{The expected random read performance from a log with 1KB entries
-      performs best on the same strategy that the write performance performs
-      best on - the N:1 bystream append strategy.}
+      performs best on the same strategy that the writes perform
+      best on - the \texttt{(N:1, BS)} append strategy.}
       \label{fig:vanilla_rd_jewel}
 \end{figure}
 
@@ -716,16 +713,16 @@ SSD, HDDs, NVMe devices and discovered a wide range of behaviors and
 performance profiles. As an example, Figure~\ref{fig:jewel-hdd-128b} shows the
 write performance of 128 byte log entries using Jewel and a single HDD.
 Performance is 10\(\times\) slower than its SSD counterpart in
-Figure~\ref{ig:jewel_v_firefly_v_es} (top row, third column) but the behavior
+Figure~\ref{fig:jewel_v_firefly_v_es} (top row, third column) but the behavior
 and relative performance make this hardware configuration especially tricky.
 
 The behavior of the 1:1 implementations shows throughput drops lasting for
 minutes at a time -- this limits our focus to the N:1 implementations. The
-performance of the N:1 bystestream implementation is almost identical to the
-N:1 KV implementation (within 1\% mean throughput). Regardless of the true
-bottleneck, it is clear that choosing the N:1 KV implementation is the better
-choice because of the resulting implementation should be less complex and there
-is minimal performance degradation.
+performance of \texttt{(N:1, BS)} implementation is almost identical to
+\texttt{(N:1, KV)} (within 1\% mean throughput). Regardless of the true
+bottleneck, it is clear that choosing \texttt{(N:1, KV)} is the better choice
+because of the resulting implementation should be less complex and there is
+minimal performance degradation.
 
 \textbf{Takeaway}: choosing the best implementations is dependent on hardware.
 Something as common as an upgrade from HDD to SSD may nullify the benefits of a
