@@ -485,14 +485,14 @@ Map & I/O & Entry Size & Addressing & Metadata \\ \hline
 \hline
 \end{tabular}
 \caption{The high-level design space of mapping CORFU log entry storage onto
-the RADOS object storage system.}
+the RADOS object storage system. }
 \label{tab:pd-map}
 \end{table}
 
 \begin{figure*}[t]
 	\centering
 	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/jewel_v_firefly_v_es.png}
-	\caption{The cluster-specific optimizations impact performance... a lot. This caption is quite terrible.
+	\caption{The relative performance difference between the different mapping strategies in Table~\ref{tab:pd-map} changes with the Ceph version. These discrepancies alter the implementation that a developer \emph{would have chosen} had they been developing on a different release. Here we vary the log entry size to show that there is a trend for Jewel (larger entry sizes decreases \texttt{(N:1)}'s relative performance) that is not present in Firefly.
 	\label{fig:jewel_v_firefly_v_es}}
 \end{figure*}
 
@@ -503,9 +503,9 @@ with Jewel and 4KB entry sizes, we see that both one-to-one strategies have
 relatively poor performance. Jewel with 1KB entry sizes sees a 2.5\(\times\)
 performance increase for the \texttt{(N:1,KV)} mapping. The large period of reduced
 throughput for corresponds to the OSD splitting file system directories in
-order to maintain a maximum directory size, and will occur in \texttt{(1:1, KV)}
+order to maintain a maximum directory size, and will occur in \texttt{(1:1,KV)}
 although the threshold number of objects is not reached in this example due to
-the reduced overall throughput of the \texttt{(1:1, KV)} strategy.
+the reduced overall throughput of the \texttt{(1:1,KV)} strategy.
 
 The second lesson that we can learn from the Jewel row of
 Figure~\ref{fig:jewel_v_firefly_v_es} is that even when using an N:1 addressing
@@ -519,9 +519,9 @@ over 2\(\times\).
 \begin{figure}[t]
       \centering
       \includegraphics[width=0.85\linewidth]{experiments/basic-cls-rand-read/output.read.60min.1k.png}
-      \caption{The expected random read performance from a log with 1KB entries
+      \caption{The expected random read performance for a log with 1KB entries
       performs best on the same strategy that the writes perform
-      best on - the \texttt{(N:1, BS)} append strategy.}
+      best on - \texttt{(N:1, BS)}.}
       \label{fig:vanilla_rd_jewel}
 \end{figure}
 
@@ -576,7 +576,7 @@ lieu of the key-value database, but leaves the design space wide open.
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.85\linewidth]{experiments/basic-cls-overhead/output.1024.soft.reset.png}	
-	\caption{1hr,1k,cls\_wr,jewel: this graph shows the overhead of class}
+	\caption{The overhead of Ceph's object class interfaces and the cost of checking metadata affect the performance of the CORFU API on RADOS. The performance degradation of \texttt{KV} might not be enough to offset the simplicity of the implementation.}
 	\label{fig:cls_wr_jewel}
 \end{figure}
 
@@ -705,7 +705,7 @@ brute-force parameter selection hard.
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=1.0\linewidth]{experiments/basic-cls-rand-read/jewel-hdd-128b.png}
-	\caption{shows that with a HDD, it don't matter if you choose omap!!!!!}
+	\caption{The performance of \texttt{(N:1,KV)} is within 1\% of \texttt{(N:1,BS)} when using the Ceph Jewel release on a HDD. For this specific hardware/software configuration, \texttt{(N:1,KV)} is a better implementation.}
 	\label{fig:jewel-hdd-128b}
 \end{figure}
 
@@ -740,7 +740,7 @@ done, finding a solution that is future-proof is still unsolved.
 
 This physical design process, of first thinking about the design trade-offs and
 then doing parameters sweeps, is insufficient for large general-purpose systems
-like Ceph. Had we built ZLog from the ground up (like CORFU) the story might be
+like Ceph. Had we built CORFU from the ground up the story might be
 different but to deal with the large state space we need a way to automatically
 and autonomically decide which parameters to choose. 
 
