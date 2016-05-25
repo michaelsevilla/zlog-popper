@@ -176,7 +176,7 @@ implementation against hardware and software upgrades.
 Previous work related to storage interface design has largely been in the
 context of standardization efforts and active storage. While the former is
 primarily concerned with fixed interfaces, application-specific interfaces
-built using active storage techniques have not to the best of our knoweldge
+built using active storage techniques have not to the best of our knowledge
 addressed portability concerns that arise from defining interfaces
 imperatively. We address this gap by using a declarative language we call
 \emph{brados} to define application-specific storage interfaces in
@@ -421,7 +421,7 @@ This would simplify the design of the \emph{write} interface because a small
 amount of metadata stored as a header in the object could describe the state
 of the log entry.  However, as we will see this choice of a physical design
 can result in poor performance compared to other designs. In the remainder of
-this section we will define the entire design space and use a set of targetted
+this section we will define the entire design space and use a set of targeted
 benchmarks to arrive at a final design. Finally we will show that these design
 decisions can lead to non-optimal decisions and suggest an automated approach
 is desirable.
@@ -649,7 +649,7 @@ version that introduced cache tiering and erasure coding. The Jewel row of
 Figure~\ref{fig:jewel_v_firefly_v_es} shows that the size of the log entries
 has a clear impact on performance but the Firefly release shows no such trend.
 The fact that the appends per second are an order of magnitude slower on
-Firefly indicates that the the benchmark is bottlenecked by the Ceph software
+Firefly indicates that the benchmark is bottlenecked by the Ceph software
 instead of the external log implementation. 
 
 The bytestream interface outperforms the key-value interface by 12\%, compared
@@ -658,7 +658,7 @@ overall throughput achieved in the older version, some developers may find that
 incurring the overhead of using the key-value interface is an easy decision
 given the reduced complexity of the design space for metadata management. If
 this choice had been made, then a future system upgrade could drop a
-significant number of iops on the floor.
+significant number of IOPS on the floor.
 
 \textbf{Ceph Features}: to show the affect of cutting-edge Ceph features, we
 now show results for BlueStore~\cite{weil:vault2016-bluestore}. BlueStore is a
@@ -669,12 +669,12 @@ metadata model makes object listings slow, respectively. BlueStore stores data
 directly on a block device and the metadata in RocksDB, which is provided by a
 minimalistic, non-POSIX C++ filesystem. This model adheres to the overall
 software defined storage strategy of Ceph because it gives the administrator
-the flexiblity to store the 3 componenets of BlueStore (e.g., data, RocksDB
+the flexibility to store the 3 components of BlueStore (e.g., data, RocksDB
 database, and RocksDB write-ahead log) on any partition on any device in the
 OSD. 
 
 \textbf{Takeaway}: choosing the best implementations is dependent on both the
-timing of the developemnt (Ceph Version) and the expertise of the administrator
+timing of the development (Ceph Version) and the expertise of the administrator
 (Ceph Features). Different versions and features of Ceph may lead the
 administrator to choose a suboptimal implementation for the system's next
 upgrade. The software parameters must be accounted for and benchmarked when
@@ -686,15 +686,15 @@ The most recent version of Ceph (v10.2.0-1281-g1f03205) has 994 tunable
 parameters\footnote{This number comes from \texttt{src/common/config\_opts.h}
 with debug options filtered out.}, where 195 of them pertain to the OSD itself
 and 95 of them focus on the OSD back end file system (i.e. its
-\texttt{filestore}). Ceph also has tunables for the subystems it uses, like
+\texttt{filestore}). Ceph also has tunables for the subsystems it uses, like
 LevelDB (10 tunables), RocksDB (5 tunables), its own key-value stores (5
 tunables), its object cache (6 tunables), its journals (24 tunables), and its
-other optional filestores like BlueStore (49 tunables).
+other optional object stores like BlueStore (49 tunables).
 
 This many domain-specific tunables makes it almost impossible to come up with
 the best set of tunables, although auto-tuning like the work done
 in~\cite{behzad:sc2013-autotuning} could go a long way. Regardless of the
-technique that we use, it is clear the the number of tunables increases the
+technique that we use, it is clear the number of tunables increases the
 physical design parameters to an unwieldy state space size.
 
 \textbf{Takeaway}: the number and complexity of Ceph's tunables makes
@@ -742,7 +742,7 @@ This physical design process, of first thinking about the design trade-offs and
 then doing parameters sweeps, is insufficient for large general-purpose systems
 like Ceph. Had we built CORFU from the ground up the story might be
 different but to deal with the large state space we need a way to automatically
-and autonomically decide which parameters to choose. 
+decide which parameters to choose. 
 
 Next we present a declarative programming model that seeks to solve the issue
 of selecting an optimal mapping between application requirements and object
@@ -751,8 +751,8 @@ class implementation.
 \section{The Brados Programming Model}
 
 As Ceph continues to develop into a target for building distributed services
-and applications, it is important to not restrict use to developers seasonsed
-in distributed programming and those with knowledge of the intracacies of Ceph
+and applications, it is important to not restrict use to developers seasoned
+in distributed programming and those with knowledge of the intricacies of Ceph
 and its performance model. The hard-coded imperative method of writing object
 interfaces today restrict the optimizations that can be performed
 automatically or derived from static analysis.  To this end we present Brados,
@@ -889,7 +889,7 @@ end
 \end{lstlisting}
 
 Trimming a log entry always succeeds. In Listing~\ref{lst:trim} the
-\texttt{<+-} operator simulatenously removes the log entry with the given 
+\texttt{<+-} operator simultaneously removes the log entry with the given 
 position and replaces it with an entry with its state set to \emph{trimmed}.
 In practice the removal of a log entry may trigger garbage collection, but
 we model it here as an update for brevity.
@@ -902,12 +902,12 @@ bloom :trim do
 end
 \end{lstlisting}
 
-The write and fill interfaces are implemented similarily, and are both shown in
+The write and fill interfaces are implemented similarly, and are both shown in
 Listing~\ref{lst:write}.  A \texttt{valid\_write} collection is created if the
 operation position is not found in the log.  A \texttt{valid\_write} operation
-is then merged into log, otherwise a read only error is returend indicating
+is then merged into log, otherwise a read only error is returned indicating
 that the log position was already written to.  The fill operation is identical
-except a the fill state is set on the log entry.
+except the fill state is set on the log entry.
 
 \begin{lstlisting}[caption={Write and Fill}, label=lst:write]
 bloom :write do
@@ -933,8 +933,8 @@ Finally the read interface is shown in Listing~\ref{lst:read}, and structured
 in a similar way to the write and fill interfaces. First we create a collection
 containing a valid read operation (named \texttt{ok\_read}) that is in the log
 and does not have the filled or trimmed state set.  The data read from the log
-is returend in the case of a valid read operation, otherwise an error is
-returend through the output interface.
+is returned in the case of a valid read operation, otherwise an error is
+returned through the output interface.
 
 \begin{lstlisting}[caption={Read}, label=lst:read]
 bloom :read do
@@ -962,7 +962,7 @@ Section~\ref{sec:pd}. Furthermore, the complexity introduced by using the
 bytestream interface would grow the amount of code written in the optimized
 version.
 
-But beyond the convience of writing less code, it is far easier for the
+But beyond the convenience of writing less code, it is far easier for the
 programmer writing an interface such as CORFU to convenience herself of the
 correctness of the high-level details of the implementation without being
 distracted by issues related to physical design or the many other gotchas that
@@ -1023,12 +1023,12 @@ end
 \subsection{Optimizations}
 
 The challenge of navigating the physical design space has served as the
-primary source of motivation for selection of a declarative langauge. While
+primary source of motivation for selection of a declarative language. While
 our implementation does not yet 
 
 The Bloom language that we use as a basis for Brados produces a data flow
 graph that can be used in static analysis. We envision that this graph will be
-made available to the OSD and used to reorder and collesce requests based on
+made available to the OSD and used to reorder and coalesce requests based on
 optimization criteria available from a performance model combined with
 semantic information from the dataflow. For example today object classes are
 represented as black boxes from the point of view of the OSD execution engine.
@@ -1045,7 +1045,7 @@ increase performance and reduce data movement by exploiting remote storage
 resources. This concept has been applied in the context of on-disk
 controllers and object-based storage
 (T10)~\cite{riedel:vldb98,du:nwesp05,xie:msst11}.  Solutions to safety
-concerns have examined using managed lanuages, sandbox technologies, as well
+concerns have examined using managed languages, sandbox technologies, as well
 as restricting extension installation to
 vendors~\cite{john:hiperio08,xie:msst11,runde:msst12}.
 
@@ -1059,7 +1059,7 @@ computation in general workloads as well as database systems
 
 Most closely related to our work are efforts that consider specific
 programming models in the context of active storage such as a stream-based
-model~\cite{acharya:asplos98}, a model that assisted in optmiizing balancing
+model~\cite{acharya:asplos98}, a model that assisted in optimizing balancing
 computation~\cite{wickremesinghe:hpdc022}, and optimization that took
 advantage of read-only data to reorder operations~\cite{huston:fast04}.
 While our goals are similar to previous work, we start with a declarative
