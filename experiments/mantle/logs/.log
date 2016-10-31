@@ -1,0 +1,126 @@
+2016-10-16 19:32:30,112 p=4691 u=issdm |   [WARNING]: Host file not found: hosts-
+
+2016-10-16 19:32:30,120 p=4691 u=issdm |   [WARNING]: provided hosts list is empty, only localhost is available
+
+2016-10-16 19:32:30,229 p=4691 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4,clients5] *******************
+2016-10-16 19:32:30,229 p=4691 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,231 p=4691 u=issdm |  PLAY [clients0] ****************************************************************
+2016-10-16 19:32:30,231 p=4691 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,233 p=4691 u=issdm |  PLAY [clients1] ****************************************************************
+2016-10-16 19:32:30,233 p=4691 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,234 p=4691 u=issdm |  PLAY [clients2] ****************************************************************
+2016-10-16 19:32:30,234 p=4691 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,236 p=4691 u=issdm |  PLAY [clients3] ****************************************************************
+2016-10-16 19:32:30,236 p=4691 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,238 p=4691 u=issdm |  PLAY [clients4] ****************************************************************
+2016-10-16 19:32:30,238 p=4691 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,240 p=4691 u=issdm |  PLAY [clients5] ****************************************************************
+2016-10-16 19:32:30,240 p=4691 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,241 p=4691 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4] ****************************
+2016-10-16 19:32:30,241 p=4691 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,242 p=4691 u=issdm |  PLAY RECAP *********************************************************************
+2016-10-16 19:32:30,797 p=4700 u=issdm |   [WARNING]: Host file not found: hosts-
+
+2016-10-16 19:32:30,805 p=4700 u=issdm |   [WARNING]: provided hosts list is empty, only localhost is available
+
+2016-10-16 19:32:30,914 p=4700 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4,clients5] *******************
+2016-10-16 19:32:30,914 p=4700 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,916 p=4700 u=issdm |  PLAY [clients0] ****************************************************************
+2016-10-16 19:32:30,916 p=4700 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,918 p=4700 u=issdm |  PLAY [clients1] ****************************************************************
+2016-10-16 19:32:30,918 p=4700 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,919 p=4700 u=issdm |  PLAY [clients2] ****************************************************************
+2016-10-16 19:32:30,919 p=4700 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,921 p=4700 u=issdm |  PLAY [clients3] ****************************************************************
+2016-10-16 19:32:30,921 p=4700 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,923 p=4700 u=issdm |  PLAY [clients4] ****************************************************************
+2016-10-16 19:32:30,923 p=4700 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,925 p=4700 u=issdm |  PLAY [clients5] ****************************************************************
+2016-10-16 19:32:30,925 p=4700 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,926 p=4700 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4] ****************************
+2016-10-16 19:32:30,926 p=4700 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:30,927 p=4700 u=issdm |  PLAY RECAP *********************************************************************
+2016-10-16 19:32:31,485 p=4709 u=issdm |   [WARNING]: Host file not found: hosts-
+
+2016-10-16 19:32:31,493 p=4709 u=issdm |   [WARNING]: provided hosts list is empty, only localhost is available
+
+2016-10-16 19:32:31,602 p=4709 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4,clients5] *******************
+2016-10-16 19:32:31,603 p=4709 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:31,604 p=4709 u=issdm |  PLAY [clients0] ****************************************************************
+2016-10-16 19:32:31,605 p=4709 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:31,606 p=4709 u=issdm |  PLAY [clients1] ****************************************************************
+2016-10-16 19:32:31,606 p=4709 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:31,608 p=4709 u=issdm |  PLAY [clients2] ****************************************************************
+2016-10-16 19:32:31,608 p=4709 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:31,610 p=4709 u=issdm |  PLAY [clients3] ****************************************************************
+2016-10-16 19:32:31,610 p=4709 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:31,611 p=4709 u=issdm |  PLAY [clients4] ****************************************************************
+2016-10-16 19:32:31,612 p=4709 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:31,613 p=4709 u=issdm |  PLAY [clients5] ****************************************************************
+2016-10-16 19:32:31,613 p=4709 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:31,615 p=4709 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4] ****************************
+2016-10-16 19:32:31,615 p=4709 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:31,615 p=4709 u=issdm |  PLAY RECAP *********************************************************************
+2016-10-16 19:32:32,171 p=4718 u=issdm |   [WARNING]: Host file not found: hosts-
+
+2016-10-16 19:32:32,179 p=4718 u=issdm |   [WARNING]: provided hosts list is empty, only localhost is available
+
+2016-10-16 19:32:32,287 p=4718 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4,clients5] *******************
+2016-10-16 19:32:32,288 p=4718 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:32,289 p=4718 u=issdm |  PLAY [clients0] ****************************************************************
+2016-10-16 19:32:32,290 p=4718 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:32,291 p=4718 u=issdm |  PLAY [clients1] ****************************************************************
+2016-10-16 19:32:32,291 p=4718 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:32,293 p=4718 u=issdm |  PLAY [clients2] ****************************************************************
+2016-10-16 19:32:32,293 p=4718 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:32,295 p=4718 u=issdm |  PLAY [clients3] ****************************************************************
+2016-10-16 19:32:32,295 p=4718 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:32,297 p=4718 u=issdm |  PLAY [clients4] ****************************************************************
+2016-10-16 19:32:32,297 p=4718 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:32,298 p=4718 u=issdm |  PLAY [clients5] ****************************************************************
+2016-10-16 19:32:32,298 p=4718 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:32,300 p=4718 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4] ****************************
+2016-10-16 19:32:32,300 p=4718 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:32,300 p=4718 u=issdm |  PLAY RECAP *********************************************************************
+2016-10-16 19:32:32,861 p=4727 u=issdm |   [WARNING]: Host file not found: hosts-
+
+2016-10-16 19:32:33,726 p=4727 u=issdm |   [WARNING]: provided hosts list is empty, only localhost is available
+
+2016-10-16 19:32:33,836 p=4727 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4,clients5] *******************
+2016-10-16 19:32:33,836 p=4727 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:33,838 p=4727 u=issdm |  PLAY [clients0] ****************************************************************
+2016-10-16 19:32:33,838 p=4727 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:33,840 p=4727 u=issdm |  PLAY [clients1] ****************************************************************
+2016-10-16 19:32:33,840 p=4727 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:33,841 p=4727 u=issdm |  PLAY [clients2] ****************************************************************
+2016-10-16 19:32:33,842 p=4727 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:33,843 p=4727 u=issdm |  PLAY [clients3] ****************************************************************
+2016-10-16 19:32:33,844 p=4727 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:33,845 p=4727 u=issdm |  PLAY [clients4] ****************************************************************
+2016-10-16 19:32:33,845 p=4727 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:33,847 p=4727 u=issdm |  PLAY [clients5] ****************************************************************
+2016-10-16 19:32:33,847 p=4727 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:33,848 p=4727 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4] ****************************
+2016-10-16 19:32:33,849 p=4727 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:33,849 p=4727 u=issdm |  PLAY RECAP *********************************************************************
+2016-10-16 19:32:34,407 p=4736 u=issdm |   [WARNING]: Host file not found: hosts-
+
+2016-10-16 19:32:34,415 p=4736 u=issdm |   [WARNING]: provided hosts list is empty, only localhost is available
+
+2016-10-16 19:32:34,523 p=4736 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4,clients5] *******************
+2016-10-16 19:32:34,523 p=4736 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:34,525 p=4736 u=issdm |  PLAY [clients0] ****************************************************************
+2016-10-16 19:32:34,525 p=4736 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:34,526 p=4736 u=issdm |  PLAY [clients1] ****************************************************************
+2016-10-16 19:32:34,527 p=4736 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:34,528 p=4736 u=issdm |  PLAY [clients2] ****************************************************************
+2016-10-16 19:32:34,528 p=4736 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:34,530 p=4736 u=issdm |  PLAY [clients3] ****************************************************************
+2016-10-16 19:32:34,530 p=4736 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:34,532 p=4736 u=issdm |  PLAY [clients4] ****************************************************************
+2016-10-16 19:32:34,532 p=4736 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:34,534 p=4736 u=issdm |  PLAY [clients5] ****************************************************************
+2016-10-16 19:32:34,534 p=4736 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:34,535 p=4736 u=issdm |  PLAY [clients0,clients1,clients2,clients3,clients4] ****************************
+2016-10-16 19:32:34,536 p=4736 u=issdm |  skipping: no hosts matched
+2016-10-16 19:32:34,536 p=4736 u=issdm |  PLAY RECAP *********************************************************************

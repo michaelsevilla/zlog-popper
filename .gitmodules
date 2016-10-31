@@ -1,9 +1,9 @@
-[submodule "roles/srl"]
-	path = roles/srl
-	url = https://github.com/systemslab/srl-roles.git
 [submodule "roles/ceph"]
 	path = roles/ceph
 	url = https://github.com/michaelsevilla/ceph-ansible.git
 [submodule "dockerfiles/docker-cephdev"]
 	path = dockerfiles/docker-cephdev
 	url = https://github.com/ivotron/docker-cephdev.git
+[submodule "roles/srl"]
+	path = roles/srl
+	url = https://github.com/systemslab/srl-roles.git
